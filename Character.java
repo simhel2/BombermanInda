@@ -17,7 +17,7 @@ public class Character extends MovingObjects{
     
     
     
-    public Character(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    public Character(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
         super(graphic, posX, posY, isVisible, collisionEnable);
  
     }
@@ -112,7 +112,7 @@ public void testMovement3(Stage primaryStage, Pane pane){
     public int getCurrentPosAsIndexX(int worldWidth){
         int pxWidth =  500;   //primaryStage.getWidth(); TODO FIX 
          
-        return (getX()*worldWidth)/pxWidth;
+        return (((int)getX())*worldWidth)/pxWidth;
        
         //ex: (300* 20)/500  = 12. 
     }
@@ -120,7 +120,7 @@ public void testMovement3(Stage primaryStage, Pane pane){
     public int getCurrentPosAsIndexY(int worldHeight){
         int pxHeight = 500; //primaryStage.getHeight(); TODO FIX 
 
-        return (getY()*worldHeight)/pxHeight;
+        return (((int)getY())*worldHeight)/pxHeight;
     }
     
    

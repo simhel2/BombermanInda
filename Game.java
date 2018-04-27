@@ -2,6 +2,8 @@ package BombermanInda;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleLongProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -72,16 +74,15 @@ private Pane pane;
 
          
         // Gameloop
-        long startNanoTime = System.nanoTime();
+        final LongProperty lastUpdateTime = new SimpleLongProperty(0);
         new AnimationTimer(){
            @Override
-           public void handle(long currentNanoTime) {
-               
-               double timePassed = (currentNanoTime - startNanoTime)/1000000000.0;
-               render.drawAllMapObjects(world);
+           public void handle(long timestamp) {   
+            long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;               
+            render.drawAllMapObjects(world);
                //logic -> move all movable objects and check for collisison!
                
-               mainChar.Move(timePassed);   //Problem this increases always!!! TODO find out way to pass time along 
+             mainChar.Move(elapsedTimeMs);   //Problem this increases always!!! TODO find out way to pass time along 
                
                
               

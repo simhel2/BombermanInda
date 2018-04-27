@@ -3,13 +3,13 @@ package BombermanInda;
 import javafx.scene.Node;
 
 public abstract class MapObject {
-    protected int posX;
-    protected int posY;
+    protected double posX;
+    protected double posY;
     private Node graphic; 
     private boolean isVisible;
     private boolean collisionEnable;
 
-    public MapObject(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    public MapObject(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
         this.graphic = graphic;
         this.isVisible = isVisible;
         this.collisionEnable = collisionEnable; 
@@ -32,10 +32,10 @@ public abstract class MapObject {
     public boolean isCollisionEnable() {
         return collisionEnable;
     }
-    public int getX(){
+    public double getX(){
         return posX;
     }
-    public int getY(){
+    public double getY(){
         return posY;
     }
     public Node getNode(){
