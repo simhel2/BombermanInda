@@ -15,13 +15,13 @@ import javafx.scene.Node;
 
 public class MovingObjects extends MapObject{
     
-    int speedX = 0;     //make modifiable
-    int speedY = 0;
+    double speedX = 0;     //make modifiable
+    double speedY = 0;
     //int acceleration = 3;   // make modifiable
-    int maxSpeed = 30;  //x+y speed? 
+    double maxSpeed = 10;  //x+y speed? 
    
     
-    public MovingObjects(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    public MovingObjects(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
         super(graphic, posX, posY, isVisible, collisionEnable);
     }
     
@@ -45,16 +45,17 @@ public class MovingObjects extends MapObject{
     
  
     //time = time since last frame
-    public void Move(double time){
-       double deltaMoveX =  speedX/30;//time* speedX; TODO FIX
-       double deltaMoveY =  speedY/30;//time* speedY;
+    public void Move(double timeMs){
+       double deltaMoveX =  (timeMs* speedX)/1000; 
+       double deltaMoveY =  (timeMs* speedY)/1000;
+       System.out.println(timeMs);
        //check for collision
        //Move X
-       getNode().relocate(getX()+(int)deltaMoveX, getY()); //may become conversionproblem? 
-       setX(getX()+(int)deltaMoveX);
+       getNode().relocate((int)(getX()+deltaMoveX), getY()); //may become conversionproblem? 
+       setX(getX()+deltaMoveX);
        //Move Y
-       getNode().relocate(getX(), getY()+(int)deltaMoveY);  
-       setY(getY()+(int)deltaMoveY);
+       getNode().relocate(getX(), (int)(getY()+deltaMoveY));  
+       setY(getY()+deltaMoveY);
        
        
        
@@ -68,11 +69,11 @@ public class MovingObjects extends MapObject{
     
     
     
-    public void setY(int toY){
+    public void setY(double toY){
         posY = toY;
     }
     
-    public void setX(int toX){
+    public void setX(double toX){
         posX = toX;
     }
 }

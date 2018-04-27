@@ -15,7 +15,7 @@ import javafx.scene.Node;
 
 
 public class Crate extends MapObject {
-    public Crate(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    public Crate(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
                 super(graphic, posX, posY, isVisible, collisionEnable);
                 
     }
