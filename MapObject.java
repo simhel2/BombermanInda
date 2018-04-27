@@ -1,4 +1,4 @@
-package indaprojekt;
+package BombermanInda;
 
 import javafx.scene.Node;
 

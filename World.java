@@ -1,4 +1,4 @@
-package indaprojekt;
+package BombermanInda;
 
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.image.Image;

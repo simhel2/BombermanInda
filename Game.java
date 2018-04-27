@@ -1,4 +1,4 @@
-package indaprojekt;
+package BombermanInda;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -48,7 +48,7 @@ private Pane pane;
         
         
         //init background
-        Image background = new Image( "indaprojekt/heart.jpg" );
+        Image background = new Image( "BombermanInda/heart.jpg" );
         
         //init world
         World world = new World(20,20, render, 80 , background); //create 20x20 playfield with 80 crates
