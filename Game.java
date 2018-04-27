@@ -31,6 +31,7 @@ public class Game extends Application {
 private Pane pane;
     @Override
     public void start(Stage primaryStage)  {
+        
         //size of window
         int graphicsWindowX = 500;
         int graphicsWindowY = 500;
@@ -59,8 +60,8 @@ private Pane pane;
         Character mainChar = new Character(mainCharNode,0,0, true, true);   //create char on (0,0)
         //activate movement
         //mainChar.testMovement(primaryStage,pane); 
-        mainChar.testMovement2(primaryStage,pane);
-        //mainChar.testMovement3(primaryStage,pane);
+        //mainChar.testMovement2(primaryStage,pane);
+        mainChar.testMovement3(primaryStage,pane);
 
         //draw background
         render.drawBackground(world);
@@ -88,6 +89,7 @@ private Pane pane;
            }
       
         }.start();
+        
     }
     
  

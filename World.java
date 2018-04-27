@@ -38,6 +38,8 @@ public class World {
                 try {
                     worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
                          ,0,0,true,true);            //could be split for more code clarity
+                    //maybe add powerup TODO
+                    
                 } catch (Error e) {
                     System.out.println(e.getMessage());
                 }

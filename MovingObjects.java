@@ -48,7 +48,6 @@ public class MovingObjects extends MapObject{
     public void Move(double time){
        double deltaMoveX =  speedX/30;//time* speedX; TODO FIX
        double deltaMoveY =  speedY/30;//time* speedY;
-       System.out.println(deltaMoveX);
        //check for collision
        //Move X
        getNode().relocate(getX()+(int)deltaMoveX, getY()); //may become conversionproblem? 

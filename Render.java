@@ -54,7 +54,7 @@ public class Render {
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
             //CHANGE
-            Circle circle = new Circle(0,0,graphicsWindowX/40); //maybe make the 20 a variable
+            Circle circle = new Circle(0,0,graphicsWindowX/(20*2)); //maybe make the 20 a variable
             circle.setFill(Color.GREEN);
             return circle;
         } else if (grp == GraphicsObjects.CRATE) {
@@ -78,10 +78,10 @@ public class Render {
             for(int j = 0; j < world.getWorldMatrix()[i].length; ++j) {
                 if (world.getWorldMatrix()[i][j]!=null) {   //if worldMatrix has something draw it
                    if (!pane.getChildren().contains((world.getWorldMatrix()[i][j]).getNode())) {    //if it is not in world matrix add it
-                       pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                       
+                       pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize)    
                    } 
                    //calculate position:
-                   int posX = i*graphicsWindowX/world.getWorldMatrix().length;
+                   int posX = i*graphicsWindowX/world.getWorldMatrix().length;  //change here to change size (20)
                    int posY = j*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[i][j].getNode().relocate(posX,posY);                   
                } 
