@@ -4,8 +4,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.image.Image;
 
 
-public class World {
-    private MapObject[][] worldMatrix; //contains all non moving objects over the background
+public class World { 
+    private MapObject[][] worldMatrix; //contains all blocking objects over the background (crate)
+    
     //WorldType w;
     private Image background;
     private final int numCrates;
@@ -50,6 +51,18 @@ public class World {
         }
         // fill world with mapObj.
     }
+    public void moveAllMoveable(long elapsedTimeMs){
+         for(int i = 0; i < worldMatrix.length; ++i) {
+            for(int j = 0; j < worldMatrix[i].length; ++j) {
+                if(worldMatrix[i][j]!=null) {
+                    if(worldMatrix[i][j].getClass()== Character.class ){   //== MovingObjects.class){ //TODO fix
+                        ((MovingObjects)worldMatrix[i][j]).Move(elapsedTimeMs);
+                    }
+                }
+            }
+        }
+
+    }
     
     public Image getBackground(){
         return background;
@@ -57,7 +70,4 @@ public class World {
     public void setBackground(Image background){
         this.background= background;
     }
-    
-    //add function for removing mapObject
-    
 }

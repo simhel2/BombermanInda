@@ -22,56 +22,6 @@ public class Character extends MovingObjects{
  
     }
     
-       
-    public void testMovement(Stage primaryStage, Pane pane){
-        this.primaryStage = primaryStage;
-    
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    getNode().relocate(getX(), getY()-5);  //todo make 5 some sort of constant!
-                    setY(getY()-5);
-                   
-                }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    getNode().relocate(getX(),getY()+5);
-                    setY(getY()+5);
-                }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    getNode().relocate(getX()-5, getY());
-                    setX(getX()-5);
-                }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    getNode().relocate(getX()+5,getY());
-                    setX(getX()+5);
-                }
-            }
-        });
-    }
-    public void testMovement2(Stage primaryStage, Pane pane){
-        this.primaryStage = primaryStage;
-    
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    setSpeedY(-1);
-                }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(1);
-                }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedX(-1);
-                }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(1);
-                }
-            }
-        });
-    }
     
 public void testMovement3(Stage primaryStage, Pane pane){
         this.primaryStage = primaryStage;
@@ -81,16 +31,16 @@ public void testMovement3(Stage primaryStage, Pane pane){
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP) {
-                    setSpeedY(-1);
+                    setSpeedYDirection(-1);
                 }
                 if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(1);
+                    setSpeedYDirection(1);
                 }
                  if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedX(-1);
+                    setSpeedXDirection(-1);
                 }
                 if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(1);
+                    setSpeedXDirection(1);
                 }
             }
         });
@@ -99,10 +49,10 @@ public void testMovement3(Stage primaryStage, Pane pane){
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP || ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(0);
+                    setSpeedYDirection(0);
                 }
                 if (ke.getCode() == KeyCode.LEFT || ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(0);
+                    setSpeedXDirection(0);
                 }
                 
             }

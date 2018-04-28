@@ -58,11 +58,9 @@ private Pane pane;
         
         //create main char 
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
-        pane.getChildren().add(mainCharNode);    
         Character mainChar = new Character(mainCharNode,0,0, true, true);   //create char on (0,0)
+        world.setObject(0,0, mainChar);
         //activate movement
-        //mainChar.testMovement(primaryStage,pane); 
-        //mainChar.testMovement2(primaryStage,pane);
         mainChar.testMovement3(primaryStage,pane);
 
         //draw background
@@ -80,18 +78,13 @@ private Pane pane;
            public void handle(long timestamp) {   
             long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;               
             render.drawAllMapObjects(world);
-               //logic -> move all movable objects and check for collisison!
-               
-             mainChar.Move(elapsedTimeMs);   //Problem this increases always!!! TODO find out way to pass time along 
-               
-               
-              
-               //startNanoTime = currentNanoTime;
+            
+                //mainChar.Move(elapsedTimeMs);
+                world.moveAllMoveable(elapsedTimeMs);
            }
       
         }.start();
         
     }
     
- 
 }
