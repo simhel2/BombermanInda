@@ -37,9 +37,7 @@ private Pane pane;
         //size of window
         int graphicsWindowX = 500;
         int graphicsWindowY = 500;
-        
-        
-        
+           
         //init graphic window
         primaryStage.setTitle("Bomberman");
         pane = new Pane();    
@@ -47,14 +45,11 @@ private Pane pane;
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
         Render render = new Render(pane, primaryStage); 
         
-
-        
-        
         //init background
         Image background = new Image( "BombermanInda/heart.jpg" );
         
         //init world
-        World world = new World(20,20, render, 80 , background); //create 20x20 playfield with 80 crates
+        World world = new World(20,20, render, 40 , background); //create 20x20 playfield with 40 crates
         
         //create main char 
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
@@ -65,22 +60,25 @@ private Pane pane;
 
         //draw background
         render.drawBackground(world);
-         
         
+        //draw all map objects based on world matrix
+        render.drawAllMapObjects(world);
         
         primaryStage.show();
 
-         
+        //add all from world to map
+       
         // Gameloop
         final LongProperty lastUpdateTime = new SimpleLongProperty(0);
         new AnimationTimer(){
            @Override
            public void handle(long timestamp) {   
             long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;               
-            render.drawAllMapObjects(world);
-            
-                //mainChar.Move(elapsedTimeMs);
+                //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
+
+
+
            }
       
         }.start();

@@ -84,18 +84,19 @@ public class Render {
                    int posX = i*graphicsWindowX/world.getWorldMatrix().length;  //change here to change size (20)
                    int posY = j*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[i][j].getNode().relocate(posX,posY);                   
-               } 
-                    
-              
+               }                     
             }
         }
     }
-        
+    public int getGraphicsWindowX(){
+        return graphicsWindowX;
+    }
+    public int getGraphicsWindowY(){
+        return graphicsWindowX;
+    }
     public void drawBackground(World world){
         gc.drawImage( world.getBackground(), 0, 0, graphicsWindowX,graphicsWindowY );        
     }
-    
-    
 
 }
 

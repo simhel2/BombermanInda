@@ -18,7 +18,7 @@ public abstract class MovingObjects extends MapObject{
     double speedX = 0;     
     double speedY = 0;
     //int acceleration = 3;  
-    double maxSpeed = 5;  //x+y speed? 
+    double maxSpeed = 3; 
    
     
     public MovingObjects(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
@@ -43,45 +43,23 @@ public abstract class MovingObjects extends MapObject{
         }        
     }
     
- 
-    //time = time since last frame
-    /**Function for moving MovingObjects of any type, based on time since last frame and their speed
-     * 
-     * @param timeMs 
-     */
-    public void Move(double timeMs){
-       double deltaMoveX =  (timeMs* speedX)/1000; 
-       double deltaMoveY =  (timeMs* speedY)/1000;
-       //calc newpos here
-       double newPosX = getX()+deltaMoveX;
-       double newPosY = getY()+deltaMoveY;
-       //check for collision
-       if (checkMoveForCollision(newPosX, newPosY)) {//final
-          //Move X
-          getNode().relocate((int)newPosX, getY()); //may become conversionproblem? 
-          setX(newPosX);
-          //Move Y
-          getNode().relocate(getX(), (int)newPosY); 
-          setY(newPosY);
 
-       }
-       
-       
+    public void Move(double newPosX, double newPosY){  
+       //Move X
+       getNode().relocate((int)newPosX, getY()); 
+       setX(newPosX);
+       //Move Y
+       getNode().relocate(getX(), (int)newPosY); 
+       setY(newPosY);
+    }   
+    public double getNewAfterMoveX(long elapsedTimeMs){
+        double deltaMoveX =  (elapsedTimeMs* speedX)/1000; 
+        return getX()+deltaMoveX;
     }
-    //should not be here TODO 
-    
-    private boolean checkMoveForCollision(double afterX, double afterY){
-        if (false ) {
-            //TODO
-            //need world here, before xy after xy radius
-            return false;
-        }
-        else {
-            return true;
-        }
+    public double getNewAfterMoveY(long elapsedTimeMs){
+        double deltaMoveY =  (elapsedTimeMs* speedY)/1000; 
+        return getY()+deltaMoveY;
     }
-    
-    
         
     public void setY(double toY){
         posY = toY;

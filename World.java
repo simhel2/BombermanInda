@@ -45,23 +45,52 @@ public class World {
                     System.out.println(e.getMessage());
                 }
             } else {       
-               i--;    //this is may become infinite loop with bad params
+               i--;    //WARNING this is may become infinite loop with bad params
             }
             
         }
         // fill world with mapObj.
     }
+
     public void moveAllMoveable(long elapsedTimeMs){
          for(int i = 0; i < worldMatrix.length; ++i) {
             for(int j = 0; j < worldMatrix[i].length; ++j) {
                 if(worldMatrix[i][j]!=null) {
-                    if(worldMatrix[i][j].getClass()== Character.class ){   //== MovingObjects.class){ //TODO fix
-                        ((MovingObjects)worldMatrix[i][j]).Move(elapsedTimeMs);
+                    //if of type movingObjects
+                    if((MovingObjects.class).isAssignableFrom(worldMatrix[i][j].getClass())){ 
+                        double newX = ((MovingObjects)worldMatrix[i][j]).getNewAfterMoveX(elapsedTimeMs);
+                        double newY = ((MovingObjects)worldMatrix[i][j]).getNewAfterMoveY(elapsedTimeMs);
+
+                        if(!worldMatrix[i][j].isCollisionEnable() ||        //if collision disabled
+                                posIsClear(newX,newY,20)){  //20 is radius TODO FIX
+                            ((MovingObjects)worldMatrix[i][j]).Move(newX, newY);
+                        }
+                        //TODO else move as close as possible?
                     }
                 }
             }
         }
-
+    }
+    //left collision works, down collision late, right collision late
+    public boolean posIsClear(double X, double Y, double radius){
+        int xIndex = (int) (X*worldMatrix.length/render.getGraphicsWindowX());        
+        int yIndex = (int) (Y*worldMatrix[0].length/render.getGraphicsWindowY());
+        System.out.println(xIndex + ", "+ yIndex );
+        //check for out of bounds
+        if (xIndex<0 || yIndex<0 || worldMatrix.length-1<xIndex|| worldMatrix[0].length -1< yIndex) {
+            return false;
+        }
+        
+        //TODO improve
+        if(worldMatrix[xIndex][yIndex]==null) {
+            return true;
+        } else if (worldMatrix[xIndex][yIndex].getClass()==Crate.class){
+            return false;
+        }
+        else {
+            return true;
+        }
+        
     }
     
     public Image getBackground(){
