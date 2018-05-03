@@ -49,14 +49,19 @@ private Pane pane;
         Image background = new Image( "BombermanInda/heart.jpg" );
         
         //init world
-        World world = new World(20,20, render, 40 , background); //create 20x20 playfield with 40 crates
+        World world = new World(20,20, render, 10 , background); //create 20x20 playfield with 10 crates
         
         //create main char 
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
         Character mainChar = new Character(mainCharNode,0,0, true, true);   //create char on (0,0)
-        world.setObject(0,0, mainChar);
+        world.addMovingObject(mainChar);
         //activate movement
         mainChar.testMovement3(primaryStage,pane);
+        
+        //create moving obj dummy
+        Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //TODO change
+        Character dummyChar1 = new Character(dummyNode1,60,30, true,true); 
+        world.addMovingObject(dummyChar1);
 
         //draw background
         render.drawBackground(world);
