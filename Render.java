@@ -48,7 +48,7 @@ public class Render {
     }
    
     public enum GraphicsObjects{
-        MAINCHARACTER, CRATE;
+        MAINCHARACTER, CRATE, BOMB;
     }
             
     public Node createGraphicsEntity(GraphicsObjects grp){
@@ -63,6 +63,12 @@ public class Render {
             //CHANGE
             Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
             rect.setFill(Color.ORANGE);
+            return rect;
+        
+        } else if (grp == GraphicsObjects.BOMB) {
+            //CHANGE
+            Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
+            rect.setFill(Color.RED);
             return rect;
         
         } else {
