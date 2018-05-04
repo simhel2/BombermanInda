@@ -79,7 +79,7 @@ public void testControls(Stage primaryStage, Pane pane){
         //TODO: add new class for bomb
         //TODO: get 25 properly
         Node newBomb;
-        newBomb = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER);
+        newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
         Character bomb = new Character(newBomb,0,0, true, true, render, world);   //create char on (0,0)
         world.setObject(((int)(getX()/25)),((int)(getY()/25)),bomb);
         render.drawAllMapObjects(world);    //bad
