@@ -49,18 +49,18 @@ private Pane pane;
         Image background = new Image( "BombermanInda/heart.jpg" );
         
         //init world
-        World world = new World(20,20, render, 10 , background); //create 20x20 playfield with 10 crates
+        World world = new World(20,20, render, 80 , background); //create 20x20 playfield with 10 crates
         
         //create main char 
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
-        Character mainChar = new Character(mainCharNode,0,0, true, true);   //create char on (0,0)
+        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world);   //create char on (0,0)
         world.addMovingObject(mainChar);
         //activate movement
-        mainChar.testMovement3(primaryStage,pane);
+        mainChar.testControls(primaryStage,pane);
         
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //TODO change
-        Character dummyChar1 = new Character(dummyNode1,60,30, true,true); 
+        Character dummyChar1 = new Character(dummyNode1,60,30, true,true, render, world); 
         world.addMovingObject(dummyChar1);
 
         //draw background
@@ -81,8 +81,8 @@ private Pane pane;
             long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;               
                 //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
-
-
+                
+                
 
            }
       

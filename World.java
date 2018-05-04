@@ -45,7 +45,8 @@ public class World {
         for(int i = 0; i<numCrates; i++) {
             int x = ThreadLocalRandom.current().nextInt(0,worldMatrix.length);
             int y = ThreadLocalRandom.current().nextInt(0,worldMatrix[0].length);
-            if(worldMatrix[x][y]==null) {   
+            
+            if(worldMatrix[x][y]==null ) {   
                 try {
                     worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
                          ,0,0,true,true);            //could be split for more code clarity
@@ -96,11 +97,13 @@ public class World {
         }
     }
     **/ 
+    
+    
     //TODO: should ideally put as close as possible
     //TODO: should check the entire line becasue otherwise slow logic or high speed gives you noclip
-    //TODO: should fix hitbox for moveable so it does not have to check all of them
-    //TODO: TOP and LEFT lineups work, right and down does not
+    //TODO: maybe should fix hitbox for moveable so it does not have to check all of them??
     //notes: startX and startY for everything is top left
+    //notes: maybe move to move?
     
     public boolean lineIsClear(double startX, double startY, double endX, double endY, double radius, MovingObjects thisObj){
         int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
@@ -113,50 +116,51 @@ public class World {
             return true;
         }
         
-            
+        //2 px margin
+        int margin = 2;
         //check for out of bounds
-        if (endX<0 || endY<0 || render.getGraphicsWindowX()<endX+radius|| render.getGraphicsWindowY()< endY+radius+1) {
+        if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radius-margin|| render.getGraphicsWindowY()< endY+radius-margin) {
             return false;
         }
         
         //check for other collision
 
         //moving in +x direction        
-        if(startX<endX&&endX>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){
-            if(worldMatrix[endXIndex+1][endYIndex]!=null){ //check for collision enabled!! TODO
+        if(startX<endX&&endX-margin>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){
+            if(worldMatrix[endXIndex+1][endYIndex]!=null){ //check for type of object!! TODO
                 return false; 
             } 
             //check tile under as well supports 1px overlap
-            else if(endY>1+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex+1]!=null){//check for collision enabled!! TODO
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex+1]!=null){//check for collision enabled!! TODO
                 return false;
             }
         }
         //moving in -x direction
         else if(startXIndex>endXIndex){
-            if(worldMatrix[endXIndex][endYIndex]!=null){ //check for collision enabled!! TODO
+            if(worldMatrix[endXIndex][endYIndex]!=null){  //check for type of object!! TODO
                 return false; 
             } 
             //check tile under as well supports 1px overlap
-            else if(endY>1+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex][endYIndex+1]!=null){//check for collision enabled!! TODO
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex][endYIndex+1]!=null){//check for collision enabled!! TODO
                 return false;
             }
         }
         //moving in +y direction
         if(startYIndex>endYIndex){
-            if(worldMatrix[endXIndex][endYIndex]!=null){ //check for collision enabled!! TODO
+            if(worldMatrix[endXIndex][endYIndex]!=null){  //check for type of object!! TODO
                 return false; 
             } 
             //check tile right as well supports 1px overlap
-            else if(endX>1+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex]!=null){//check for collision enabled!! TODO
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex]!=null){//check for collision enabled!! TODO
                 return false;
             }
         }
         //moving in -y direction (supports 1px overlap)
-        else if(startY<endY&&endY>1+endYIndex*render.getGraphicsWindowY()/worldMatrix.length){
-            if(worldMatrix[endXIndex][endYIndex+1]!=null){ //check for collision enabled!! TODO
+        else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix.length){
+            if(worldMatrix[endXIndex][endYIndex+1]!=null){  //check for type of object!! TODO
                 return false; 
             } 
-            else if(endX>1+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex+1]!=null){//check for collision enabled!! TODO
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex+1]!=null){//check for collision enabled!! TODO
                 return false;
             }
         }
@@ -165,9 +169,9 @@ public class World {
             //check vs itself 
             if(!(movObj==thisObj)){
                 //y aligned
-                if(endY>=movObj.getY()&&endY<movObj.getY()+radius){
+                if((endY<=movObj.getY()&&(endY+radius>movObj.getY()))||(endY<=movObj.getY()+radius&&(endY>movObj.getY()))){
                     //x aligned
-                    if(endX>=movObj.getX()&&endX<movObj.getX()+radius){
+                    if((endX<=movObj.getX()&&(endX+radius>movObj.getX()))||(endX<=movObj.getX()+radius&&(endX>movObj.getX()))){
                         return false;
                     }
 
@@ -179,7 +183,28 @@ public class World {
         return true;        
         
     }  
-            
+    
+   public void breakCrate(){
+    //TODO actually break the crate
+    
+    //replace with random powerup
+    int x = ThreadLocalRandom.current().nextInt(0, 99);
+    
+    if (x<75) {   //75% chance to find nothing
+        //do nothing
+    } else if(x>95) {
+        //TODO insert powerup1
+    } else if(x>90) {
+        //TODO powerup2
+    } else if (x>85) {
+        //TODO powerup3
+    } else if (x>80){
+        //TODO powerup4
+    } else if (x>=75) {
+        //TODO powerup5
+    }
+}    
+    
     
     
     public Image getBackground(){
