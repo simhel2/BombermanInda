@@ -54,9 +54,11 @@ public class Render {
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
             //CHANGE
-            Circle circle = new Circle(0,0,graphicsWindowX/(20*2)); //maybe make the 20 a variable
-            circle.setFill(Color.GREEN);
-            return circle;
+            //Circle circle = new Circle(0,0,graphicsWindowX/(20*2)); //maybe make the 20 a variable
+            //circle.setFill(Color.GREEN);
+            Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
+            rect.setFill(Color.GREEN);
+            return rect;
         } else if (grp == GraphicsObjects.CRATE) {
             //CHANGE
             Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
@@ -73,29 +75,36 @@ public class Render {
     }
     
     public void drawAllMapObjects(World world) {
-        
+        //draw all in matrix
         for(int i = 0; i < world.getWorldMatrix().length; ++i) {
             for(int j = 0; j < world.getWorldMatrix()[i].length; ++j) {
                 if (world.getWorldMatrix()[i][j]!=null) {   //if worldMatrix has something draw it
                    if (!pane.getChildren().contains((world.getWorldMatrix()[i][j]).getNode())) {    //if it is not in world matrix add it
-                       pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize)    
+                       pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize?)    
                    } 
                    //calculate position:
                    int posX = i*graphicsWindowX/world.getWorldMatrix().length;  //change here to change size (20)
                    int posY = j*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[i][j].getNode().relocate(posX,posY);                   
-               } 
-                    
-              
+               }                     
             }
         }
+        //draw all moveable objects 
+        for (MovingObjects movObj: world.getMovingObjects()) {
+            if (!pane.getChildren().contains(movObj.getNode())) {    //if it is not in world matrix add it
+                pane.getChildren().add(movObj.getNode());                   //(optimize?)    
+            }             
+        }
     }
-        
+    public int getGraphicsWindowX(){
+        return graphicsWindowX;
+    }
+    public int getGraphicsWindowY(){
+        return graphicsWindowX;
+    }
     public void drawBackground(World world){
         gc.drawImage( world.getBackground(), 0, 0, graphicsWindowX,graphicsWindowY );        
     }
-    
-    
 
 }
 

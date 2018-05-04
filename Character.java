@@ -16,14 +16,18 @@ public class Character extends MovingObjects{
     private Stage primaryStage;
     
     
+    private Render render;
+    private World world;
     
-    public Character(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
+    public Character(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable, Render render, World world){
         super(graphic, posX, posY, isVisible, collisionEnable);
- 
+        this.render = render;
+        this.world = world;
+        
     }
     
-       
-    public void testMovement(Stage primaryStage, Pane pane){
+    
+public void testControls(Stage primaryStage, Pane pane){
         this.primaryStage = primaryStage;
     
         //random keylistener for no reason
@@ -31,67 +35,23 @@ public class Character extends MovingObjects{
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP) {
-                    getNode().relocate(getX(), getY()-5);  //todo make 5 some sort of constant!
-                    setY(getY()-5);
-                   
+                    setSpeedYDirection(-1);
                 }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    getNode().relocate(getX(),getY()+5);
-                    setY(getY()+5);
+                else if (ke.getCode() == KeyCode.DOWN) {
+                    setSpeedYDirection(1);
                 }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    getNode().relocate(getX()-5, getY());
-                    setX(getX()-5);
+                else if (ke.getCode() == KeyCode.LEFT) {
+                    setSpeedXDirection(-1);
                 }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    getNode().relocate(getX()+5,getY());
-                    setX(getX()+5);
+                else if (ke.getCode() == KeyCode.RIGHT) {
+                    setSpeedXDirection(1);
                 }
-            }
-        });
-    }
-    public void testMovement2(Stage primaryStage, Pane pane){
-        this.primaryStage = primaryStage;
-    
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    setSpeedY(-1);
+                //layBomb
+                else if(ke.getCode()== KeyCode.SPACE) {
+                    layBomb();
+
                 }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(1);
-                }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedX(-1);
-                }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(1);
-                }
-            }
-        });
-    }
-    
-public void testMovement3(Stage primaryStage, Pane pane){
-        this.primaryStage = primaryStage;
-    
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    setSpeedY(-1);
-                }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(1);
-                }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedX(-1);
-                }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(1);
-                }
+
             }
         });
         
@@ -99,31 +59,31 @@ public void testMovement3(Stage primaryStage, Pane pane){
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP || ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(0);
+                    setSpeedYDirection(0);
                 }
                 if (ke.getCode() == KeyCode.LEFT || ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(0);
+                    setSpeedXDirection(0);
                 }
                 
             }
         });
-    }
-    //WARNING ROUNDS DOWN AGGRESSIVELY
-    public int getCurrentPosAsIndexX(int worldWidth){
-        int pxWidth =  500;   //primaryStage.getWidth(); TODO FIX 
-         
-        return (((int)getX())*worldWidth)/pxWidth;
-       
-        //ex: (300* 20)/500  = 12. 
-    }
-    //WARNING ROUNDS DOWN AGGRESSIVELY
-    public int getCurrentPosAsIndexY(int worldHeight){
-        int pxHeight = 500; //primaryStage.getHeight(); TODO FIX 
 
-        return (((int)getY())*worldHeight)/pxHeight;
     }
-    
-   
+
     //TODO add function for setting controls
 
+
+
+    public void layBomb(){
+        
+        //TODO: add new class for bomb
+        //TODO: get 25 properly
+        Node newBomb;
+        newBomb = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER);
+        Character bomb = new Character(newBomb,0,0, true, true, render, world);   //create char on (0,0)
+        world.setObject(((int)(getX()/25)),((int)(getY()/25)),bomb);
+        render.drawAllMapObjects(world);    //bad
+        
+    }
+    
 }
