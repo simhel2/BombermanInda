@@ -49,9 +49,7 @@ public class World {
             if(worldMatrix[x][y]==null ) {   
                 try {
                     worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
-                         ,0,0,true,true);            //could be split for more code clarity
-                    //maybe add powerup TODO
-                    
+                         ,0,0,true,true);            //could be split for more code clarity                    
                 } catch (Error e) {
                     System.out.println(e.getMessage());
                 }
@@ -75,30 +73,6 @@ public class World {
             }
         }
     }
-    /** old and unused
-    public void moveAllMoveable(long elapsedTimeMs){
-         for(int i = 0; i < worldMatrix.length; ++i) {
-            for(int j = 0; j < worldMatrix[i].length; ++j) {
-                if(worldMatrix[i][j]!=null) {
-                    //if of type movingObjects
-                    if((MovingObjects.class).isAssignableFrom(worldMatrix[i][j].getClass())){ 
-                        double newX = ((MovingObjects)worldMatrix[i][j]).getNewAfterMoveX(elapsedTimeMs);
-                        double newY = ((MovingObjects)worldMatrix[i][j]).getNewAfterMoveY(elapsedTimeMs);
-                        double oldX = worldMatrix[i][j].getX(); 
-                        double oldY = worldMatrix[i][j].getY(); 
-                        if(!worldMatrix[i][j].isCollisionEnable() ||        //if collision disabled
-                                lineIsClear(oldX,oldY,newX,newY,20)){  //20 is diameter TODO FIX
-                            ((MovingObjects)worldMatrix[i][j]).Move(newX, newY);
-                        }
-                        //TODO else move as close as possible?
-                    }
-                }
-            }
-        }
-    }
-    **/ 
-    
-    
     //TODO: should ideally put as close as possible
     //TODO: should check the entire line becasue otherwise slow logic or high speed gives you noclip
     //TODO: maybe should fix hitbox for moveable so it does not have to check all of them??
@@ -127,40 +101,44 @@ public class World {
 
         //moving in +x direction        
         if(startX<endX&&endX-margin>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){
-            if(worldMatrix[endXIndex+1][endYIndex]!=null){ //check for type of object!! TODO
+            if(worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){ 
                 return false; 
             } 
-            //check tile under as well supports 1px overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex+1]!=null){//check for collision enabled!! TODO
+            //check tile under as well supports margin overlap
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
+                    &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
                 return false;
             }
         }
         //moving in -x direction
         else if(startXIndex>endXIndex){
-            if(worldMatrix[endXIndex][endYIndex]!=null){  //check for type of object!! TODO
+            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
                 return false; 
             } 
-            //check tile under as well supports 1px overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex][endYIndex+1]!=null){//check for collision enabled!! TODO
+            //check tile under as well supports margin overlap
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
+                    &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
                 return false;
             }
         }
         //moving in +y direction
         if(startYIndex>endYIndex){
-            if(worldMatrix[endXIndex][endYIndex]!=null){  //check for type of object!! TODO
+            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
                 return false; 
             } 
-            //check tile right as well supports 1px overlap
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex]!=null){//check for collision enabled!! TODO
+            //check tile right as well supports margin overlap
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)
+                    &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
                 return false;
             }
         }
-        //moving in -y direction (supports 1px overlap)
+        //moving in -y direction (supports margin overlap)
         else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix.length){
-            if(worldMatrix[endXIndex][endYIndex+1]!=null){  //check for type of object!! TODO
+            if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
                 return false; 
             } 
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)&&worldMatrix[endXIndex+1][endYIndex+1]!=null){//check for collision enabled!! TODO
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
+                    &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
                 return false;
             }
         }

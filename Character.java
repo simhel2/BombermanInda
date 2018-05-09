@@ -26,7 +26,7 @@ public class Character extends MovingObjects{
         
     }
     
-    
+    //TODO make less janky
 public void testControls(Stage primaryStage, Pane pane){
         this.primaryStage = primaryStage;
     
