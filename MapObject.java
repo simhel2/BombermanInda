@@ -38,6 +38,7 @@ public abstract class MapObject {
     public double getY(){
         return posY;
     }
+
     public Node getNode(){
         return graphic;
     }

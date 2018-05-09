@@ -50,7 +50,7 @@ private int numGrid = 20;
         pane = new Pane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
-        Render render = new Render(pane, primaryStage);
+        Render render = new Render(pane, primaryStage, this);
 
 
         ImageView bombermanLogo = new ImageView("BombermanInda/Images/BomberManTitle.png");
@@ -63,7 +63,7 @@ private int numGrid = 20;
         // Makes a button that starts the game
         Button startButton = new Button("Start");
         pane.getChildren().add(startButton);
-        startButton.relocate(125, 300);
+        startButton.relocate(125, 100);
         ImageView startButtonImage = new ImageView("BombermanInda/Images/MainCharFront.png");
         startButton.setGraphic((Node) startButtonImage);
         startButton.setOnMousePressed(e -> startGame(primaryStage));
@@ -71,7 +71,7 @@ private int numGrid = 20;
         // Makes a button that exits the program
         Button quitButton = new Button("Quit");
         pane.getChildren().add(quitButton);
-        quitButton.relocate(125, 100);
+        quitButton.relocate(125, 300);
         ImageView quitButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
         quitButton.setGraphic((Node) quitButtonImage);
         quitButton.setOnMousePressed(e -> System.exit(1));
@@ -96,7 +96,7 @@ private int numGrid = 20;
         pane = new Pane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
-        Render render = new Render(pane, primaryStage);
+        Render render = new Render(pane, primaryStage, this);
 
 
     }
@@ -108,13 +108,14 @@ private int numGrid = 20;
         pane = new Pane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
-        Render render = new Render(pane, primaryStage);
+        Render render = new Render(pane, primaryStage, this);
 
         //init background
         Image background = new Image( "BombermanInda/Images/heart.jpg" );
 
         //init world
-        World world = new World(20,20, render, 80 , background); //create 20x20 playfield with 10 crates
+        // TODO fix so it will be scaleable.
+        World world = new World(numGrid, numGrid, render, 80 , background); //create 20x20 playfield with 10 crates
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
@@ -169,7 +170,26 @@ private int numGrid = 20;
 
     }
 
-   
+    public  int getGraphicsWindowX() {
+        return graphicsWindowX;
+    }
+
+    public int getGraphicsWindowY() {
+        return graphicsWindowY;
+    }
+
+    public void setGraphicsWindowX(int newX) {
+        graphicsWindowX = newX;
+    }
+
+    public void setGraphicsWindowY(int newY) {
+        graphicsWindowY = newY;
+    }
+
+    public int getNumGrid(){
+        return numGrid;
+    }
+
 }
     
 

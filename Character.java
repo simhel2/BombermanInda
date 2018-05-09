@@ -54,7 +54,7 @@ public void testControls(Stage primaryStage, Pane pane, Render render){
                 }
                 //layBomb
                 else if(ke.getCode()== KeyCode.SPACE) {
-                    layBomb();
+                    layBomb(render.getGraphicsWindowY(), render.getGraphicsWindowY(), render.getNumGrid());
 
                 }
 
@@ -80,14 +80,14 @@ public void testControls(Stage primaryStage, Pane pane, Render render){
 
 
 
-    public void layBomb(){
-        
+    public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid){
+
         //TODO: add new class for bomb
         //TODO: get 25 properly
         Node newBomb;
         newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
         Character bomb = new Character(newBomb,0,0, true, true, render, world);   //create char on (0,0)
-        world.setObject(((int)(getX()/25)),((int)(getY()/25)),bomb);
+        world.setObject(((int)(getX()/(graphicsWindowX/numGrid))),((int)(getY()/(graphicsWindowY/numGrid))),bomb);
         render.drawAllMapObjects(world);    //bad
         
     }

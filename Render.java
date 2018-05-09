@@ -32,12 +32,16 @@ public class Render {
     private Stage primaryStage;  
     private int graphicsWindowX;    
     private int graphicsWindowY;
-    public Render (Pane pane, Stage stage) {
+    private int numGrid;
+    private Game game;
+
+    public Render (Pane pane, Stage stage, Game game) {
+        this.game = game;
         this.pane = pane;
         this.primaryStage = stage;
-        this.graphicsWindowX = 500;//(int)stage.getWidth(); // TODO FIX, this does not work
-        this.graphicsWindowY= 500;//(int)stage.getHeight();
-        
+        this.graphicsWindowX = game.getGraphicsWindowX();//(int)stage.getWidth(); // TODO FIX, this does not work
+        this.graphicsWindowY= game.getGraphicsWindowY();//(int)stage.getHeight();
+        this.numGrid = game.getNumGrid();
         //initial graphic
         
         Canvas canvas = new Canvas(graphicsWindowX, graphicsWindowY );
@@ -55,20 +59,20 @@ public class Render {
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
             ImageView mainCharacter = new ImageView("BombermanInda/Images/MainCharFront.png");
-            mainCharacter.setFitHeight(20);
-            mainCharacter.setFitWidth(20);
+            mainCharacter.setFitHeight(graphicsWindowX/numGrid);
+            mainCharacter.setFitWidth(graphicsWindowY/numGrid);
 
             return (Node) mainCharacter;
 
         } else if (grp == GraphicsObjects.CRATE) {
             //CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
             rect.setFill(Color.ORANGE);
             return rect;
         
         } else if (grp == GraphicsObjects.BOMB) {
             //CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
             rect.setFill(Color.RED);
             return rect;
         
@@ -103,15 +107,23 @@ public class Render {
             }             
         }
     }
+
     public int getGraphicsWindowX(){
         return graphicsWindowX;
     }
+
     public int getGraphicsWindowY(){
         return graphicsWindowX;
     }
-    public void drawBackground(World world){
-        gc.drawImage( world.getBackground(), 0, 0, graphicsWindowX,graphicsWindowY );        
+
+    public int getNumGrid(){
+        return numGrid;
     }
+
+    public void drawBackground(World world){
+        gc.drawImage(world.getBackground(), 0, 0, graphicsWindowX, graphicsWindowY );
+    }
+
     public void drawMainCharacterFront(Node graphic) {
         Image image = new Image("BombermanInda/Images/MainCharFront.png");
         ((ImageView) graphic).setImage(image);
