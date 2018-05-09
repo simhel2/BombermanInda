@@ -27,7 +27,9 @@ public class Character extends MovingObjects{
     }
     
     //TODO make less janky
-public void testControls(Stage primaryStage, Pane pane){
+
+public void testControls(Stage primaryStage, Pane pane, Render render){
+
         this.primaryStage = primaryStage;
     
         //random keylistener for no reason
@@ -36,15 +38,19 @@ public void testControls(Stage primaryStage, Pane pane){
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP) {
                     setSpeedYDirection(-1);
+                    render.drawMainCharacterBack(getNode());
                 }
                 else if (ke.getCode() == KeyCode.DOWN) {
                     setSpeedYDirection(1);
+                    render.drawMainCharacterFront(getNode());
                 }
                 else if (ke.getCode() == KeyCode.LEFT) {
                     setSpeedXDirection(-1);
+                    render.drawMainCharacterLeft(getNode());
                 }
                 else if (ke.getCode() == KeyCode.RIGHT) {
                     setSpeedXDirection(1);
+                    render.drawMainCharacterRight(getNode());
                 }
                 //layBomb
                 else if(ke.getCode()== KeyCode.SPACE) {
