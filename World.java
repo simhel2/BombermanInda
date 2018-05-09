@@ -71,7 +71,8 @@ public class World {
                         {
                 movObj.Move(newX, newY);
             } else {
-                Position pos = lineIsClear(oldX,oldY,newX,newY,25, movObj);                 //25 is diameter TODO FIX
+                Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/render.getNumGrid(),
+                        render.getGraphicsWindowY()/render.getNumGrid(), movObj);                 //25 is diameter TODO FIX
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
