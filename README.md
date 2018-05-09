@@ -6,6 +6,7 @@ The game will use JavaFX for graphics interaction.
 
 ## How to install
 
-1. Download and install IntelliJ.
-2. Clone the repo and open it from Intellij.
-3. Run the main class Bomber.
+1. Download and install JavaFX.
+2. Download and install an IDE that works with JavaFX and use it as an SDK.
+3. Clone the repo and open it from Intellij.
+4. Run the main class Bomber.
