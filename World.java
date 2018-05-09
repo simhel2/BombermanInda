@@ -94,7 +94,7 @@ public class World {
     //TODO: maybe should fix hitbox for moveable so it does not have to check all of them??
     //notes: startX and startY for everything is top left
     //notes: maybe move to move?
-        public Position lineIsClear(double startX, double startY, double endX, double endY, double radius, MovingObjects thisObj){
+        public Position lineIsClear(double startX, double startY, double endX, double endY,double radiusX, double radiusY, MovingObjects thisObj){
         int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
         int startYIndex = (int) ((startY*worldMatrix[0].length)/render.getGraphicsWindowY());        
         int endXIndex = (int) (((endX*worldMatrix.length)/render.getGraphicsWindowX()));        
@@ -108,7 +108,7 @@ public class World {
         //2 px margin
         int margin = 2;
         //check for out of bounds
-        if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radius-margin|| render.getGraphicsWindowY()< endY+radius-margin) {
+        if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radiusX-margin|| render.getGraphicsWindowY()< endY+radiusY-margin) {
             return new Position(startX, startY);
         }
         
@@ -162,9 +162,9 @@ public class World {
             //check vs itself 
             if(!(movObj==thisObj)){
                 //y aligned
-                if((endY<=movObj.getY()&&(endY+radius>movObj.getY()))||(endY<=movObj.getY()+radius&&(endY>movObj.getY()))){
+                if((endY<=movObj.getY()&&(endY+radiusY>movObj.getY()))||(endY<=movObj.getY()+radiusY&&(endY>movObj.getY()))){
                     //x aligned
-                    if((endX<=movObj.getX()&&(endX+radius>movObj.getX()))||(endX<=movObj.getX()+radius&&(endX>movObj.getX()))){
+                    if((endX<=movObj.getX()&&(endX+radiusX>movObj.getX()))||(endX<=movObj.getX()+radiusX&&(endX>movObj.getX()))){
                       return new Position(startX, startY);
                     }
 
