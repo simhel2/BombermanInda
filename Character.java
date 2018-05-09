@@ -26,8 +26,10 @@ public class Character extends MovingObjects{
         
     }
     
-    
+    //TODO make less janky
+
 public void testControls(Stage primaryStage, Pane pane, Render render){
+
         this.primaryStage = primaryStage;
     
         //random keylistener for no reason
