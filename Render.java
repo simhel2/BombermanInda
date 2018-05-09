@@ -116,7 +116,6 @@ public class Render {
         Image image = new Image("BombermanInda/Images/MainCharFront.png");
         ((ImageView) graphic).setImage(image);
     }
-
     public void drawMainCharacterBack(Node graphic) {
         Image image = new Image("BombermanInda/Images/MainCharBack.png");
         ((ImageView) graphic).setImage(image);

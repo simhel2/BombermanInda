@@ -67,18 +67,116 @@ public class World {
             double newY = movObj.getNewAfterMoveY(elapsedTimeMs);
             double oldX = movObj.getX(); 
             double oldY = movObj.getY(); 
-            if(!movObj.isCollisionEnable() ||        //if collision disabled
-                        lineIsClear(oldX,oldY,newX,newY,25, movObj)){  //25 is diameter TODO FIX
+            if(!movObj.isCollisionEnable())        //if collision disabled
+                        {
                 movObj.Move(newX, newY);
+            } else {
+                Position pos = lineIsClear(oldX,oldY,newX,newY,25, movObj);                 //25 is diameter TODO FIX
+                movObj.Move(pos.xPos,pos.yPos);
             }
         }
     }
-    //TODO: should ideally put as close as possible
-    //TODO: should check the entire line becasue otherwise slow logic or high speed gives you noclip
+    /**
+     * helper class position
+     */
+    class Position{
+        public double xPos;
+        public double yPos;    
+        public Position(double xPos, double yPos) {
+            this.xPos = xPos;
+            this.yPos = yPos;
+        }
+    };
+    
+    //TODO: should put as close as possible
+    //TODO: should ideally check the entire line becasue otherwise slow logic or high speed gives you noclip
     //TODO: maybe should fix hitbox for moveable so it does not have to check all of them??
     //notes: startX and startY for everything is top left
     //notes: maybe move to move?
-    
+        public Position lineIsClear(double startX, double startY, double endX, double endY, double radius, MovingObjects thisObj){
+        int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
+        int startYIndex = (int) ((startY*worldMatrix[0].length)/render.getGraphicsWindowY());        
+        int endXIndex = (int) (((endX*worldMatrix.length)/render.getGraphicsWindowX()));        
+        int endYIndex = (int) ((endY*worldMatrix[0].length)/render.getGraphicsWindowY()); 
+        
+        //if not move no collision
+        if(startX==endX && startY==endY){
+            return new Position(endX, endY);
+        }
+        
+        //2 px margin
+        int margin = 2;
+        //check for out of bounds
+        if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radius-margin|| render.getGraphicsWindowY()< endY+radius-margin) {
+            return new Position(startX, startY);
+        }
+        
+        //check for other collision
+
+        //moving in +x direction        
+        if(startX<endX&&endX-margin>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){
+            if(worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){ 
+                return new Position(startX, startY);
+            } 
+            //check tile under as well supports margin overlap
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
+                    &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
+                return new Position(startX, startY);
+            }
+        }
+        //moving in -x direction
+        else if(startXIndex>endXIndex){
+            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
+                return new Position(startX, startY);
+            } 
+            //check tile under as well supports margin overlap
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
+                    &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
+                return new Position(startX, startY);
+            }
+        }
+        //moving in +y direction
+        if(startYIndex>endYIndex){
+            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
+                return new Position(startX, startY);
+            } 
+            //check tile right as well supports margin overlap
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)
+                    &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
+                return new Position(startX, startY);
+            }
+        }
+        //moving in -y direction (supports margin overlap)
+        else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix.length){
+            if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
+                return new Position(startX, startY);
+            } 
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
+                    &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
+                return new Position(startX, startY);
+            }
+        }
+                //check for collision with another moving obj. but not itself!!! 
+        for (MovingObjects movObj: movingObjects) {
+            //check vs itself 
+            if(!(movObj==thisObj)){
+                //y aligned
+                if((endY<=movObj.getY()&&(endY+radius>movObj.getY()))||(endY<=movObj.getY()+radius&&(endY>movObj.getY()))){
+                    //x aligned
+                    if((endX<=movObj.getX()&&(endX+radius>movObj.getX()))||(endX<=movObj.getX()+radius&&(endX>movObj.getX()))){
+                      return new Position(startX, startY);
+                    }
+
+                }
+            }
+        }
+        
+        
+        return new Position(endX, endY);       
+        
+    }  
+
+    /**
     public boolean lineIsClear(double startX, double startY, double endX, double endY, double radius, MovingObjects thisObj){
         int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
         int startYIndex = (int) ((startY*worldMatrix[0].length)/render.getGraphicsWindowY());        
@@ -161,6 +259,7 @@ public class World {
         return true;        
         
     }  
+        **/
     
    public void breakCrate(){
     //TODO actually break the crate
