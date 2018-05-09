@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -53,12 +54,12 @@ public class Render {
             
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
-            //CHANGE
-            //Circle circle = new Circle(0,0,graphicsWindowX/(20*2)); //maybe make the 20 a variable
-            //circle.setFill(Color.GREEN);
-            Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
-            rect.setFill(Color.GREEN);
-            return rect;
+            ImageView mainCharacter = new ImageView("BombermanInda/Images/MainCharFront.png");
+            mainCharacter.setFitHeight(20);
+            mainCharacter.setFitWidth(20);
+
+            return (Node) mainCharacter;
+
         } else if (grp == GraphicsObjects.CRATE) {
             //CHANGE
             Rectangle rect = new Rectangle(graphicsWindowX/20,graphicsWindowY/20); 
@@ -110,6 +111,24 @@ public class Render {
     }
     public void drawBackground(World world){
         gc.drawImage( world.getBackground(), 0, 0, graphicsWindowX,graphicsWindowY );        
+    }
+    public void drawMainCharacterFront(Node graphic) {
+        Image image = new Image("BombermanInda/Images/MainCharFront.png");
+        ((ImageView) graphic).setImage(image);
+    }
+
+    public void drawMainCharacterBack(Node graphic) {
+        Image image = new Image("BombermanInda/Images/MainCharBack.png");
+        ((ImageView) graphic).setImage(image);
+
+    }
+    public static void drawMainCharacterRight(Node graphic) {
+        Image image = new Image("BombermanInda/Images/MainCharRight.png");
+        ((ImageView) graphic).setImage(image);
+    }
+    public static void drawMainCharacterLeft(Node graphic) {
+        Image image = new Image("BombermanInda/Images/MainCharLeft.png");
+        ((ImageView) graphic).setImage(image);
     }
 
 }
