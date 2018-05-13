@@ -59,6 +59,7 @@ public void testControls(Stage primaryStage, Render render){
                     setSpeedXDirection(1);
                     render.drawMainCharacterRight(getNode());
                 }
+
                 //layBomb
                 else if(ke.getCode()== KeyCode.PERIOD) {
                     try {
