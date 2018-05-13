@@ -2,6 +2,7 @@ package BombermanInda;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 
 
@@ -178,26 +179,33 @@ public class World {
         
     }  
     
-   public void breakCrate(){
-    //TODO actually break the crate
-    
-    //replace with random powerup
-    int x = ThreadLocalRandom.current().nextInt(0, 99);
-    
-    if (x<75) {   //75% chance to find nothing
-        //do nothing
-    } else if(x>95) {
-        //TODO insert powerup1
-    } else if(x>90) {
-        //TODO powerup2
-    } else if (x>85) {
-        //TODO powerup3
-    } else if (x>80){
-        //TODO powerup4
-    } else if (x>=75) {
-        //TODO powerup5
-    }
-}    
+    //remove the logical (but not the graphical) crate
+    public void destroyCrate(int xCord, int yCord){
+        remove(xCord, yCord);
+
+        //replace with random powerup
+        int randInt = ThreadLocalRandom.current().nextInt(0, 99);
+
+        if (randInt<75) {   //75% chance to find nothing
+             //do nothing
+        } else if(randInt>95) { 
+            //create powerup 
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_BIGGER);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.BIGGER);
+            //add it to world
+            worldMatrix[xCord][yCord]=powerUp;
+            //draw it 
+            render.drawMapObject(xCord, yCord, this);
+        } else if(randInt>90) {
+             //TODO powerup2
+        } else if (randInt>85) {
+             //TODO powerup3
+        } else if (randInt>80){
+             //TODO powerup4
+        } else if (randInt>=75) {
+             //TODO powerup5
+        }
+    }    
     
     public void remove(int x, int y){
         worldMatrix[x][y]= null;

@@ -89,7 +89,7 @@ public class Render {
     }
    
     public enum GraphicsObjects{
-        MAINCHARACTER, CRATE, BOMB;
+        MAINCHARACTER, CRATE, BOMB, POWER_BIGGER; //TODO add more
     }
             
     public Node createGraphicsEntity(GraphicsObjects grp){
@@ -111,6 +111,11 @@ public class Render {
             rect.setFill(Color.RED);
             return rect;
         
+        } else if (grp == GraphicsObjects.POWER_BIGGER) {
+            //TODO CHANGEs
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
+            rect.setFill(Color.BLUE);
+            return rect;
         } else {
             //make error
             throw new Error("could not construct object"+grp.toString());
@@ -165,7 +170,7 @@ public class Render {
     public int getNumGrid(){
         return numGrid;
     }
-
+    
     public void drawBackground(World world){
         gc.drawImage(world.getBackground(), 0, 0, graphicsWindowX, graphicsWindowY );
     }

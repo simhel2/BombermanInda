@@ -24,8 +24,9 @@ public class Explosion extends TimerTask{
     private int xCord;
     private int yCord;
     private Pane pane;
+    private Character owner;
     public Explosion(int size, World world, Render render, 
-            Node bomb,int xCord, int yCord, Pane pane) {
+            Node bomb,int xCord, int yCord, Pane pane, Character owner) {
         super();
         this.size = size;
         this.world = world;
@@ -34,6 +35,7 @@ public class Explosion extends TimerTask{
         this.xCord = xCord;
         this.yCord = yCord;
         this.pane = pane;
+        this.owner = owner;
     }
     @Override
     public void run() {
@@ -49,6 +51,7 @@ public class Explosion extends TimerTask{
                     render.drawExplosion(xCord, yCord, border.up, border.down, border.left, border.right, world);
                     world.remove(xCord, yCord);
                     pane.getChildren().remove(bomb);  
+                    owner.removeBomb(bomb);
                     
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Explosion.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,7 +97,7 @@ public class Explosion extends TimerTask{
                     leftCord = xCord -left;   //TODO wrong
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord-i][yCord].getNode());
-                    world.remove(xCord-i,yCord); //TODO destroyCrate
+                    world.destroyCrate(xCord-i,yCord);
                     
                     break;
                 } 
@@ -113,7 +116,7 @@ public class Explosion extends TimerTask{
                     rightCord = xCord + right; 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord+i][yCord].getNode());
-                    world.remove(xCord+i,yCord); //TODO destroyCrate
+                    world.destroyCrate(xCord+i,yCord); 
                     
                     break;
                 } 
@@ -133,7 +136,7 @@ public class Explosion extends TimerTask{
 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord-i].getNode());
-                    world.remove(xCord,yCord-i); //TODO destroyCrate
+                    world.destroyCrate(xCord,yCord-i); 
                     
                     break;
                 } 
@@ -153,8 +156,7 @@ public class Explosion extends TimerTask{
 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord+i].getNode());
-                    world.remove(xCord,yCord+i); //TODO destroyCrate
-                    
+                    world.destroyCrate(xCord,yCord+i); 
                     break;
                 } 
                 //bomb TODO

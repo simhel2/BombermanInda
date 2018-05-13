@@ -1,5 +1,6 @@
 package BombermanInda;
 
+import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -21,6 +22,8 @@ public class Character extends MovingObjects{
     private Pane pane;
     
     //defaults
+    private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
+    private int maxBombs = 1;
     private int lives = 3;
     private int bombSize = 3;   
     private int detTime = 3000; //ms
@@ -99,18 +102,27 @@ public void testControls(Stage primaryStage, Render render){
         //TODO add animation/imortality on taking damage
         
     }
+    public void removeBomb(Node bomb) {
+        currentBombs.remove(bomb);
+    }
 
     //TODO add function for setting controls
+    
+    
     public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid) throws InterruptedException{
-        //TODO: add new class for bomb
-        //TODO: Fix collision with bomb placement
-        Node newBomb;
-        newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
-        Bomb bomb = new Bomb(newBomb,true, true, world,render);  
-        int xCord  =  getXIndex(world,render);
-        int yCord = getYIndex(world,render);
-        world.setObject(xCord, yCord, bomb); //should maybe make one ?
-        render.drawMapObject(xCord, yCord, world);   
-        bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);       
+        
+        //TODO: Fix collision with bomb placement (no bomb stacking)
+
+        if (currentBombs.size()<maxBombs) {
+            Node newBomb;
+            newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
+            currentBombs.add(newBomb);
+            Bomb bomb = new Bomb(newBomb,true, true, world,render, this);  
+            int xCord  =  getXIndex(world,render);
+            int yCord = getYIndex(world,render);
+            world.setObject(xCord, yCord, bomb); //should maybe make one ?
+            render.drawMapObject(xCord, yCord, world);   
+            bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);       
+        }
     }
 }
