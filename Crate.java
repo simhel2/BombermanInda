@@ -23,9 +23,9 @@ public class Crate extends MapObject {
     }
     
     
-// TODO: add destroy functionality / animation
+// TODO: add destroy functionality / animation ?
 public void playDestroyAnim(){
-   //
+   
 }
     
     
