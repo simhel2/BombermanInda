@@ -85,6 +85,20 @@ public void testControls(Stage primaryStage, Render render){
         });
 
     }
+    public void damage () {
+        
+        lives--;
+        if (lives==0){
+            //remove from graphics and world
+            pane.getChildren().remove(graphic);
+            world.removeMovingObject(this);
+            
+            //TODO add check to see if gameover
+        } 
+        
+        //TODO add animation/imortality on taking damage
+        
+    }
 
     //TODO add function for setting controls
     public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid) throws InterruptedException{
@@ -93,8 +107,8 @@ public void testControls(Stage primaryStage, Render render){
         Node newBomb;
         newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
         Bomb bomb = new Bomb(newBomb,true, true, world,render);  
-        int xCord  = ((int)((getX())/(graphicsWindowX/numGrid)));
-        int yCord = ((int)((getY())/(graphicsWindowY/numGrid)));
+        int xCord  =  getXIndex(world,render);
+        int yCord = getYIndex(world,render);
         world.setObject(xCord, yCord, bomb); //should maybe make one ?
         render.drawMapObject(xCord, yCord, world);   
         bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);       

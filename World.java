@@ -72,7 +72,7 @@ public class World {
                 movObj.Move(newX, newY);
             } else {
                 Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/render.getNumGrid(),
-                        render.getGraphicsWindowY()/render.getNumGrid(), movObj);                 //25 is diameter TODO FIX
+                        render.getGraphicsWindowY()/render.getNumGrid(), movObj);                 
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
@@ -91,7 +91,7 @@ public class World {
     
     //TODO: should put as close as possible
     //TODO: should ideally check the entire line becasue otherwise slow logic or high speed gives you noclip
-    //TODO: maybe should fix hitbox for moveable so it does not have to check all of them??
+    //TODO: Maybe there is a better way to check moveable?
     //notes: startX and startY for everything is top left
     //notes: maybe move to move?
         public Position lineIsClear(double startX, double startY, double endX, double endY,double radiusX, double radiusY, MovingObjects thisObj){
@@ -208,6 +208,20 @@ public class World {
     public int getHeight(){
         return worldMatrix[0].length;
     }    
+    
+    
+    
+    public double getPixelsPerSquareX(){
+        return render.getGraphicsWindowX()/worldMatrix.length;
+    }
+     
+    public double getPixelsPerSquareY(){
+        return render.getGraphicsWindowY()/worldMatrix[0].length;
+    }
+    
+    public void removeMovingObject(MovingObjects movObj){
+        movingObjects.remove(movObj);
+    }
     
     public Image getBackground(){
         return background;

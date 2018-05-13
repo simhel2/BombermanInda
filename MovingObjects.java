@@ -72,4 +72,15 @@ public abstract class MovingObjects extends MapObject{
         this.maxSpeed = maxSpeed;
     }
     
+    public int getYIndex(World world, Render render){
+        return (int) ((((getY()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix()[0].length))
+                /render.getGraphicsWindowY());        
+    }
+    
+    public int getXIndex(World world, Render render){
+        return (int) ((((getX()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix().length))
+                /render.getGraphicsWindowX());        
+    }
+    
+    abstract void damage();
 }
