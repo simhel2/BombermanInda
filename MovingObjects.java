@@ -18,7 +18,11 @@ public abstract class MovingObjects extends MapObject{
     double speedX = 0;     
     double speedY = 0;
     //int acceleration = 3;  
-    double maxSpeed = 0.1;
+
+
+    double maxSpeed = 0.5;
+
+
    
     
     public MovingObjects(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
