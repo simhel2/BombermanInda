@@ -101,9 +101,10 @@ public class Render {
 
         } else if (grp == GraphicsObjects.CRATE) {
             //CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
-            rect.setFill(Color.ORANGE);
-            return rect;
+            ImageView crate = new ImageView("BombermanInda/Images/Crate.png");
+            crate.setFitWidth(graphicsWindowY/numGrid);
+            crate.setFitHeight(graphicsWindowY/numGrid);
+            return crate;
         
         } else if (grp == GraphicsObjects.BOMB) {
             //CHANGE
