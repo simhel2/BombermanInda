@@ -34,8 +34,8 @@ public class Game extends Application {
 
 private Pane pane;
 private GameMenu menu;
-private int graphicsWindowX = 500; // Window size
-private int graphicsWindowY = 500; // Window size
+private int graphicsWindowX = 1000; // Window size
+private int graphicsWindowY = 1000; // Window size
 private int numGrid = 20;
 
     @Override
@@ -122,11 +122,13 @@ private int numGrid = 20;
         mainChar.testControls(primaryStage, render);
 
         //create moving obj dummy
-        Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //TODO change
+        Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
 
-        Character dummyChar1 = new Character(dummyNode1,60,30, true,true, render, world, pane);
+        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-50,graphicsWindowY-50, true,true, render, world, pane);
 
         world.addMovingObject(dummyChar1);
+
+        dummyChar1.secondPlayerControl(primaryStage, render);
         
 
         

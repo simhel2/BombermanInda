@@ -60,7 +60,7 @@ public void testControls(Stage primaryStage, Render render){
                     render.drawMainCharacterRight(getNode());
                 }
                 //layBomb
-                else if(ke.getCode()== KeyCode.SPACE) {
+                else if(ke.getCode()== KeyCode.PERIOD) {
                     try {
                     layBomb(render.getGraphicsWindowY(), render.getGraphicsWindowY(), render.getNumGrid());
                     } catch (InterruptedException e){
@@ -85,6 +85,58 @@ public void testControls(Stage primaryStage, Render render){
         });
 
     }
+
+    public void secondPlayerControl(Stage primaryStage, Render render){
+
+        this.primaryStage = primaryStage;
+
+        //random keylistener for no reason
+        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.W) {
+                    setSpeedYDirection(-1);
+                    render.drawSecondCharacterBack(getNode());
+                }
+                else if (ke.getCode() == KeyCode.S) {
+                    setSpeedYDirection(1);
+                    render.drawSecondCharacterFront(getNode());
+                }
+                else if (ke.getCode() == KeyCode.A) {
+                    setSpeedXDirection(-1);
+                    render.drawSecondCharacterLeft(getNode());
+                }
+                else if (ke.getCode() == KeyCode.D) {
+                    setSpeedXDirection(1);
+                    render.drawSecondCharacterRight(getNode());
+                }
+                //layBomb
+                else if(ke.getCode()== KeyCode.T) {
+                    try {
+                        layBomb(render.getGraphicsWindowY(), render.getGraphicsWindowY(), render.getNumGrid());
+                    } catch (InterruptedException e){
+                        //TODO
+                    }
+                }
+
+            }
+        });
+
+        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.W || ke.getCode() == KeyCode.S) {
+                    setSpeedYDirection(0);
+                }
+                if (ke.getCode() == KeyCode.A || ke.getCode() == KeyCode.D) {
+                    setSpeedXDirection(0);
+                }
+
+            }
+        });
+
+    }
+
 
     //TODO add function for setting controls
     public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid) throws InterruptedException{
