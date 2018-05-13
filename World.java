@@ -2,6 +2,7 @@ package BombermanInda;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 
 
@@ -49,7 +50,7 @@ public class World {
             if(worldMatrix[x][y]==null ) {   
                 try {
                     worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
-                         ,0,0,true,true);            //could be split for more code clarity                    
+                         ,0,0,true,true);                       
                 } catch (Error e) {
                     System.out.println(e.getMessage());
                 }
@@ -72,7 +73,7 @@ public class World {
                 movObj.Move(newX, newY);
             } else {
                 Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/render.getNumGrid(),
-                        render.getGraphicsWindowY()/render.getNumGrid(), movObj);                 //25 is diameter TODO FIX
+                        render.getGraphicsWindowY()/render.getNumGrid(), movObj);                 
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
@@ -91,7 +92,7 @@ public class World {
     
     //TODO: should put as close as possible
     //TODO: should ideally check the entire line becasue otherwise slow logic or high speed gives you noclip
-    //TODO: maybe should fix hitbox for moveable so it does not have to check all of them??
+    //TODO: Maybe there is a better way to check moveable?
     //notes: startX and startY for everything is top left
     //notes: maybe move to move?
         public Position lineIsClear(double startX, double startY, double endX, double endY,double radiusX, double radiusY, MovingObjects thisObj){
@@ -158,7 +159,7 @@ public class World {
                 return new Position(startX, startY);
             }
         }
-                //check for collision with another moving obj. but not itself!!! 
+        //check for collision with another moving obj. but not itself
         for (MovingObjects movObj: movingObjects) {
             //check vs itself 
             if(!(movObj==thisObj)){
@@ -170,34 +171,73 @@ public class World {
                     }
 
                 }
+            
+                
+               
+            }
+            //if character check for collison with powerup. TODO add enemies??
+            if(movObj.getClass() == BombermanInda.Character.class) {
+                if (worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)]!=null){                    
+                    if (worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)].getClass()
+                            == PowerUp.class ) {
+                        //consume the powerup
+                        ((PowerUp)worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)]
+                                ).consume((Character)movObj);
+                          //remove the powerup
+                          render.removeObject(worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)].getNode());
+                          worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)]= null;                 
+                    }
+                }
+
             }
         }
+        
         
         
         return new Position(endX, endY);       
         
     }  
     
-   public void breakCrate(){
-    //TODO actually break the crate
-    
-    //replace with random powerup
-    int x = ThreadLocalRandom.current().nextInt(0, 99);
-    
-    if (x<75) {   //75% chance to find nothing
-        //do nothing
-    } else if(x>95) {
-        //TODO insert powerup1
-    } else if(x>90) {
-        //TODO powerup2
-    } else if (x>85) {
-        //TODO powerup3
-    } else if (x>80){
-        //TODO powerup4
-    } else if (x>=75) {
-        //TODO powerup5
-    }
-}    
+    //remove the logical (but not the graphical) crate
+    public void destroyCrate(int xCord, int yCord){
+        remove(xCord, yCord);
+
+        //replace with random powerup
+        int randInt = ThreadLocalRandom.current().nextInt(0, 99);
+
+        if (randInt<50) {   //50% chance to find nothing
+             //do nothing
+        } else if(randInt>95) {    //??
+
+        } else if(randInt>90) {     //??
+             //TODO powerup2
+        } else if (randInt>85) {    //speed
+            //create powerup 
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_SPEED);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.SPEED); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            //add it to world
+            setObject(xCord, yCord, powerUp);
+            //draw it 
+            render.drawMapObject(xCord, yCord, this);
+        } else if (randInt>80){     //More bombs
+            //create powerup 
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_MORE);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.MORE); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            //add it to world
+            setObject(xCord, yCord, powerUp);
+            //draw it 
+            render.drawMapObject(xCord, yCord, this);
+
+        } else if (randInt>=75) {            //bigger bombs
+            //create powerup 
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_BIGGER);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.BIGGER); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            //add it to world
+            setObject(xCord, yCord, powerUp);
+            //draw it 
+            render.drawMapObject(xCord, yCord, this);
+        }
+    }    
     
     public void remove(int x, int y){
         worldMatrix[x][y]= null;
@@ -208,6 +248,20 @@ public class World {
     public int getHeight(){
         return worldMatrix[0].length;
     }    
+    
+    
+    
+    public double getPixelsPerSquareX(){
+        return render.getGraphicsWindowX()/worldMatrix.length;
+    }
+     
+    public double getPixelsPerSquareY(){
+        return render.getGraphicsWindowY()/worldMatrix[0].length;
+    }
+    
+    public void removeMovingObject(MovingObjects movObj){
+        movingObjects.remove(movObj);
+    }
     
     public Image getBackground(){
         return background;

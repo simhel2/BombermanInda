@@ -15,18 +15,18 @@ import javafx.scene.layout.Pane;
  */
 public class Bomb extends MapObject{
  
-   
-
-    public Bomb(Node newBomb, boolean isVisible, boolean collisionEnable, World world, Render render) {
+    Character owner;
+    
+    public Bomb(Node newBomb, boolean isVisible, boolean collisionEnable, World world, Render render, Character owner) {
         super(newBomb, 0, 0 , isVisible , collisionEnable);
-
+        this.owner = owner;
     }
     
     public void setFuse(int milliseconds,int bombSize, World world, Render render,
             Node bomb, int xCord, int yCord, Pane pane) throws InterruptedException {
         Timer detTimer = new Timer();
         Explosion explosion = new Explosion(bombSize,world, render, 
-                getNode(), xCord, yCord, pane); //bomb
+                getNode(), xCord, yCord, pane, owner); //bomb
         detTimer.schedule(explosion, milliseconds);      
         
     }

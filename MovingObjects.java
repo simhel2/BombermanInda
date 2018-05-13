@@ -19,7 +19,9 @@ public abstract class MovingObjects extends MapObject{
     double speedY = 0;
     //int acceleration = 3;  
 
+
     double maxSpeed = 0.5;
+
 
    
     
@@ -73,5 +75,10 @@ public abstract class MovingObjects extends MapObject{
     public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
+    public double getMaxSpeed(){
+        return maxSpeed;
+    }
     
+
+    abstract void damage();
 }

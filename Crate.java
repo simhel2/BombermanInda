@@ -23,7 +23,7 @@ public class Crate extends MapObject {
     }
     
     
-// TODO: add destroy functionality / animation ?
+// TODO: add destroy functionality / animation ? WARNING NOT CALLED ATM!
 public void playDestroyAnim(){
    
 }

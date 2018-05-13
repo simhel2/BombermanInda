@@ -89,7 +89,9 @@ public class Render {
     }
    
     public enum GraphicsObjects{
-        MAINCHARACTER, CRATE, BOMB,SECONDCHARACTER;
+
+        MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED; //TODO add more
+
     }
             
     public Node createGraphicsEntity(GraphicsObjects grp){
@@ -114,12 +116,30 @@ public class Render {
             bomb.setFitHeight(graphicsWindowY/numGrid);
             return bomb;
         
+
         } else if (grp == GraphicsObjects.SECONDCHARACTER) {
 
             ImageView secondCharacter = new ImageView("BombermanInda/Images/CharTwoFront.png");
             secondCharacter.setFitHeight(graphicsWindowY/numGrid);
             secondCharacter.setFitWidth(graphicsWindowY/numGrid);
             return secondCharacter;
+
+
+        } else if (grp == GraphicsObjects.POWER_BIGGER) {
+            //TODO CHANGE
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
+            rect.setFill(Color.BLUE);
+            return rect;
+        } else if (grp == GraphicsObjects.POWER_MORE) {
+            //TODO CHANGE
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
+            rect.setFill(Color.GREEN);
+            return rect;
+        } else if (grp == GraphicsObjects.POWER_SPEED) {
+            //TODO CHANGE
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
+            rect.setFill(Color.YELLOW);
+            return rect;
 
         } else {
             //make error
@@ -175,9 +195,12 @@ public class Render {
     public int getNumGrid(){
         return numGrid;
     }
-
+    
     public void drawBackground(World world){
         gc.drawImage(world.getBackground(), 0, 0, graphicsWindowX, graphicsWindowY );
+    }
+    public void removeObject(Node node) {
+        pane.getChildren().remove(node);
     }
 
     public void drawMainCharacterFront(Node graphic) {
