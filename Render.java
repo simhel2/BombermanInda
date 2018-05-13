@@ -89,28 +89,42 @@ public class Render {
     }
    
     public enum GraphicsObjects{
-        MAINCHARACTER, CRATE, BOMB, POWER_BIGGER, POWER_MORE, POWER_SPEED; //TODO add more
+
+        MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED; //TODO add more
+
     }
             
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
+
             ImageView mainCharacter = new ImageView("BombermanInda/Images/MainCharFront.png");
             mainCharacter.setFitHeight(graphicsWindowX/numGrid);
             mainCharacter.setFitWidth(graphicsWindowY/numGrid);
             return (Node) mainCharacter;
 
         } else if (grp == GraphicsObjects.CRATE) {
-            //CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
-            rect.setFill(Color.ORANGE);
-            return rect;
+
+            ImageView crate = new ImageView("BombermanInda/Images/Crate.png");
+            crate.setFitWidth(graphicsWindowY/numGrid);
+            crate.setFitHeight(graphicsWindowY/numGrid);
+            return crate;
         
         } else if (grp == GraphicsObjects.BOMB) {
-            //CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
-            rect.setFill(Color.RED);
-            return rect;
+
+            ImageView bomb = new ImageView("BombermanInda/Images/Bomb.png");
+            bomb.setFitWidth(graphicsWindowY/numGrid);
+            bomb.setFitHeight(graphicsWindowY/numGrid);
+            return bomb;
         
+
+        } else if (grp == GraphicsObjects.SECONDCHARACTER) {
+
+            ImageView secondCharacter = new ImageView("BombermanInda/Images/CharTwoFront.png");
+            secondCharacter.setFitHeight(graphicsWindowY/numGrid);
+            secondCharacter.setFitWidth(graphicsWindowY/numGrid);
+            return secondCharacter;
+
+
         } else if (grp == GraphicsObjects.POWER_BIGGER) {
             //TODO CHANGE
             Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
@@ -126,6 +140,7 @@ public class Render {
             Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
             rect.setFill(Color.YELLOW);
             return rect;
+
         } else {
             //make error
             throw new Error("could not construct object"+grp.toString());
@@ -197,12 +212,30 @@ public class Render {
         ((ImageView) graphic).setImage(image);
 
     }
-    public static void drawMainCharacterRight(Node graphic) {
+    public void drawMainCharacterRight(Node graphic) {
         Image image = new Image("BombermanInda/Images/MainCharRight.png");
         ((ImageView) graphic).setImage(image);
     }
-    public static void drawMainCharacterLeft(Node graphic) {
+    public void drawMainCharacterLeft(Node graphic) {
         Image image = new Image("BombermanInda/Images/MainCharLeft.png");
+        ((ImageView) graphic).setImage(image);
+    }
+
+    public void drawSecondCharacterFront(Node graphic) {
+        Image image = new Image("BombermanInda/Images/CharTwoFront.png");
+        ((ImageView) graphic).setImage(image);
+    }
+    public void drawSecondCharacterBack(Node graphic) {
+        Image image = new Image("BombermanInda/Images/CharTwoBack.png");
+        ((ImageView) graphic).setImage(image);
+
+    }
+    public static void drawSecondCharacterRight(Node graphic) {
+        Image image = new Image("BombermanInda/Images/CharTwoRight.png");
+        ((ImageView) graphic).setImage(image);
+    }
+    public static void drawSecondCharacterLeft(Node graphic) {
+        Image image = new Image("BombermanInda/Images/CharTwoLeft.png");
         ((ImageView) graphic).setImage(image);
     }
 

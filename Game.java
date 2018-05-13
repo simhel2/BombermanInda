@@ -34,8 +34,8 @@ public class Game extends Application {
 
 private Pane pane;
 private GameMenu menu;
-private int graphicsWindowX = 500; // Window size
-private int graphicsWindowY = 500; // Window size
+private int graphicsWindowX = 1000; // Window size
+private int graphicsWindowY = 1000; // Window size
 private int numGrid = 20;
 
     @Override
@@ -53,18 +53,20 @@ private int numGrid = 20;
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
         Render render = new Render(pane, primaryStage, this);
 
+        ImageView background = new ImageView("BombermanInda/Images/Blue.jpg");
+        pane.getChildren().add(background);
 
         ImageView bombermanLogo = new ImageView("BombermanInda/Images/BomberManTitle.png");
         pane.getChildren().add(bombermanLogo);
         bombermanLogo.setFitHeight(71);
         bombermanLogo.setFitWidth(256);
-        bombermanLogo.relocate(125, 50);
+        bombermanLogo.relocate(graphicsWindowX/3, graphicsWindowY/10);
 
 
         // Makes a button that starts the game
         Button startButton = new Button("Start");
         pane.getChildren().add(startButton);
-        startButton.relocate(125, 100);
+        startButton.relocate(graphicsWindowX/3, graphicsWindowY/5);
         ImageView startButtonImage = new ImageView("BombermanInda/Images/MainCharFront.png");
         startButton.setGraphic((Node) startButtonImage);
         startButton.setOnMousePressed(e -> startGame(primaryStage));
@@ -72,7 +74,7 @@ private int numGrid = 20;
         // Makes a button that exits the program
         Button quitButton = new Button("Quit");
         pane.getChildren().add(quitButton);
-        quitButton.relocate(125, 300);
+        quitButton.relocate(graphicsWindowX/3, graphicsWindowY/3);
         ImageView quitButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
         quitButton.setGraphic((Node) quitButtonImage);
         quitButton.setOnMousePressed(e -> System.exit(1));
@@ -80,7 +82,7 @@ private int numGrid = 20;
         // Makes a button that takes takes you to the options
         Button optionsButton = new Button("Options");
         pane.getChildren().add(optionsButton);
-        optionsButton.relocate(125, 200);
+        optionsButton.relocate(graphicsWindowX/3,  graphicsWindowY/2);
         ImageView optionsButtonImage = new ImageView("BombermanInda/Images/MainCharRight.png");
         optionsButton.setGraphic((Node) optionsButtonImage);
         optionsButton.setOnMousePressed(e -> optionsMenu(primaryStage));
@@ -108,7 +110,7 @@ private int numGrid = 20;
         Render render = new Render(pane, primaryStage, this);
 
         //init background
-        Image background = new Image( "BombermanInda/Images/heart.jpg" );
+        Image background = new Image( "BombermanInda/Images/Grey.png" );
 
         //init world
         // TODO fix so it will be scaleable.
@@ -122,12 +124,14 @@ private int numGrid = 20;
         mainChar.testControls(primaryStage, render);
 
         //create moving obj dummy
-        Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //TODO change
+        Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
 
-        Character dummyChar1 = new Character(dummyNode1,60,30, true,true, render, world, pane);
+        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-50,graphicsWindowY-50, true,true, render, world, pane);
 
         world.addMovingObject(dummyChar1);
-        
+
+        dummyChar1.secondPlayerControl(primaryStage, render);
+
 
         
         
@@ -167,6 +171,10 @@ private int numGrid = 20;
             }
         });
         */
+
+    }
+
+    public void endScreen (Stage primaryStage) {
 
     }
 
