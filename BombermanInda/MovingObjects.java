@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package indaprojekt;
+package BombermanInda;
 
 import javafx.scene.Node;
 
@@ -13,19 +13,23 @@ import javafx.scene.Node;
  */
 
 
-public class MovingObjects extends MapObject{
+public abstract class MovingObjects extends MapObject{
     
-    int speedX = 0;     //make modifiable
-    int speedY = 0;
-    //int acceleration = 3;   // make modifiable
-    int maxSpeed = 30;  //x+y speed? 
+    double speedX = 0;     
+    double speedY = 0;
+    //int acceleration = 3;  
+
+
+    double maxSpeed = 0.5;
+
+
    
     
-    public MovingObjects(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    public MovingObjects(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
         super(graphic, posX, posY, isVisible, collisionEnable);
     }
     
-    public void setSpeedX(int direction){
+    public void setSpeedXDirection(int direction){
         if (speedX==(-direction)*maxSpeed) {     //stop
            speedX = 0;
         } else {
@@ -34,7 +38,7 @@ public class MovingObjects extends MapObject{
         }
         
     }
-    public void setSpeedY(int direction){
+    public void setSpeedYDirection(int direction){
         if (speedY==(-direction)*maxSpeed) {     //stop
            speedY = 0;
         } else {
@@ -43,37 +47,38 @@ public class MovingObjects extends MapObject{
         }        
     }
     
- 
-    //time = time since last frame
-    public void Move(double time){
-       double deltaMoveX =  speedX/30;//time* speedX; TODO FIX
-       double deltaMoveY =  speedY/30;//time* speedY;
-       System.out.println(deltaMoveX);
-       //check for collision
+
+    public void Move(double newPosX, double newPosY){  
        //Move X
-       getNode().relocate(getX()+(int)deltaMoveX, getY()); //may become conversionproblem? 
-       setX(getX()+(int)deltaMoveX);
+       getNode().relocate((int)newPosX, getY()); 
+       setX(newPosX);
        //Move Y
-       getNode().relocate(getX(), getY()+(int)deltaMoveY);  
-       setY(getY()+(int)deltaMoveY);
-       
-       
-       
-       
+       getNode().relocate(getX(), (int)newPosY); 
+       setY(newPosY);
+    }   
+    public double getNewAfterMoveX(long elapsedTimeMs){
+        double deltaMoveX =  (elapsedTimeMs* speedX)/1000; 
+        return getX()+deltaMoveX;
     }
-    
-    
-    private boolean CollisionDetection(int posX, int posY, int afterX, int afterY){
-        return true;
+    public double getNewAfterMoveY(long elapsedTimeMs){
+        double deltaMoveY =  (elapsedTimeMs* speedY)/1000; 
+        return getY()+deltaMoveY;
     }
-    
-    
-    
-    public void setY(int toY){
+        
+    public void setY(double toY){
         posY = toY;
     }
     
-    public void setX(int toX){
+    public void setX(double toX){
         posX = toX;
     }
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+    public double getMaxSpeed(){
+        return maxSpeed;
+    }
+    
+
+    abstract void damage();
 }

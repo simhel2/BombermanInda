@@ -4,4 +4,9 @@ This project is about creating a Bomberman-like game. Here, the player will be a
 
 The game will use JavaFX for graphics interaction.
 
-The only way right now to download and play the game is to clone the repo and run the main class.
+## How to install
+
+1. Download and install JavaFX.
+2. Download and install an IDE that works with JavaFX and use it as an SDK.
+3. Clone the repo and open it from Intellij.
+4. Run the main class Bomber.

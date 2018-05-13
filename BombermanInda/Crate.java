@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package indaprojekt;
+package BombermanInda;
 
+import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.Node;
 
 /**
@@ -12,14 +13,20 @@ import javafx.scene.Node;
  * @author simon
  */
 
+//TODO: add different types of crates
 
 
 public class Crate extends MapObject {
-    public Crate(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    public Crate(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
                 super(graphic, posX, posY, isVisible, collisionEnable);
                 
     }
     
-    //add destroy functionality / animation
+    
+// TODO: add destroy functionality / animation ? WARNING NOT CALLED ATM!
+public void playDestroyAnim(){
+   
+}
+    
     
 }

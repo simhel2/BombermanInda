@@ -1,5 +1,6 @@
-package indaprojekt;
+package BombermanInda;
 
+import java.util.ArrayList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -16,82 +17,61 @@ public class Character extends MovingObjects{
     private Stage primaryStage;
     
     
+    private Render render;
+    private World world;
+    private Pane pane;
     
-    public Character(Node graphic, int posX, int posY, boolean isVisible, boolean collisionEnable){
+    //defaults
+    private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
+    private int maxBombs = 1;
+    private int lives = 3;
+    private int bombSize = 3;   
+    private int detTime = 3000; //ms
+    
+    public Character(Node graphic, double posX, double posY, boolean isVisible, 
+            boolean collisionEnable, Render render, World world, Pane pane){
         super(graphic, posX, posY, isVisible, collisionEnable);
- 
+        this.render = render;
+        this.world = world;
+        this.pane = pane;
     }
     
-       
-    public void testMovement(Stage primaryStage, Pane pane){
+    //TODO make less janky
+
+public void testControls(Stage primaryStage, Render render){
+
         this.primaryStage = primaryStage;
-    
+
         //random keylistener for no reason
         primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP) {
-                    getNode().relocate(getX(), getY()-5);  //todo make 5 some sort of constant!
-                    setY(getY()-5);
-                   
+                    setSpeedYDirection(-1);
+                    render.drawMainCharacterBack(getNode());
                 }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    getNode().relocate(getX(),getY()+5);
-                    setY(getY()+5);
+                else if (ke.getCode() == KeyCode.DOWN) {
+                    setSpeedYDirection(1);
+                    render.drawMainCharacterFront(getNode());
                 }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    getNode().relocate(getX()-5, getY());
-                    setX(getX()-5);
+                else if (ke.getCode() == KeyCode.LEFT) {
+                    setSpeedXDirection(-1);
+                    render.drawMainCharacterLeft(getNode());
                 }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    getNode().relocate(getX()+5,getY());
-                    setX(getX()+5);
+                else if (ke.getCode() == KeyCode.RIGHT) {
+                    setSpeedXDirection(1);
+                    render.drawMainCharacterRight(getNode());
                 }
-            }
-        });
-    }
-    public void testMovement2(Stage primaryStage, Pane pane){
-        this.primaryStage = primaryStage;
-    
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    setSpeedY(-1);
+
+                //layBomb
+                else if(ke.getCode()== KeyCode.PERIOD) {
+                    try {
+                        layBomb();
+                    } catch (InterruptedException e){
+                        //TODO
+                    }
                 }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(1);
-                }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedX(-1);
-                }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(1);
-                }
-            }
-        });
-    }
-    
-public void testMovement3(Stage primaryStage, Pane pane){
-        this.primaryStage = primaryStage;
-    
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    setSpeedY(-1);
-                }
-                if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(1);
-                }
-                 if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedX(-1);
-                }
-                if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(1);
-                }
+
             }
         });
         
@@ -99,31 +79,125 @@ public void testMovement3(Stage primaryStage, Pane pane){
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP || ke.getCode() == KeyCode.DOWN) {
-                    setSpeedY(0);
+                    setSpeedYDirection(0);
                 }
                 if (ke.getCode() == KeyCode.LEFT || ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedX(0);
+                    setSpeedXDirection(0);
                 }
                 
             }
         });
-    }
-    //WARNING ROUNDS DOWN AGGRESSIVELY
-    public int getCurrentPosAsIndexX(int worldWidth){
-        int pxWidth =  500;   //primaryStage.getWidth(); TODO FIX 
-         
-        return (getX()*worldWidth)/pxWidth;
-       
-        //ex: (300* 20)/500  = 12. 
-    }
-    //WARNING ROUNDS DOWN AGGRESSIVELY
-    public int getCurrentPosAsIndexY(int worldHeight){
-        int pxHeight = 500; //primaryStage.getHeight(); TODO FIX 
 
-        return (getY()*worldHeight)/pxHeight;
+    }
+
+    public void secondPlayerControl(Stage primaryStage, Render render){
+
+        this.primaryStage = primaryStage;
+
+        //random keylistener for no reason
+        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.W) {
+                    setSpeedYDirection(-1);
+                    render.drawSecondCharacterBack(getNode());
+                }
+                else if (ke.getCode() == KeyCode.S) {
+                    setSpeedYDirection(1);
+                    render.drawSecondCharacterFront(getNode());
+                }
+                else if (ke.getCode() == KeyCode.A) {
+                    setSpeedXDirection(-1);
+                    render.drawSecondCharacterLeft(getNode());
+                }
+                else if (ke.getCode() == KeyCode.D) {
+                    setSpeedXDirection(1);
+                    render.drawSecondCharacterRight(getNode());
+                }
+                //layBomb
+                else if(ke.getCode()== KeyCode.T) {
+                    try {
+                        layBomb();
+                    } catch (InterruptedException e){
+                        //TODO
+                    }
+                }
+
+            }
+        });
+
+        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent ke) {
+                if (ke.getCode() == KeyCode.W || ke.getCode() == KeyCode.S) {
+                    setSpeedYDirection(0);
+                }
+                if (ke.getCode() == KeyCode.A || ke.getCode() == KeyCode.D) {
+                    setSpeedXDirection(0);
+                }
+
+            }
+        });
+
+    }
+
+    public void damage () {
+        
+        lives--;
+        if (lives==0){
+            //remove from graphics and world
+            pane.getChildren().remove(graphic);
+            world.removeMovingObject(this);
+            
+            //check if game over
+            int charsLeft = 0;
+            for (MovingObjects movObj : world.getMovingObjects() ) {
+                if(movObj.getClass() == Character.class) {
+                    charsLeft++;
+                }
+                
+            }
+            if (charsLeft<=1)
+            {
+                System.out.println("game over");
+                //TODO game over
+            }
+        } 
+        
+        //TODO add animation/imortality on taking damage
+        
+    }
+    public void removeBomb(Node bomb) {
+        currentBombs.remove(bomb);
     }
     
-   
+    public void improveBombs(int i){
+        bombSize = bombSize+i; 
+    }
+    public void addBombLimit(int i){
+        maxBombs=maxBombs+i;
+    }
+    public void changeSpeed(double mult){
+        setMaxSpeed(getMaxSpeed()*mult);
+    }
+    
     //TODO add function for setting controls
+    
+    
+    public void layBomb() throws InterruptedException{
+        
+        //TODO: Fix collision with bomb placement (no bomb stacking)
 
+        if (currentBombs.size()<maxBombs) {
+            Node newBomb;
+            newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
+            currentBombs.add(newBomb);
+            Bomb bomb = new Bomb(newBomb,true, true, world,render, this);  
+            int xCord  =  getXIndex(world,render);
+            int yCord = getYIndex(world,render);
+            world.setObject(xCord, yCord, bomb); //should maybe make one ?
+            render.drawMapObject(xCord, yCord, world);   
+            bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);       
+        }
+    }
 }
