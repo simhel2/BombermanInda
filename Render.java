@@ -38,7 +38,8 @@ public class Render {
     private Stage primaryStage;  
     private int graphicsWindowX;    
     private int graphicsWindowY;
-    private int numGrid;
+    private int numGridX;
+    private int numGridY;
     private Game game;
 
     public Render (Pane pane, Stage stage, Game game) {
@@ -47,7 +48,9 @@ public class Render {
         this.primaryStage = stage;
         this.graphicsWindowX = game.getGraphicsWindowX();
         this.graphicsWindowY= game.getGraphicsWindowY();
-        this.numGrid = game.getNumGrid();
+        this.numGridX = game.getNumGridX();
+        this.numGridY = game.getNumGridY();
+
         //initial graphic
         
         Canvas canvas = new Canvas(graphicsWindowX, graphicsWindowY );
@@ -62,8 +65,8 @@ public class Render {
             int rightSize, World world) throws InterruptedException {
 
         Polygon explosion  = new Polygon();
-        double multX = graphicsWindowX/numGrid;
-        double multY = graphicsWindowY/numGrid;
+        double multX = graphicsWindowX/numGridX;
+        double multY = graphicsWindowY/numGridY;
         explosion.getPoints().addAll(new Double[]{
                    
         //cross
@@ -98,50 +101,48 @@ public class Render {
         if(grp==GraphicsObjects.MAINCHARACTER) {
 
             ImageView mainCharacter = new ImageView("BombermanInda/Images/MainCharFront.png");
-            mainCharacter.setFitHeight(graphicsWindowX/numGrid);
-            mainCharacter.setFitWidth(graphicsWindowY/numGrid);
+            mainCharacter.setFitWidth(graphicsWindowX/numGridX);
+            mainCharacter.setFitHeight(graphicsWindowY/numGridY);
             return (Node) mainCharacter;
 
         } else if (grp == GraphicsObjects.CRATE) {
 
             ImageView crate = new ImageView("BombermanInda/Images/Crate.png");
-            crate.setFitWidth(graphicsWindowY/numGrid);
-            crate.setFitHeight(graphicsWindowY/numGrid);
+            crate.setFitWidth(graphicsWindowX/numGridX);
+            crate.setFitHeight(graphicsWindowY/numGridY);
             return crate;
         
         } else if (grp == GraphicsObjects.BOMB) {
 
             ImageView bomb = new ImageView("BombermanInda/Images/Bomb.png");
-            bomb.setFitWidth(graphicsWindowY/numGrid);
-            bomb.setFitHeight(graphicsWindowY/numGrid);
+            bomb.setFitWidth(graphicsWindowX/numGridX);
+            bomb.setFitHeight(graphicsWindowY/numGridY);
             return bomb;
         
 
         } else if (grp == GraphicsObjects.SECONDCHARACTER) {
 
             ImageView secondCharacter = new ImageView("BombermanInda/Images/CharTwoFront.png");
-            secondCharacter.setFitHeight(graphicsWindowY/numGrid);
-            secondCharacter.setFitWidth(graphicsWindowY/numGrid);
+            secondCharacter.setFitWidth(graphicsWindowX/numGridX);
+            secondCharacter.setFitHeight(graphicsWindowY/numGridY);
             return secondCharacter;
 
 
         } else if (grp == GraphicsObjects.POWER_BIGGER) {
-            //TODO CHANGE
             ImageView biggerFlames = new ImageView("BombermanInda/Images/BiggerFlames.png");
-            biggerFlames.setFitHeight(graphicsWindowY/numGrid);
-            biggerFlames.setFitWidth(graphicsWindowY/numGrid);
+            biggerFlames.setFitWidth(graphicsWindowX/numGridX);
+            biggerFlames.setFitHeight(graphicsWindowY/numGridY);
             return biggerFlames;
         } else if (grp == GraphicsObjects.POWER_MORE) {
-            //TODO CHANGE
             ImageView moreBombs = new ImageView("BombermanInda/Images/MoreBombs.png");
-            moreBombs.setFitHeight(graphicsWindowY/numGrid);
-            moreBombs.setFitWidth(graphicsWindowY/numGrid);
+            moreBombs.setFitWidth(graphicsWindowX/numGridX);
+            moreBombs.setFitHeight(graphicsWindowY/numGridY);
+
             return moreBombs;
         } else if (grp == GraphicsObjects.POWER_SPEED) {
-            //TODO CHANGE
             ImageView speedUp = new ImageView("BombermanInda/Images/SpeedUp.png");
-            speedUp.setFitHeight(graphicsWindowY/numGrid);
-            speedUp.setFitWidth(graphicsWindowY/numGrid);
+            speedUp.setFitWidth(graphicsWindowX/numGridX);
+            speedUp.setFitHeight(graphicsWindowY/numGridY);
             return speedUp;
 
         } else {
@@ -162,7 +163,7 @@ public class Render {
                        pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize?)    
                    } 
                    //calculate position:
-                   int posX = i*graphicsWindowX/world.getWorldMatrix().length;  //change here to change size (20)
+                   int posX = i*graphicsWindowX/world.getWorldMatrix().length;  
                    int posY = j*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[i][j].getNode().relocate(posX,posY);                   
                }                     
@@ -181,7 +182,7 @@ public class Render {
                        pane.getChildren().add(world.getWorldMatrix()[x][y].getNode());                   //(optimize?)    
                    } 
                    //calculate position:
-                   int posX = x*graphicsWindowX/world.getWorldMatrix().length;  //change here to change size (20)
+                   int posX = x*graphicsWindowX/world.getWorldMatrix().length; 
                    int posY = y*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[x][y].getNode().relocate(posX,posY);                   
         }           
@@ -192,11 +193,15 @@ public class Render {
     }
 
     public int getGraphicsWindowY(){
-        return graphicsWindowX;
+        return graphicsWindowY;
     }
 
-    public int getNumGrid(){
-        return numGrid;
+    public int getNumGridX(){
+        return numGridX;
+    }
+    
+    public int getNumGridY(){
+        return numGridY;
     }
     
     public void drawBackground(World world){

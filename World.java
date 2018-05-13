@@ -72,8 +72,8 @@ public class World {
                         {
                 movObj.Move(newX, newY);
             } else {
-                Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/render.getNumGrid(),
-                        render.getGraphicsWindowY()/render.getNumGrid(), movObj);                 
+                Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/worldMatrix.length,
+                        render.getGraphicsWindowY()/worldMatrix[0].length, movObj); 
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
@@ -122,7 +122,7 @@ public class World {
             } 
             //add else if for nudge TODO
             //check tile under as well supports margin overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
                     &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
                 return new Position(startX, startY);
             }
@@ -133,24 +133,24 @@ public class World {
                 return new Position(startX, startY);
             } 
             //check tile under as well supports margin overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
+            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
                     &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
                 return new Position(startX, startY);
             }
         }
-        //moving in +y direction
+        //moving in -y direction
         if(startYIndex>endYIndex){
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
                 return new Position(startX, startY);
             } 
             //check tile right as well supports margin overlap
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)
-                    &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
+            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
+                &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
                 return new Position(startX, startY);
             }
         }
-        //moving in -y direction (supports margin overlap)
-        else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix.length){
+        //moving in +y direction (supports margin overlap)
+        else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length){
             if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
                 return new Position(startX, startY);
             } 
@@ -214,7 +214,7 @@ public class World {
         } else if (randInt>85) {    //speed
             //create powerup 
             Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_SPEED);
-            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.SPEED); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.SPEED); 
             //add it to world
             setObject(xCord, yCord, powerUp);
             //draw it 
@@ -222,7 +222,7 @@ public class World {
         } else if (randInt>80){     //More bombs
             //create powerup 
             Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_MORE);
-            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.MORE); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.MORE); 
             //add it to world
             setObject(xCord, yCord, powerUp);
             //draw it 
@@ -231,7 +231,7 @@ public class World {
         } else if (randInt>=75) {            //bigger bombs
             //create powerup 
             Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_BIGGER);
-            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.BIGGER); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.BIGGER); 
             //add it to world
             setObject(xCord, yCord, powerUp);
             //draw it 

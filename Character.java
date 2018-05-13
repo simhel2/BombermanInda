@@ -66,7 +66,7 @@ public void testControls(Stage primaryStage, Render render){
                 //layBomb
                 else if(ke.getCode()== KeyCode.PERIOD) {
                     try {
-                    layBomb(render.getGraphicsWindowY(), render.getGraphicsWindowY(), render.getNumGrid());
+                        layBomb();
                     } catch (InterruptedException e){
                         //TODO
                     }
@@ -117,7 +117,7 @@ public void testControls(Stage primaryStage, Render render){
                 //layBomb
                 else if(ke.getCode()== KeyCode.T) {
                     try {
-                        layBomb(render.getGraphicsWindowY(), render.getGraphicsWindowY(), render.getNumGrid());
+                        layBomb();
                     } catch (InterruptedException e){
                         //TODO
                     }
@@ -184,7 +184,7 @@ public void testControls(Stage primaryStage, Render render){
     //TODO add function for setting controls
     
     
-    public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid) throws InterruptedException{
+    public void layBomb() throws InterruptedException{
         
         //TODO: Fix collision with bomb placement (no bomb stacking)
 

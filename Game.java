@@ -34,10 +34,11 @@ public class Game extends Application {
 
 private Pane pane;
 private GameMenu menu;
-private int graphicsWindowX = 700; // Window size
-private int graphicsWindowY = 700; // Window size
-private int numGrid = 20;
-
+private int graphicsWindowX = 1200; // Window size
+private int graphicsWindowY = 600; // Window size
+private int numGridX = 40;
+private int numGridY = 20;
+private int numCrates = 80;
     @Override
     public void start(Stage primaryStage) {
         gameMenu(primaryStage);
@@ -114,7 +115,7 @@ private int numGrid = 20;
 
         //init world
         // TODO fix so it will be scaleable.
-        World world = new World(numGrid, numGrid, render, 80 , background); //create 20x20 playfield with 80 crates
+        World world = new World(numGridX, numGridY, render, numCrates , background); //create playfield
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
@@ -125,9 +126,7 @@ private int numGrid = 20;
 
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
-
-        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-50,graphicsWindowY-50, true,true, render, world, pane);
-
+        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX)-1,graphicsWindowY-(graphicsWindowY/numGridY)-1, true,true, render, world, pane);
         world.addMovingObject(dummyChar1);
 
         dummyChar1.secondPlayerControl(primaryStage, render);
@@ -194,8 +193,12 @@ private int numGrid = 20;
         graphicsWindowY = newY;
     }
 
-    public int getNumGrid(){
-        return numGrid;
+    public int getNumGridX(){
+        return numGridX;
+    }
+    
+    public int getNumGridY(){
+        return numGridY;
     }
 
 }

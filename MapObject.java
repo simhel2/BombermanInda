@@ -44,7 +44,7 @@ public abstract class MapObject {
     }
     
     public int getXIndex(World world, Render render){
-        return (int) ((((getX()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix().length))
+        return (int) ((((getX()+world.getPixelsPerSquareX()/2)*world.getWorldMatrix().length))
                 /render.getGraphicsWindowX());        
     }
     
