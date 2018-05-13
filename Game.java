@@ -34,8 +34,8 @@ public class Game extends Application {
 
 private Pane pane;
 private GameMenu menu;
-private int graphicsWindowX = 1000; // Window size
-private int graphicsWindowY = 1000; // Window size
+private int graphicsWindowX = 700; // Window size
+private int graphicsWindowY = 700; // Window size
 private int numGrid = 20;
 
     @Override

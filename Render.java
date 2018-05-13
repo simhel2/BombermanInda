@@ -127,19 +127,22 @@ public class Render {
 
         } else if (grp == GraphicsObjects.POWER_BIGGER) {
             //TODO CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
-            rect.setFill(Color.BLUE);
-            return rect;
+            ImageView biggerFlames = new ImageView("BombermanInda/Images/BiggerFlames.png");
+            biggerFlames.setFitHeight(graphicsWindowY/numGrid);
+            biggerFlames.setFitWidth(graphicsWindowY/numGrid);
+            return biggerFlames;
         } else if (grp == GraphicsObjects.POWER_MORE) {
             //TODO CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
-            rect.setFill(Color.GREEN);
-            return rect;
+            ImageView moreBombs = new ImageView("BombermanInda/Images/MoreBombs.png");
+            moreBombs.setFitHeight(graphicsWindowY/numGrid);
+            moreBombs.setFitWidth(graphicsWindowY/numGrid);
+            return moreBombs;
         } else if (grp == GraphicsObjects.POWER_SPEED) {
             //TODO CHANGE
-            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
-            rect.setFill(Color.YELLOW);
-            return rect;
+            ImageView speedUp = new ImageView("BombermanInda/Images/SpeedUp.png");
+            speedUp.setFitHeight(graphicsWindowY/numGrid);
+            speedUp.setFitWidth(graphicsWindowY/numGrid);
+            return speedUp;
 
         } else {
             //make error
