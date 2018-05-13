@@ -105,7 +105,17 @@ public void testControls(Stage primaryStage, Render render){
     public void removeBomb(Node bomb) {
         currentBombs.remove(bomb);
     }
-
+    
+    public void improveBombs(int i){
+        bombSize = bombSize+i; 
+    }
+    public void addBombLimit(int i){
+        maxBombs=maxBombs+i;
+    }
+    public void changeSpeed(double mult){
+        setMaxSpeed(getMaxSpeed()*mult);
+    }
+    
     //TODO add function for setting controls
     
     

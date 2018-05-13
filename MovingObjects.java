@@ -18,7 +18,7 @@ public abstract class MovingObjects extends MapObject{
     double speedX = 0;     
     double speedY = 0;
     //int acceleration = 3;  
-    double maxSpeed = 0.5;
+    double maxSpeed = 0.1;
    
     
     public MovingObjects(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
@@ -71,16 +71,10 @@ public abstract class MovingObjects extends MapObject{
     public void setMaxSpeed(double maxSpeed) {
         this.maxSpeed = maxSpeed;
     }
-    
-    public int getYIndex(World world, Render render){
-        return (int) ((((getY()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix()[0].length))
-                /render.getGraphicsWindowY());        
+    public double getMaxSpeed(){
+        return maxSpeed;
     }
     
-    public int getXIndex(World world, Render render){
-        return (int) ((((getX()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix().length))
-                /render.getGraphicsWindowX());        
-    }
-    
+
     abstract void damage();
 }

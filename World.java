@@ -50,7 +50,7 @@ public class World {
             if(worldMatrix[x][y]==null ) {   
                 try {
                     worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
-                         ,0,0,true,true);            //could be split for more code clarity                    
+                         ,0,0,true,true);                       
                 } catch (Error e) {
                     System.out.println(e.getMessage());
                 }
@@ -159,7 +159,7 @@ public class World {
                 return new Position(startX, startY);
             }
         }
-                //check for collision with another moving obj. but not itself!!! 
+        //check for collision with another moving obj. but not itself
         for (MovingObjects movObj: movingObjects) {
             //check vs itself 
             if(!(movObj==thisObj)){
@@ -171,8 +171,27 @@ public class World {
                     }
 
                 }
+            
+                
+               
+            }
+            //if character check for collison with powerup. TODO add enemies??
+            if(movObj.getClass() == BombermanInda.Character.class) {
+                if (worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)]!=null){                    
+                    if (worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)].getClass()
+                            == PowerUp.class ) {
+                        //consume the powerup
+                        ((PowerUp)worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)]
+                                ).consume((Character)movObj);
+                          //remove the powerup
+                          render.removeObject(worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)].getNode());
+                          worldMatrix[movObj.getXIndex(this,render)][movObj.getYIndex(this,render)]= null;                 
+                    }
+                }
+
             }
         }
+        
         
         
         return new Position(endX, endY);       
@@ -186,24 +205,37 @@ public class World {
         //replace with random powerup
         int randInt = ThreadLocalRandom.current().nextInt(0, 99);
 
-        if (randInt<75) {   //75% chance to find nothing
+        if (randInt<50) {   //50% chance to find nothing
              //do nothing
-        } else if(randInt>95) { 
+        } else if(randInt>95) {    //??
+
+        } else if(randInt>90) {     //??
+             //TODO powerup2
+        } else if (randInt>85) {    //speed
             //create powerup 
-            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_BIGGER);
-            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.BIGGER);
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_SPEED);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.SPEED); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
             //add it to world
-            worldMatrix[xCord][yCord]=powerUp;
+            setObject(xCord, yCord, powerUp);
             //draw it 
             render.drawMapObject(xCord, yCord, this);
-        } else if(randInt>90) {
-             //TODO powerup2
-        } else if (randInt>85) {
-             //TODO powerup3
-        } else if (randInt>80){
-             //TODO powerup4
-        } else if (randInt>=75) {
-             //TODO powerup5
+        } else if (randInt>80){     //More bombs
+            //create powerup 
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_MORE);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.MORE); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            //add it to world
+            setObject(xCord, yCord, powerUp);
+            //draw it 
+            render.drawMapObject(xCord, yCord, this);
+
+        } else if (randInt>=75) {            //bigger bombs
+            //create powerup 
+            Node powerGraphic = render.createGraphicsEntity(Render.GraphicsObjects.POWER_BIGGER);
+            PowerUp powerUp = new PowerUp(powerGraphic, 0, 0, true, false, PowerUp.PowerUps.BIGGER); //xCord*render.getGraphicsWindowX()/render.getNumGrid(), yCord*render.getGraphicsWindowY()/render.getNumGrid()
+            //add it to world
+            setObject(xCord, yCord, powerUp);
+            //draw it 
+            render.drawMapObject(xCord, yCord, this);
         }
     }    
     

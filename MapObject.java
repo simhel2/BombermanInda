@@ -38,6 +38,16 @@ public abstract class MapObject {
     public double getY(){
         return posY;
     }
+    public int getYIndex(World world, Render render){
+        return (int) ((((getY()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix()[0].length))
+                /render.getGraphicsWindowY());        
+    }
+    
+    public int getXIndex(World world, Render render){
+        return (int) ((((getX()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix().length))
+                /render.getGraphicsWindowX());        
+    }
+    
 
     public Node getNode(){
         return graphic;

@@ -89,7 +89,7 @@ public class Render {
     }
    
     public enum GraphicsObjects{
-        MAINCHARACTER, CRATE, BOMB, POWER_BIGGER; //TODO add more
+        MAINCHARACTER, CRATE, BOMB, POWER_BIGGER, POWER_MORE, POWER_SPEED; //TODO add more
     }
             
     public Node createGraphicsEntity(GraphicsObjects grp){
@@ -112,9 +112,19 @@ public class Render {
             return rect;
         
         } else if (grp == GraphicsObjects.POWER_BIGGER) {
-            //TODO CHANGEs
+            //TODO CHANGE
             Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
             rect.setFill(Color.BLUE);
+            return rect;
+        } else if (grp == GraphicsObjects.POWER_MORE) {
+            //TODO CHANGE
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
+            rect.setFill(Color.GREEN);
+            return rect;
+        } else if (grp == GraphicsObjects.POWER_SPEED) {
+            //TODO CHANGE
+            Rectangle rect = new Rectangle(graphicsWindowX/numGrid,graphicsWindowY/numGrid);
+            rect.setFill(Color.YELLOW);
             return rect;
         } else {
             //make error
@@ -173,6 +183,9 @@ public class Render {
     
     public void drawBackground(World world){
         gc.drawImage(world.getBackground(), 0, 0, graphicsWindowX, graphicsWindowY );
+    }
+    public void removeObject(Node node) {
+        pane.getChildren().remove(node);
     }
 
     public void drawMainCharacterFront(Node graphic) {

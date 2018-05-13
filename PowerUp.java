@@ -18,10 +18,28 @@ public class PowerUp extends MapObject{
         super(graphic, posX, posY, isVisible, collisionEnable);
         this.powerUp = powerUp;
         
+        
     }
     
     public enum PowerUps{
-        BIGGER,MORE,IMMORTAL;
+        BIGGER,MORE,IMMORTAL, SPEED;
+    }
+    public void consume(Character player){
+        //depends on enum
+        if(powerUp ==  PowerUps.BIGGER) {
+            player.improveBombs(1);
+        }
+        else if (powerUp ==  PowerUps.MORE) {
+            player.addBombLimit(1);
+        }
+        else if (powerUp ==  PowerUps.SPEED) {
+            player.changeSpeed(1.5);
+        }
+        
+        //TODO Add more
+
+        
+            
     }
     
 }
