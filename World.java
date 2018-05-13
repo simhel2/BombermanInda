@@ -102,14 +102,14 @@ public class World {
         
         //if not move no collision
         if(startX==endX && startY==endY){
-            return new Position(endX, endY);
+            return new Position(endX, endY); 
         }
         
         //2 px margin
         int margin = 2;
         //check for out of bounds
         if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radiusX-margin|| render.getGraphicsWindowY()< endY+radiusY-margin) {
-            return new Position(startX, startY);
+            return new Position(startX, startY); //TODO math to get close
         }
         
         //check for other collision
@@ -119,6 +119,7 @@ public class World {
             if(worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){ 
                 return new Position(startX, startY);
             } 
+            //add else if for nudge TODO
             //check tile under as well supports margin overlap
             else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
                     &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
@@ -176,91 +177,6 @@ public class World {
         return new Position(endX, endY);       
         
     }  
-
-    /**
-    public boolean lineIsClear(double startX, double startY, double endX, double endY, double radius, MovingObjects thisObj){
-        int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
-        int startYIndex = (int) ((startY*worldMatrix[0].length)/render.getGraphicsWindowY());        
-        int endXIndex = (int) (((endX*worldMatrix.length)/render.getGraphicsWindowX()));        
-        int endYIndex = (int) ((endY*worldMatrix[0].length)/render.getGraphicsWindowY()); 
-        
-        //if not move no collision
-        if(startX==endX && startY==endY){
-            return true;
-        }
-        
-        //2 px margin
-        int margin = 2;
-        //check for out of bounds
-        if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radius-margin|| render.getGraphicsWindowY()< endY+radius-margin) {
-            return false;
-        }
-        
-        //check for other collision
-
-        //moving in +x direction        
-        if(startX<endX&&endX-margin>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){
-            if(worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){ 
-                return false; 
-            } 
-            //check tile under as well supports margin overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
-                    &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
-                return false;
-            }
-        }
-        //moving in -x direction
-        else if(startXIndex>endXIndex){
-            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
-                return false; 
-            } 
-            //check tile under as well supports margin overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix.length)
-                    &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
-                return false;
-            }
-        }
-        //moving in +y direction
-        if(startYIndex>endYIndex){
-            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
-                return false; 
-            } 
-            //check tile right as well supports margin overlap
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowY()/worldMatrix.length)
-                    &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
-                return false;
-            }
-        }
-        //moving in -y direction (supports margin overlap)
-        else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix.length){
-            if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
-                return false; 
-            } 
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
-                    &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
-                return false;
-            }
-        }
-        //check for collision with another moving obj. but not itself!!! 
-        for (MovingObjects movObj: movingObjects) {
-            //check vs itself 
-            if(!(movObj==thisObj)){
-                //y aligned
-                if((endY<=movObj.getY()&&(endY+radius>movObj.getY()))||(endY<=movObj.getY()+radius&&(endY>movObj.getY()))){
-                    //x aligned
-                    if((endX<=movObj.getX()&&(endX+radius>movObj.getX()))||(endX<=movObj.getX()+radius&&(endX>movObj.getX()))){
-                        return false;
-                    }
-
-                }
-            }
-        }
-        
-        
-        return true;        
-        
-    }  
-        **/
     
    public void breakCrate(){
     //TODO actually break the crate
@@ -283,7 +199,15 @@ public class World {
     }
 }    
     
-    
+    public void remove(int x, int y){
+        worldMatrix[x][y]= null;
+    }
+    public int getWidth(){
+        return worldMatrix.length;
+    }
+    public int getHeight(){
+        return worldMatrix[0].length;
+    }    
     
     public Image getBackground(){
         return background;

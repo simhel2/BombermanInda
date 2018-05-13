@@ -18,20 +18,27 @@ public class Character extends MovingObjects{
     
     private Render render;
     private World world;
+    private Pane pane;
     
-    public Character(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable, Render render, World world){
+    //defaults
+    private int lives = 3;
+    private int bombSize = 3;   
+    private int detTime = 3000; //ms
+    
+    public Character(Node graphic, double posX, double posY, boolean isVisible, 
+            boolean collisionEnable, Render render, World world, Pane pane){
         super(graphic, posX, posY, isVisible, collisionEnable);
         this.render = render;
         this.world = world;
-        
+        this.pane = pane;
     }
     
     //TODO make less janky
 
-public void testControls(Stage primaryStage, Pane pane, Render render){
+public void testControls(Stage primaryStage, Render render){
 
         this.primaryStage = primaryStage;
-    
+
         //random keylistener for no reason
         primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -54,8 +61,11 @@ public void testControls(Stage primaryStage, Pane pane, Render render){
                 }
                 //layBomb
                 else if(ke.getCode()== KeyCode.SPACE) {
+                    try {
                     layBomb(render.getGraphicsWindowY(), render.getGraphicsWindowY(), render.getNumGrid());
-
+                    } catch (InterruptedException e){
+                        //TODO
+                    }
                 }
 
             }
@@ -77,19 +87,16 @@ public void testControls(Stage primaryStage, Pane pane, Render render){
     }
 
     //TODO add function for setting controls
-
-
-
-    public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid){
-
+    public void layBomb(int graphicsWindowX, int graphicsWindowY, int numGrid) throws InterruptedException{
         //TODO: add new class for bomb
-        //TODO: get 25 properly
+        //TODO: Fix collision with bomb placement
         Node newBomb;
         newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
-        Character bomb = new Character(newBomb,0,0, true, true, render, world);   //create char on (0,0)
-        world.setObject(((int)(getX()/(graphicsWindowX/numGrid))),((int)(getY()/(graphicsWindowY/numGrid))),bomb);
-        render.drawAllMapObjects(world);    //bad
-        
+        Bomb bomb = new Bomb(newBomb,true, true, world,render);  
+        int xCord  = ((int)((getX())/(graphicsWindowX/numGrid)));
+        int yCord = ((int)((getY())/(graphicsWindowY/numGrid)));
+        world.setObject(xCord, yCord, bomb); //should maybe make one ?
+        render.drawMapObject(xCord, yCord, world);   
+        bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);       
     }
-    
 }

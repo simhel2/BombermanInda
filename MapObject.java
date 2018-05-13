@@ -5,7 +5,7 @@ import javafx.scene.Node;
 public abstract class MapObject {
     protected double posX;
     protected double posY;
-    private Node graphic; 
+    Node graphic; 
     private boolean isVisible;
     private boolean collisionEnable;
 

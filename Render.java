@@ -1,8 +1,12 @@
 package BombermanInda;
 
+import java.util.Timer;
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,10 +20,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  *
@@ -39,8 +45,8 @@ public class Render {
         this.game = game;
         this.pane = pane;
         this.primaryStage = stage;
-        this.graphicsWindowX = game.getGraphicsWindowX();//(int)stage.getWidth(); // TODO FIX, this does not work
-        this.graphicsWindowY= game.getGraphicsWindowY();//(int)stage.getHeight();
+        this.graphicsWindowX = game.getGraphicsWindowX();
+        this.graphicsWindowY= game.getGraphicsWindowY();
         this.numGrid = game.getNumGrid();
         //initial graphic
         
@@ -50,6 +56,36 @@ public class Render {
 
         
         
+    }
+
+    void drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
+            int rightSize, World world) throws InterruptedException {
+
+        Polygon explosion  = new Polygon();
+        double multX = graphicsWindowX/numGrid;
+        double multY = graphicsWindowY/numGrid;
+        explosion.getPoints().addAll(new Double[]{
+                   
+        //cross
+        xCord*multX-multX*leftSize, yCord*multY,             //leftside
+        xCord*multX-multX*leftSize, yCord*multY+multY, 
+        xCord*multX+multX*(rightSize+1), yCord*multY+multY,   //rightside
+        xCord*multX+multX*(rightSize+1), yCord*multY,
+        xCord*multX, yCord*multY,                         //mid
+        xCord*multX, yCord*multY+multY*(downSize+1), //down
+        xCord*multX+multX, yCord*multY+multY*(downSize+1),
+        xCord*multX+multX, yCord*multY-multY*(upSize), //up     
+        xCord*multX, yCord*multY-multY*(upSize),
+        xCord*multX, yCord*multY             //mid
+
+                
+        });
+        explosion.setFill(Color.RED);   //change
+        pane.getChildren().add(explosion);
+        Timer detTimer = new Timer();
+        RemoveExplosion remExpl = new RemoveExplosion(pane,(Node)explosion);
+        detTimer.schedule(remExpl, 400);        
+      
     }
    
     public enum GraphicsObjects{
@@ -61,7 +97,6 @@ public class Render {
             ImageView mainCharacter = new ImageView("BombermanInda/Images/MainCharFront.png");
             mainCharacter.setFitHeight(graphicsWindowX/numGrid);
             mainCharacter.setFitWidth(graphicsWindowY/numGrid);
-
             return (Node) mainCharacter;
 
         } else if (grp == GraphicsObjects.CRATE) {
@@ -106,6 +141,17 @@ public class Render {
                 pane.getChildren().add(movObj.getNode());                   //(optimize?)    
             }             
         }
+    }
+    public void drawMapObject(int x, int y,  World world) {
+        if (world.getWorldMatrix()[x][y]!=null) {   //if worldMatrix has something draw it
+                   if (!pane.getChildren().contains((world.getWorldMatrix()[x][y]).getNode())) {    //if it is not in world matrix add it
+                       pane.getChildren().add(world.getWorldMatrix()[x][y].getNode());                   //(optimize?)    
+                   } 
+                   //calculate position:
+                   int posX = x*graphicsWindowX/world.getWorldMatrix().length;  //change here to change size (20)
+                   int posY = y*graphicsWindowY/world.getWorldMatrix()[0].length;
+                   world.getWorldMatrix()[x][y].getNode().relocate(posX,posY);                   
+        }           
     }
 
     public int getGraphicsWindowX(){

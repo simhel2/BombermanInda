@@ -24,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -90,19 +91,15 @@ private int numGrid = 20;
     }
 
     public void optionsMenu(Stage primaryStage) {
-
         //init graphic window
         primaryStage.setTitle("Bomberman");
         pane = new Pane();
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
         Render render = new Render(pane, primaryStage, this);
-
-
     }
 
     public void startGame(Stage primaryStage) {
-
         //init graphic window
         primaryStage.setTitle("Bomberman");
         pane = new Pane();
@@ -119,16 +116,21 @@ private int numGrid = 20;
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
-        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world);   //create char on (0,0)
+        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane);   //create char on (0,0)
         world.addMovingObject(mainChar);
         //activate movement
-        mainChar.testControls(primaryStage, pane, render);
+        mainChar.testControls(primaryStage, render);
 
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //TODO change
-        Character dummyChar1 = new Character(dummyNode1,600,30, true,true, render, world);
-        world.addMovingObject(dummyChar1);
 
+        Character dummyChar1 = new Character(dummyNode1,60,30, true,true, render, world, pane);
+
+        world.addMovingObject(dummyChar1);
+        
+
+        
+        
         //draw background
         render.drawBackground(world);
 
@@ -149,8 +151,6 @@ private int numGrid = 20;
                 long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;
                 //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
-
-
             }
 
         }.start();
