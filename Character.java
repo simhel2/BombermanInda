@@ -96,7 +96,19 @@ public void testControls(Stage primaryStage, Render render){
             pane.getChildren().remove(graphic);
             world.removeMovingObject(this);
             
-            //TODO add check to see if gameover
+            //check if game over
+            int charsLeft = 0;
+            for (MovingObjects movObj : world.getMovingObjects() ) {
+                if(movObj.getClass() == Character.class) {
+                    charsLeft++;
+                }
+                
+            }
+            if (charsLeft<=1)
+            {
+                System.out.println("game over");
+                //TODO game over
+            }
         } 
         
         //TODO add animation/imortality on taking damage
