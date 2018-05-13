@@ -126,7 +126,7 @@ private int numGrid = 20;
 
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //TODO change
-        Character dummyChar1 = new Character(dummyNode1,60,30, true,true, render, world);
+        Character dummyChar1 = new Character(dummyNode1,600,30, true,true, render, world);
         world.addMovingObject(dummyChar1);
 
         //draw background
