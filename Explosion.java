@@ -5,6 +5,7 @@
  */
 package BombermanInda;
 
+import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,8 +24,9 @@ public class Explosion extends TimerTask{
     private int xCord;
     private int yCord;
     private Pane pane;
+    private Character owner;
     public Explosion(int size, World world, Render render, 
-            Node bomb,int xCord, int yCord, Pane pane) {
+            Node bomb,int xCord, int yCord, Pane pane, Character owner) {
         super();
         this.size = size;
         this.world = world;
@@ -33,6 +35,7 @@ public class Explosion extends TimerTask{
         this.xCord = xCord;
         this.yCord = yCord;
         this.pane = pane;
+        this.owner = owner;
     }
     @Override
     public void run() {
@@ -48,6 +51,7 @@ public class Explosion extends TimerTask{
                     render.drawExplosion(xCord, yCord, border.up, border.down, border.left, border.right, world);
                     world.remove(xCord, yCord);
                     pane.getChildren().remove(bomb);  
+                    owner.removeBomb(bomb);
                     
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Explosion.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,6 +80,11 @@ public class Explosion extends TimerTask{
         int up = size;
         int down = size;
         
+        int leftCord = xCord -size;
+        int rightCord= xCord +size; 
+        int upCord = yCord -size;
+        int downCord= yCord +size;       
+        
         //left
         for (int i = 1; i <= size; i++) {
             if (xCord-i <0 ) {
@@ -85,14 +94,14 @@ public class Explosion extends TimerTask{
                 //crate
                 if (world.getWorldMatrix()[xCord-i][yCord].getClass()==Crate.class){              
                     left = size-(size-i);
+                    leftCord = xCord -left;   //TODO wrong
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord-i][yCord].getNode());
-                    world.remove(xCord-i,yCord); //TODO destroyCrate
+                    world.destroyCrate(xCord-i,yCord);
                     
                     break;
                 } 
                 //bomb TODO
-                //character TODO         
             } 
         }
         //Right
@@ -104,14 +113,14 @@ public class Explosion extends TimerTask{
                 //crate
                 if (world.getWorldMatrix()[xCord+i][yCord].getClass()==Crate.class){              
                     right = size-(size-i);
+                    rightCord = xCord + right; 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord+i][yCord].getNode());
-                    world.remove(xCord+i,yCord); //TODO destroyCrate
+                    world.destroyCrate(xCord+i,yCord); 
                     
                     break;
                 } 
                 //bomb TODO
-                //character TODO         
             } 
         }
         //UP
@@ -123,14 +132,15 @@ public class Explosion extends TimerTask{
                 //crate
                 if (world.getWorldMatrix()[xCord][yCord-i].getClass()==Crate.class){              
                     up = size-(size-i);
+                    upCord = yCord -up; 
+
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord-i].getNode());
-                    world.remove(xCord,yCord-i); //TODO destroyCrate
+                    world.destroyCrate(xCord,yCord-i); 
                     
                     break;
                 } 
                 //bomb TODO
-                //character TODO         
             } 
         }
         //DOWN
@@ -142,16 +152,48 @@ public class Explosion extends TimerTask{
                 //crate
                 if (world.getWorldMatrix()[xCord][yCord+i].getClass()==Crate.class){              
                     down = size-(size-i);
+                    downCord = downCord + down; 
+
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord+i].getNode());
-                    world.remove(xCord,yCord+i); //TODO destroyCrate
-                    
+                    world.destroyCrate(xCord,yCord+i); 
                     break;
                 } 
                 //bomb TODO
-                //character TODO         
             } 
+            
+            
         }
+        //here we have left right up down calculated
+        ArrayList<MovingObjects> copyOfMovObjList =  new ArrayList<MovingObjects>(world.getMovingObjects());
+        for (MovingObjects movObj:copyOfMovObjList){
+            //check for collision and deal damage TODO
+            int xIndex = movObj.getXIndex(world, render);
+            int yIndex = movObj.getYIndex(world, render);
+                
+            /**    
+            //square hitbox test
+            if (leftCord<=xIndex && xIndex <= rightCord && upCord<=yIndex && yIndex <= downCord){
+                movObj.damage();
+            }
+            **/
+            
+            //boolean that will determine wheter or not we got hit
+            boolean hit = false;
+            //horisontal hitbox
+            if(yIndex == yCord && leftCord <= xIndex && xIndex <=rightCord ){
+                hit = true;
+            //vertical hitbox
+            } else if (xIndex == xCord && upCord <= yIndex && yIndex <=downCord){ 
+                hit = true;
+            }
+            if (hit) {
+                movObj.damage();
+            }
+            
+        }
+        
+        
         
         
         

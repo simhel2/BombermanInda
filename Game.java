@@ -112,7 +112,7 @@ private int numGrid = 20;
 
         //init world
         // TODO fix so it will be scaleable.
-        World world = new World(numGrid, numGrid, render, 80 , background); //create 20x20 playfield with 10 crates
+        World world = new World(numGrid, numGrid, render, 80 , background); //create 20x20 playfield with 80 crates
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
