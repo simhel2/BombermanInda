@@ -1,5 +1,6 @@
 package BombermanInda;
 
+import java.util.Timer;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.LongProperty;
@@ -40,7 +41,7 @@ private int graphicsWindowX = 1280; // Window size 16:9
 private int graphicsWindowY = 720; // Window size
 private int numGridX = 32; //16:9
 private int numGridY = 18;
-private int numCrates = 180;
+private int numCrates = 0;
 
     @Override
     public void start(Stage primaryStage) {
@@ -147,16 +148,23 @@ private int numCrates = 180;
 
         //add all from world to map
 
-        // Gameloop
-        final LongProperty lastUpdateTime = new SimpleLongProperty(0);
-
+        // Gameloop        
         new AnimationTimer(){
-
+            private long lastUpdateTime = System.nanoTime();
+           
             @Override
-            public void handle(long timestamp) {
-                long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;
+            public void handle(long timestamp) {     
+                //calculate time since last frame
+                long elapsedTimeMs = (timestamp-lastUpdateTime)/10000l;
+                
                 //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
+                
+                
+                //get new old time
+                lastUpdateTime = System.nanoTime();
+                
+                
             }
 
         }.start();

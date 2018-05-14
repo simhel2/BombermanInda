@@ -160,12 +160,9 @@ public class World {
                 //chek for nudge
                 if((worldMatrix[endXIndex+1][endYIndex]==null
                         ||!worldMatrix[endXIndex+1][endYIndex].isCollisionEnable())
-                        &&startX == (endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX){
-                        //TODO FIX!!!
-                        //&&endY>(-radiusY*nudgeRatio+((double)endYIndex+1.0)*render.getGraphicsWindowY()/worldMatrix[0].length))  
+                        &&startX == (endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX
+                        &&endY<(-radiusY*nudgeRatio+((double)endYIndex+1.0)*render.getGraphicsWindowY()/worldMatrix[0].length))  
                      {
-                   //  System.out.println(endY + " > " + (-radiusY*nudgeRatio+
-                     //        (double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length));
                     //calculate new movement 
                     double newY = thisObj.getNewAfterNudgeY(-elapsedTimeMs); //- for move upwards
                     //only move to edge 
@@ -186,6 +183,58 @@ public class World {
         //moving in -x direction
         else if(startXIndex>endXIndex){
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
+                //check for nudging
+                if ((worldMatrix[endXIndex][endYIndex+1]==null
+                        ||!worldMatrix[endXIndex][endYIndex+1].isCollisionEnable())
+                        &&startX == endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusX
+                        &&endY>(radiusY*(1-nudgeRatio)+(double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)) {
+                    
+                    //calculate new movement 
+                    double newY = thisObj.getNewAfterNudgeY(elapsedTimeMs);
+                    //only move to edge 
+                    newY = Math.min(newY, 
+                            radiusY+(double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
+                    //recursively do new movement
+                    return lineIsClear(startX, startY, startX, newY, radiusX, 
+                               radiusY, thisObj, elapsedTimeMs);
+                    
+                } else { 
+               
+                    return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusX, startY);
+                }
+            }             
+            //check tile under as well 
+            else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+                    &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
+                //check for nudging
+                
+                if ((worldMatrix[endXIndex][endYIndex]==null||
+                        !worldMatrix[endXIndex][endYIndex].isCollisionEnable())
+                        &&startX==endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusX
+                        
+                        ) {
+                    //calculate new movement 
+                    double newY = thisObj.getNewAfterNudgeY(-elapsedTimeMs); //- for move upwards
+                    //only move to edge 
+                    newY = Math.max(newY, 
+                            endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
+                    //recursively do new movement
+                    return lineIsClear(startX, startY, startX, newY, radiusX, 
+                               radiusY, thisObj, elapsedTimeMs);                    
+                    
+                }
+                //put as close as possible
+                else {
+                    return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusX, startY);
+                } 
+            }
+            
+        }
+        
+        /**
+        //moving in -x direction
+        else if(startXIndex>endXIndex){
+            if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
                 return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusY, startY);
             } 
             //check tile under as well 
@@ -194,6 +243,7 @@ public class World {
                 return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusY, startY);
             }
         }
+        **/ 
         //moving in -y direction
         if(startYIndex>endYIndex){
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
@@ -216,33 +266,7 @@ public class World {
             }
         }
 
-        //check for non grid collision
-        Position newPos = nonGridCollision(startX, startY, endX, endY, radiusX, 
-               radiusY, thisObj, elapsedTimeMs);
-        if (0<= newPos.xPos   ) {
-            return newPos;
-        } 
-        
-        return new Position(endX, endY);       
-        
-    }  
-    /**
-     * 
-     * @param startX
-     * @param startY
-     * @param endX
-     * @param endY
-     * @param radiusX
-     * @param radiusY
-     * @param thisObj
-     * @param elapsedTimeMs
-     * @return Position of collision, if no collision was found return -1,-1
-     */
-        
-     
-    public Position nonGridCollision(double startX, double startY, double endX, double endY,double radiusX, 
-                double radiusY, MovingObjects thisObj, long elapsedTimeMs){  
-        //check for collision with another moving obj. but not itself
+  //check for collision with another moving obj. but not itself
         for (MovingObjects movObj: movingObjects) {
             //check vs itself 
             if(!(movObj==thisObj)){
@@ -274,8 +298,11 @@ public class World {
 
             }
         }
-        return new Position(-1,-1);
-    }
+        
+        return new Position(endX, endY);       
+        
+    }  
+
     
     //remove the logical (but not the graphical) crate
     public void destroyCrate(int xCord, int yCord){
