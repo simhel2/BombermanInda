@@ -1,5 +1,6 @@
 package BombermanInda;
 
+import java.util.Timer;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.LongProperty;
@@ -162,17 +163,25 @@ private int numCrates = 180;
 
         //add all from world to map
 
-        // Gameloop
-        final LongProperty lastUpdateTime = new SimpleLongProperty(0);
-
+        // Gameloop        
         new AnimationTimer(){
-
+            private long lastUpdateTime = System.nanoTime();
+           
             @Override
-            public void handle(long timestamp) {
-                long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;
-                System.out.println(elapsedTimeMs);
+
+            public void handle(long timestamp) {     
+                //calculate time since last frame
+                long elapsedTimeMs = (timestamp-lastUpdateTime)/10000l;
+                
+
                 //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
+                
+                
+                //get new old time
+                lastUpdateTime = System.nanoTime();
+                
+                
             }
 
         }.start();
