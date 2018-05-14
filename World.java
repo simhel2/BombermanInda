@@ -52,7 +52,7 @@ public class World {
             int x = ThreadLocalRandom.current().nextInt(0,worldMatrix.length);
             int y = ThreadLocalRandom.current().nextInt(0,worldMatrix[0].length);
             
-            if(worldMatrix[x][y]==null ) {   
+            if(worldMatrix[x][y]==null && x+y >= 2 && x+y <= worldMatrix.length+worldMatrix[0].length-4) {
                 try {
                     worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
                          ,0,0,true,true);                       

@@ -19,6 +19,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -83,7 +84,7 @@ public class Render {
 
                 
         });
-        explosion.setFill(Color.RED);   //change
+        explosion.setFill(new ImagePattern(new Image("BombermanInda/Images/explosion.png"),0,0,1,1,true));   //change
         pane.getChildren().add(explosion);
         Timer detTimer = new Timer();
         RemoveExplosion remExpl = new RemoveExplosion(pane,(Node)explosion);
