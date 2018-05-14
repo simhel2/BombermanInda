@@ -78,7 +78,9 @@ public class World {
                 movObj.Move(newX, newY);
             } else {
                 Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/worldMatrix.length,
+
                         render.getGraphicsWindowY()/worldMatrix[0].length, movObj, elapsedTimeMs); 
+
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
@@ -155,16 +157,20 @@ public class World {
                     return new Position((endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX, startY);
                 }
             } 
+
             //check tile under as well
             else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
                     &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
                 //chek for nudge
                 if(endXIndex+1<worldMatrix.length
                         &&(worldMatrix[endXIndex+1][endYIndex]==null
                         ||!worldMatrix[endXIndex+1][endYIndex].isCollisionEnable())
+
                         &&startX == (endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX
                         &&endY<(-radiusY*nudgeRatio+((double)endYIndex+1.0)*render.getGraphicsWindowY()/worldMatrix[0].length))  
                      {
+
                     //calculate new movement 
                     double newY = thisObj.getNewAfterNudgeY(-elapsedTimeMs); //- for move upwards
                     //only move to edge 
@@ -176,7 +182,7 @@ public class World {
                     
                 }
                 //dont nudge bug put next to
-                else {
+                else{
                     return new Position((endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX, startY);
                 }
             }
@@ -185,6 +191,7 @@ public class World {
         //moving in -x direction
         else if(startXIndex>endXIndex){
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
+
                 //check for nudging
                 if (endYIndex+1<worldMatrix[0].length
                         &&(worldMatrix[endXIndex][endYIndex+1]==null
@@ -206,8 +213,10 @@ public class World {
                     return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusX, startY);
                 }
             }             
+
             //check tile under as well 
             else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
                     &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
                 //check for nudging
                 
@@ -255,6 +264,7 @@ public class World {
                     return new Position(startX, endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length+radiusY);
                 }
             } 
+
             //check tile right as well 
             else if(endX>(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
                 &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
@@ -282,6 +292,7 @@ public class World {
         }
         //moving in +y  (down)
         else if(startY<endY&&endY>endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length){
+
             if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
                 if (endXIndex+1<worldMatrix.length && endYIndex+1< worldMatrix[0].length
                         &&( worldMatrix[endXIndex+1][endYIndex+1]==null

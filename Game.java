@@ -36,12 +36,14 @@ public class Game extends Application {
 private Pane pane;
 private GameMenu menu;
 
+
 //NOTE graphicswindow must be evenly divisible by their respective numGrid
 private int graphicsWindowX = 1280; // Window size 16:9
 private int graphicsWindowY = 720; // Window size
 private int numGridX = 32; //16:9
 private int numGridY = 18;
 private int numCrates = 180;
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -104,6 +106,15 @@ private int numCrates = 180;
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
         Render render = new Render(pane, primaryStage, this);
+
+
+        // Makes a button that goes back to the menu
+        Button backButton = new Button("Back to menu");
+        pane.getChildren().add(backButton);
+        backButton.relocate(graphicsWindowX/3, graphicsWindowY/3);
+        ImageView backButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
+        backButton.setGraphic((Node) backButtonImage);
+        backButton.setOnMousePressed(e -> gameMenu(primaryStage));
     }
 
     public void startGame(Stage primaryStage) {
@@ -126,14 +137,18 @@ private int numCrates = 180;
         Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane);   //create char on (0,0)
         world.addMovingObject(mainChar);
         //activate movement
-        mainChar.testControls(primaryStage, render);
+        //mainChar.testControls(primaryStage, render);
 
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
+
         Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY), true,true, render, world, pane);
+
         world.addMovingObject(dummyChar1);
 
-        dummyChar1.secondPlayerControl(primaryStage, render);
+       new CharacterMovement(this, primaryStage, render,mainChar, dummyChar1);
+
+
 
 
         
@@ -153,10 +168,12 @@ private int numCrates = 180;
             private long lastUpdateTime = System.nanoTime();
            
             @Override
+
             public void handle(long timestamp) {     
                 //calculate time since last frame
                 long elapsedTimeMs = (timestamp-lastUpdateTime)/10000l;
                 
+
                 //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
                 

@@ -58,7 +58,7 @@ public abstract class MovingObjects extends MapObject{
        setY(newPosY);
     }   
     public double getNewAfterMoveX(long elapsedTimeMs){
-        double deltaMoveX =  (elapsedTimeMs* speedX)/1000; 
+        double deltaMoveX =  (elapsedTimeMs* speedX)/1000;
         return getX()+deltaMoveX;
     }
     

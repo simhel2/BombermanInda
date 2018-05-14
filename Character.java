@@ -12,9 +12,7 @@ import javafx.stage.Stage;
 
 public class Character extends MovingObjects{
     //TODO add hotkeys as fields
-    
-    
-    private Stage primaryStage;
+
     
     
     private Render render;
@@ -35,116 +33,6 @@ public class Character extends MovingObjects{
         this.world = world;
         this.pane = pane;
     }
-    
-    //TODO make less janky
-
-public void testControls(Stage primaryStage, Render render){
-
-        this.primaryStage = primaryStage;
-
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP) {
-                    setSpeedYDirection(-1);
-                    render.drawMainCharacterBack(getNode());
-                }
-                else if (ke.getCode() == KeyCode.DOWN) {
-                    setSpeedYDirection(1);
-                    render.drawMainCharacterFront(getNode());
-                }
-                else if (ke.getCode() == KeyCode.LEFT) {
-                    setSpeedXDirection(-1);
-                    render.drawMainCharacterLeft(getNode());
-                }
-                else if (ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedXDirection(1);
-                    render.drawMainCharacterRight(getNode());
-                }
-
-                //layBomb
-                else if(ke.getCode()== KeyCode.PERIOD) {
-                    try {
-                        layBomb();
-                    } catch (InterruptedException e){
-                        //TODO
-                    }
-                }
-
-            }
-        });
-        
-        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.UP || ke.getCode() == KeyCode.DOWN) {
-                    setSpeedYDirection(0);
-                }
-                if (ke.getCode() == KeyCode.LEFT || ke.getCode() == KeyCode.RIGHT) {
-                    setSpeedXDirection(0);
-                }
-                
-            }
-        });
-
-    }
-
-    public void secondPlayerControl(Stage primaryStage, Render render){
-
-        this.primaryStage = primaryStage;
-
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.W) {
-                    setSpeedYDirection(-1);
-                    render.drawSecondCharacterBack(getNode());
-                }
-                else if (ke.getCode() == KeyCode.S) {
-                    setSpeedYDirection(1);
-                    render.drawSecondCharacterFront(getNode());
-                }
-                else if (ke.getCode() == KeyCode.A) {
-                    setSpeedXDirection(-1);
-                    render.drawSecondCharacterLeft(getNode());
-                }
-                else if (ke.getCode() == KeyCode.D) {
-                    setSpeedXDirection(1);
-                    render.drawSecondCharacterRight(getNode());
-                }
-                //layBomb
-                else if(ke.getCode()== KeyCode.T) {
-                    try {
-                        layBomb();
-                    } catch (InterruptedException e){
-                        //TODO
-                    }
-                }
-
-            }
-        });
-
-        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode.W || ke.getCode() == KeyCode.S) {
-                    setSpeedYDirection(0);
-                }
-                if (ke.getCode() == KeyCode.A || ke.getCode() == KeyCode.D) {
-                    setSpeedXDirection(0);
-                }
-
-            }
-        });
-
-    }
-    
-  
-    
-
-    
 
     public void damage () {
         
