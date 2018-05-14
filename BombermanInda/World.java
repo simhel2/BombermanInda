@@ -78,7 +78,9 @@ public class World {
                 movObj.Move(newX, newY);
             } else {
                 Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/worldMatrix.length,
+
                         render.getGraphicsWindowY()/worldMatrix[0].length, movObj, elapsedTimeMs); 
+
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
@@ -154,8 +156,10 @@ public class World {
                     return new Position((endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX, startY);
                 }
             } 
+
             //check tile under as well
             else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
                     &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
                 //chek for nudge
                 if((worldMatrix[endXIndex+1][endYIndex]==null
@@ -188,8 +192,10 @@ public class World {
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
                 return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusY, startY);
             } 
+
             //check tile under as well 
             else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
                     &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
                 return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusY, startY);
             }
@@ -199,6 +205,7 @@ public class World {
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
                 return new Position(startX, endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length+radiusY);
             } 
+
             //check tile right as well 
             else if(endX>(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
                 &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
@@ -207,6 +214,7 @@ public class World {
         }
         //moving in +y direction
         else if(startY<endY&&endY>endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length){
+
             if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
                 return new Position(startX, (endYIndex+1)*render.getGraphicsWindowY()/worldMatrix[0].length-radiusY);
             } 
