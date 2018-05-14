@@ -105,6 +105,15 @@ private int numCrates = 180;
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
         primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
         Render render = new Render(pane, primaryStage, this);
+
+
+        // Makes a button that goes back to the menu
+        Button backButton = new Button("Back to menu");
+        pane.getChildren().add(backButton);
+        backButton.relocate(graphicsWindowX/3, graphicsWindowY/3);
+        ImageView backButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
+        backButton.setGraphic((Node) backButtonImage);
+        backButton.setOnMousePressed(e -> gameMenu(primaryStage));
     }
 
     public void startGame(Stage primaryStage) {
@@ -127,7 +136,7 @@ private int numCrates = 180;
         Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane);   //create char on (0,0)
         world.addMovingObject(mainChar);
         //activate movement
-        mainChar.testControls(primaryStage, render);
+        //mainChar.testControls(primaryStage, render);
 
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
@@ -136,7 +145,9 @@ private int numCrates = 180;
 
         world.addMovingObject(dummyChar1);
 
-        dummyChar1.secondPlayerControl(primaryStage, render);
+       new CharacterMovement(this, primaryStage, render,mainChar, dummyChar1);
+
+
 
 
         
@@ -159,6 +170,7 @@ private int numCrates = 180;
             @Override
             public void handle(long timestamp) {
                 long elapsedTimeMs = (timestamp - lastUpdateTime.get())/100000000000l;
+                System.out.println(elapsedTimeMs);
                 //move all moveable considering potential collision
                 world.moveAllMoveable(elapsedTimeMs);
             }

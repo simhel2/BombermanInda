@@ -21,7 +21,7 @@ public abstract class MovingObjects extends MapObject{
     
     //defaults
     private double nudgeSpeedMod = 0.25;
-    private double maxSpeed = 0.5;
+    private double maxSpeed = 1.5;
 
 
    
@@ -58,7 +58,7 @@ public abstract class MovingObjects extends MapObject{
        setY(newPosY);
     }   
     public double getNewAfterMoveX(long elapsedTimeMs){
-        double deltaMoveX =  (elapsedTimeMs* speedX)/1000; 
+        double deltaMoveX =  (elapsedTimeMs* speedX)/1000;
         return getX()+deltaMoveX;
     }
     
