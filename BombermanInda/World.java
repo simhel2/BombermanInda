@@ -14,6 +14,11 @@ public class World {
     private Image background;
     private final int numCrates;
     private final Render render;
+    
+    //defaults
+    private double nudgeRatio = 0.4; //ratio from top or bottom where nudge is allowed, max <1/2
+    
+            
 
     public World (int x, int y, Render render, int numCrates, Image background) {   // can add WorldType w for multiple maps
         worldMatrix = new MapObject[x][y];
@@ -73,7 +78,9 @@ public class World {
                 movObj.Move(newX, newY);
             } else {
                 Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/worldMatrix.length,
-                        render.getGraphicsWindowY()/worldMatrix[0].length, movObj); 
+
+                        render.getGraphicsWindowY()/worldMatrix[0].length, movObj, elapsedTimeMs); 
+
                 movObj.Move(pos.xPos,pos.yPos);
             }
         }
@@ -90,12 +97,12 @@ public class World {
         }
     };
     
-    //TODO: should put as close as possible
-    //TODO: should ideally check the entire line becasue otherwise slow logic or high speed gives you noclip
-    //TODO: Maybe there is a better way to check moveable?
+    //TODO: should ideally check the entire line becasue otherwise slow logic or
+           //high speed may give you noclip: scrapped for performance since it is unlikely
+    
     //notes: startX and startY for everything is top left
-    //notes: maybe move to move?
-        public Position lineIsClear(double startX, double startY, double endX, double endY,double radiusX, double radiusY, MovingObjects thisObj){
+        public Position lineIsClear(double startX, double startY, double endX, double endY,double radiusX, 
+                double radiusY, MovingObjects thisObj, long elapsedTimeMs){
         int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
         int startYIndex = (int) ((startY*worldMatrix[0].length)/render.getGraphicsWindowY());        
         int endXIndex = (int) (((endX*worldMatrix.length)/render.getGraphicsWindowX()));        
@@ -106,59 +113,143 @@ public class World {
             return new Position(endX, endY); 
         }
         
-        //2 px margin
-        int margin = 2;
-        //check for out of bounds
-        if (endX+margin<0 || endY+margin<0 || render.getGraphicsWindowX()<endX+radiusX-margin|| render.getGraphicsWindowY()< endY+radiusY-margin) {
-            return new Position(startX, startY); //TODO math to get close
+       
+        //check for out of bounds X
+        if (endX<0 ) {
+            return new Position(0, startY);          
         }
+        else if( render.getGraphicsWindowX()<endX+radiusX){
+            return new Position(render.getGraphicsWindowX()-radiusX, startY);           
+        }
+        //check for out of bounds Y     
+        if ( endY<0 ){
+            return new Position(startX, 0); //TODO math to get close
+        }  
+        else if (render.getGraphicsWindowY()< endY+radiusY) {
+            return new Position(startX, render.getGraphicsWindowY()-radiusY); //TODO math to get close
+        }   
         
-        //check for other collision
+        //check for collision with mapObjects
 
-        //moving in +x direction        
-        if(startX<endX&&endX-margin>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){
+        //moving in +x direction
+        if(startX<endX&&endX>endXIndex*render.getGraphicsWindowX()/worldMatrix.length){ //if entering new tile
+            //and new tile not empty 
             if(worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){ 
-                return new Position(startX, startY);
+               
+                //nudge downwards (recursive) 
+                if (( worldMatrix[endXIndex+1][endYIndex+1]==null
+                        ||!worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable())
+                        &&startX == (startXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX 
+                        &&endY>(radiusY*(1.0-nudgeRatio)+(double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)) { 
+                    //calculate new movement 
+                    double newY = thisObj.getNewAfterNudgeY(elapsedTimeMs);
+                    //only move to edge 
+                    newY = Math.min(newY, 
+                            radiusY+(double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
+                    //recursively do new movement
+                    return lineIsClear(startX, startY, startX, newY, radiusX, 
+                               radiusY, thisObj, elapsedTimeMs);
+                }            
+                    
+                //dont nudge but put next to
+                else {
+                    return new Position((endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX, startY);
+                }
             } 
-            //add else if for nudge TODO
-            //check tile under as well supports margin overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
+            //check tile under as well
+            else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
                     &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
-                return new Position(startX, startY);
+                //chek for nudge
+                if((worldMatrix[endXIndex+1][endYIndex]==null
+                        ||!worldMatrix[endXIndex+1][endYIndex].isCollisionEnable())
+                        &&startX == (endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX){
+                        //TODO FIX!!!
+                        //&&endY>(-radiusY*nudgeRatio+((double)endYIndex+1.0)*render.getGraphicsWindowY()/worldMatrix[0].length))  
+                     {
+                   //  System.out.println(endY + " > " + (-radiusY*nudgeRatio+
+                     //        (double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length));
+                    //calculate new movement 
+                    double newY = thisObj.getNewAfterNudgeY(-elapsedTimeMs); //- for move upwards
+                    //only move to edge 
+                    newY = Math.max(newY, 
+                            endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
+                    //recursively do new movement
+                    return lineIsClear(startX, startY, startX, newY, radiusX, 
+                               radiusY, thisObj, elapsedTimeMs);                    
+                    
+                }
+                //dont nudge bug put next to
+                else {
+                    return new Position((endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX, startY);
+                }
             }
+            
         }
         //moving in -x direction
         else if(startXIndex>endXIndex){
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){ 
-                return new Position(startX, startY);
+                return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusY, startY);
             } 
-            //check tile under as well supports margin overlap
-            else if(endY>margin+(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
+            //check tile under as well 
+            else if(endY>(endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length)
+
                     &&worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){
-                return new Position(startX, startY);
+                return new Position(endXIndex*render.getGraphicsWindowX()/worldMatrix.length+radiusY, startY);
             }
         }
         //moving in -y direction
         if(startYIndex>endYIndex){
             if(worldMatrix[endXIndex][endYIndex]!=null&&worldMatrix[endXIndex][endYIndex].isCollisionEnable()){  
-                return new Position(startX, startY);
+                return new Position(startX, endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length+radiusY);
             } 
-            //check tile right as well supports margin overlap
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
+
+            //check tile right as well 
+            else if(endX>(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
                 &&worldMatrix[endXIndex+1][endYIndex]!=null&&worldMatrix[endXIndex+1][endYIndex].isCollisionEnable()){
-                return new Position(startX, startY);
+                return new Position(startX, endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length+radiusY);
             }
         }
-        //moving in +y direction (supports margin overlap)
-        else if(startY<endY&&endY-margin>endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length){
+        //moving in +y direction
+        else if(startY<endY&&endY>endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length){
+
             if(worldMatrix[endXIndex][endYIndex+1]!=null&&worldMatrix[endXIndex][endYIndex+1].isCollisionEnable()){  
-                return new Position(startX, startY);
+                return new Position(startX, (endYIndex+1)*render.getGraphicsWindowY()/worldMatrix[0].length-radiusY);
             } 
-            else if(endX>margin+(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
+            else if(endX>(endXIndex*render.getGraphicsWindowX()/worldMatrix.length)
                     &&worldMatrix[endXIndex+1][endYIndex+1]!=null&&worldMatrix[endXIndex+1][endYIndex+1].isCollisionEnable()){
-                return new Position(startX, startY);
+                return new Position(startX, (endYIndex+1)*render.getGraphicsWindowY()/worldMatrix[0].length-radiusY);
             }
         }
+
+        //check for non grid collision
+        Position newPos = nonGridCollision(startX, startY, endX, endY, radiusX, 
+               radiusY, thisObj, elapsedTimeMs);
+        if (0<= newPos.xPos   ) {
+            return newPos;
+        } 
+        
+        return new Position(endX, endY);       
+        
+    }  
+    /**
+     * 
+     * @param startX
+     * @param startY
+     * @param endX
+     * @param endY
+     * @param radiusX
+     * @param radiusY
+     * @param thisObj
+     * @param elapsedTimeMs
+     * @return Position of collision, if no collision was found return -1,-1
+     */
+        
+     
+    public Position nonGridCollision(double startX, double startY, double endX, double endY,double radiusX, 
+                double radiusY, MovingObjects thisObj, long elapsedTimeMs){  
         //check for collision with another moving obj. but not itself
         for (MovingObjects movObj: movingObjects) {
             //check vs itself 
@@ -191,12 +282,8 @@ public class World {
 
             }
         }
-        
-        
-        
-        return new Position(endX, endY);       
-        
-    }  
+        return new Position(-1,-1);
+    }
     
     //remove the logical (but not the graphical) crate
     public void destroyCrate(int xCord, int yCord){

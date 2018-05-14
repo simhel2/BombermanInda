@@ -140,6 +140,11 @@ public void testControls(Stage primaryStage, Render render){
         });
 
     }
+    
+  
+    
+
+    
 
     public void damage () {
         
@@ -167,10 +172,12 @@ public void testControls(Stage primaryStage, Render render){
         //TODO add animation/imortality on taking damage
         
     }
+    
     public void removeBomb(Node bomb) {
         currentBombs.remove(bomb);
     }
     
+    //powerups
     public void improveBombs(int i){
         bombSize = bombSize+i; 
     }
@@ -180,6 +187,11 @@ public void testControls(Stage primaryStage, Render render){
     public void changeSpeed(double mult){
         setMaxSpeed(getMaxSpeed()*mult);
     }
+    
+    public void changeNudgeSpeed(double mult){
+        setNudgeSpeedMod(getNudgeSpeedMod()*mult);
+    }
+    
     
     //TODO add function for setting controls
     
