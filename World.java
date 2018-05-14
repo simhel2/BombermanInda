@@ -167,7 +167,7 @@ public class World {
                         &&startX == (endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX){
                         //TODO FIX!!!
                         //&&endY>(-radiusY*nudgeRatio+((double)endYIndex+1.0)*render.getGraphicsWindowY()/worldMatrix[0].length))  
-                     {
+
                    //  System.out.println(endY + " > " + (-radiusY*nudgeRatio+
                      //        (double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length));
                     //calculate new movement 
@@ -181,7 +181,7 @@ public class World {
                     
                 }
                 //dont nudge bug put next to
-                else {
+                else{
                     return new Position((endXIndex+1)*render.getGraphicsWindowX()/worldMatrix.length-radiusX, startY);
                 }
             }
