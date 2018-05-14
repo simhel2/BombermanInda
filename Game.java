@@ -35,6 +35,7 @@ public class Game extends Application {
 
 private Pane pane;
 private GameMenu menu;
+private Stage primaryStage;
 
 
 //NOTE graphicswindow must be evenly divisible by their respective numGrid
@@ -47,6 +48,7 @@ private int numCrates = 180;
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         gameMenu(primaryStage);
     }
 
@@ -69,6 +71,7 @@ private int numCrates = 180;
         bombermanLogo.setFitWidth(256);
         bombermanLogo.relocate(graphicsWindowX/3, graphicsWindowY/10);
 
+        pane.getChildren().removeAll();
 
         // Makes a button that starts the game
         Button startButton = new Button("Start");
@@ -134,7 +137,7 @@ private int numCrates = 180;
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
-        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane);   //create char on (0,0)
+        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane, this);   //create char on (0,0)
         world.addMovingObject(mainChar);
         //activate movement
         //mainChar.testControls(primaryStage, render);
@@ -142,7 +145,8 @@ private int numCrates = 180;
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
 
-        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY), true,true, render, world, pane);
+        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
+                                             true,true, render, world, pane, this);
 
         world.addMovingObject(dummyChar1);
 
@@ -169,6 +173,7 @@ private int numCrates = 180;
            
             @Override
 
+
             public void handle(long timestamp) {     
                 //calculate time since last frame
                 long elapsedTimeMs = (timestamp-lastUpdateTime)/10000l;
@@ -187,22 +192,16 @@ private int numCrates = 180;
         }.start();
 
 
-        /**
-        //Exits from the game to the menu when ESC key is pressed
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent ke) {
-                if (ke.getCode() == KeyCode .ESCAPE) {
-                gameMenu(primaryStage);
-                }
-            }
-        });
-        */
+
 
     }
 
     public void endScreen (Stage primaryStage) {
 
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
     public  int getGraphicsWindowX() {

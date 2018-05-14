@@ -18,6 +18,7 @@ public class Character extends MovingObjects{
     private Render render;
     private World world;
     private Pane pane;
+    private Game game;
     
     //defaults
     private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
@@ -27,11 +28,12 @@ public class Character extends MovingObjects{
     private int detTime = 3000; //ms
     
     public Character(Node graphic, double posX, double posY, boolean isVisible, 
-            boolean collisionEnable, Render render, World world, Pane pane){
+            boolean collisionEnable, Render render, World world, Pane pane, Game game){
         super(graphic, posX, posY, isVisible, collisionEnable);
         this.render = render;
         this.world = world;
         this.pane = pane;
+        this.game = game;
     }
 
     public void damage () {
@@ -52,8 +54,7 @@ public class Character extends MovingObjects{
             }
             if (charsLeft<=1)
             {
-                System.out.println("game over");
-                //TODO game over
+                game.endScreen(game.getPrimaryStage());
             }
         } 
         
