@@ -41,7 +41,7 @@ private int graphicsWindowX = 1280; // Window size 16:9
 private int graphicsWindowY = 720; // Window size
 private int numGridX = 32; //16:9
 private int numGridY = 18;
-private int numCrates = 0;
+private int numCrates = 180;
 
     @Override
     public void start(Stage primaryStage) {
