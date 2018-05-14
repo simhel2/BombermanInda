@@ -15,12 +15,13 @@ import javafx.scene.Node;
 
 public abstract class MovingObjects extends MapObject{
     
-    double speedX = 0;     
-    double speedY = 0;
-    //int acceleration = 3;  
-
-
-    double maxSpeed = 0.5;
+    private double speedX = 0;     
+    private double speedY = 0;
+    //private int acceleration = 3;  
+    
+    //defaults
+    private double nudgeSpeedMod = 0.25;
+    private double maxSpeed = 0.5;
 
 
    
@@ -60,8 +61,17 @@ public abstract class MovingObjects extends MapObject{
         double deltaMoveX =  (elapsedTimeMs* speedX)/1000; 
         return getX()+deltaMoveX;
     }
+    
     public double getNewAfterMoveY(long elapsedTimeMs){
         double deltaMoveY =  (elapsedTimeMs* speedY)/1000; 
+        return getY()+deltaMoveY;
+    }
+    public double getNewAfterNudgeX(long elapsedTimeMs){
+        double deltaMoveX =  (elapsedTimeMs* maxSpeed* nudgeSpeedMod)/1000; 
+        return getX()+deltaMoveX;
+    }
+    public double getNewAfterNudgeY(long elapsedTimeMs){
+        double deltaMoveY =  (elapsedTimeMs* maxSpeed* nudgeSpeedMod)/1000; 
         return getY()+deltaMoveY;
     }
         
@@ -78,7 +88,12 @@ public abstract class MovingObjects extends MapObject{
     public double getMaxSpeed(){
         return maxSpeed;
     }
-    
+    public double getNudgeSpeedMod(){
+        return nudgeSpeedMod;
+    }
+    public void setNudgeSpeedMod(double newSpeedMod){
+        nudgeSpeedMod = newSpeedMod;
+    }
 
     abstract void damage();
 }

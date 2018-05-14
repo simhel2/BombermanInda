@@ -34,11 +34,14 @@ public class Game extends Application {
 
 private Pane pane;
 private GameMenu menu;
-private int graphicsWindowX = 1200; // Window size
-private int graphicsWindowY = 600; // Window size
-private int numGridX = 40;
-private int numGridY = 20;
-private int numCrates = 80;
+
+//NOTE graphicswindow must be evenly divisible by their respective numGrid
+private int graphicsWindowX = 1280; // Window size 16:9
+private int graphicsWindowY = 720; // Window size
+private int numGridX = 32; //16:9
+private int numGridY = 18;
+private int numCrates = 180;
+
     @Override
     public void start(Stage primaryStage) {
         gameMenu(primaryStage);
@@ -126,7 +129,7 @@ private int numCrates = 80;
 
         //create moving obj dummy
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
-        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX)-1,graphicsWindowY-(graphicsWindowY/numGridY)-1, true,true, render, world, pane);
+        Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY), true,true, render, world, pane);
         world.addMovingObject(dummyChar1);
 
         dummyChar1.secondPlayerControl(primaryStage, render);
