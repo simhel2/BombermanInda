@@ -160,7 +160,6 @@ public class Render {
         for(int i = 0; i < world.getWorldMatrix().length; ++i) {
             for(int j = 0; j < world.getWorldMatrix()[i].length; ++j) {
                 if (world.getWorldMatrix()[i][j]!=null) {   //if worldMatrix has something draw it
-                   System.out.println(i +", " +j);
                    if (!pane.getChildren().contains((world.getWorldMatrix()[i][j]).getNode())) {    //if it is not in world matrix add it
                        pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize?)    
                    } 
@@ -188,6 +187,9 @@ public class Render {
                    int posY = y*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[x][y].getNode().relocate(posX,posY);                   
         }           
+    }
+    public void removeMapObject(World world, int xCord,int yCord) {
+        pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord].getNode());
     }
 
     public int getGraphicsWindowX(){

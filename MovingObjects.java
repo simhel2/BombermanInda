@@ -94,6 +94,13 @@ public abstract class MovingObjects extends MapObject{
     public void setNudgeSpeedMod(double newSpeedMod){
         nudgeSpeedMod = newSpeedMod;
     }
+    public double getSpeedX(){
+        return speedX;
+    }
+    
+    public double getSpeedY(){
+        return speedY;
+    }
 
     abstract void damage();
 }

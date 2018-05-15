@@ -86,7 +86,7 @@ public class CharacterMovement {
                     playerTwo.setSpeedYDirection(1);
                     render.drawSecondCharacterFront(playerTwo.getNode());
                 } else if (ke.getCode() == KeyCode.A) {
-                    playerTwo.setSpeedXDirection(-1);
+                playerTwo.setSpeedXDirection(-1);
                     render.drawSecondCharacterLeft(playerTwo.getNode());
                 } else if (ke.getCode() == KeyCode.D) {
                     playerTwo.setSpeedXDirection(1);
@@ -122,16 +122,27 @@ public class CharacterMovement {
             @Override
             public void handle(KeyEvent ke) {
                 if (ke.getCode() == KeyCode.UP || ke.getCode() == KeyCode.DOWN) {
-                    playerOne.setSpeedYDirection(0);
+                    //check to make releasing keys not stutter player if he is already moving the other way
+                    if((ke.getCode()==KeyCode.UP&&playerOne.getSpeedY()<0)||(ke.getCode()==KeyCode.DOWN&&playerOne.getSpeedY()>0)) {
+                        playerOne.setSpeedYDirection(0);
+                    }
+                    
                 }
                 if (ke.getCode() == KeyCode.LEFT || ke.getCode() == KeyCode.RIGHT) {
-                    playerOne.setSpeedXDirection(0);
+                    if((ke.getCode()==KeyCode.LEFT&&playerOne.getSpeedX()<0)||(ke.getCode()==KeyCode.RIGHT&&playerOne.getSpeedX()>0)) {
+                        playerOne.setSpeedXDirection(0);
+                    }
                 }
                 if (ke.getCode() == KeyCode.W || ke.getCode() == KeyCode.S) {
-                    playerTwo.setSpeedYDirection(0);
+                    if((ke.getCode()==KeyCode.W&&playerTwo.getSpeedY()<0)||(ke.getCode()==KeyCode.S&&playerTwo.getSpeedY()>0)) {
+                        playerTwo.setSpeedYDirection(0);
+                    }
                 }
+                
                 if (ke.getCode() == KeyCode.A || ke.getCode() == KeyCode.D) {
-                    playerTwo.setSpeedXDirection(0);
+                    if((ke.getCode()==KeyCode.A&&playerTwo.getSpeedX()<0)||(ke.getCode()==KeyCode.D&&playerTwo.getSpeedX()>0)) {
+                        playerTwo.setSpeedXDirection(0);
+                    }
                 }
 
 

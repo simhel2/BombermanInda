@@ -11,14 +11,11 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Character extends MovingObjects{
-    //TODO add hotkeys as fields
-
-    
-    
     private Render render;
     private World world;
     private Pane pane;
     private Game game;
+    private Node onTopOfBomb;
     
     //defaults
     private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
@@ -64,6 +61,9 @@ public class Character extends MovingObjects{
     
     public void removeBomb(Node bomb) {
         currentBombs.remove(bomb);
+        if (bomb == onTopOfBomb) {
+            onTopOfBomb = null;
+        }
     }
     
     //powerups
@@ -81,24 +81,30 @@ public class Character extends MovingObjects{
         setNudgeSpeedMod(getNudgeSpeedMod()*mult);
     }
     
-    
-    //TODO add function for setting controls
+    public Node getOnTopOfBomb(){
+        return onTopOfBomb;
+    }
+    public void resetOnTopOfBomb(){
+        onTopOfBomb = null;
+    }
     
     
     public void layBomb() throws InterruptedException{
         
-        //TODO: Fix collision with bomb placement (no bomb stacking)
-
-        if (currentBombs.size()<maxBombs) {
+        if (currentBombs.size()<maxBombs 
+                //disallow putting bombs on top of stuff
+                && world.getWorldMatrix()[getXIndex(world, render)][getYIndex(world, render)]==null) {
             Node newBomb;
             newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
             currentBombs.add(newBomb);
             Bomb bomb = new Bomb(newBomb,true, true, world,render, this);  
             int xCord  =  getXIndex(world,render);
             int yCord = getYIndex(world,render);
-            world.setObject(xCord, yCord, bomb); //should maybe make one ?
+            world.setObject(xCord, yCord, bomb); 
             render.drawMapObject(xCord, yCord, world);   
-            bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);       
+            bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);    
+            onTopOfBomb = bomb.getNode();
+            
         }
     }
 }

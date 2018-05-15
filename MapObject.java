@@ -32,21 +32,41 @@ public abstract class MapObject {
     public boolean isCollisionEnable() {
         return collisionEnable;
     }
+    public void setCollision(Boolean bool) {
+        collisionEnable  = bool;
+    }
+            
     public double getX(){
         return posX;
     }
     public double getY(){
         return posY;
     }
+    //get center of object index
     public int getYIndex(World world, Render render){
         return (int) ((((getY()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix()[0].length))
                 /render.getGraphicsWindowY());        
     }
     
+    //get center of object index
     public int getXIndex(World world, Render render){
         return (int) ((((getX()+world.getPixelsPerSquareX()/2)*world.getWorldMatrix().length))
                 /render.getGraphicsWindowX());        
     }
+    
+    //get top left of object index
+    public int getTopLeftXIndex(World world, Render render){
+        return (int) (((getX()*world.getWorldMatrix().length))
+                /render.getGraphicsWindowX());        
+    }
+    //get top left of object index
+    public int getTopLeftYIndex(World world, Render render){
+        return (int) (((getY()*world.getWorldMatrix()[0].length))
+                /render.getGraphicsWindowY());        
+    }
+    
+  
+    
     
 
     public Node getNode(){

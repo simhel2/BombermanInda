@@ -44,7 +44,7 @@ public class Explosion extends TimerTask{
                 
                 //calc size & do damage
                 Border border = doDamageAndCalcSize(xCord, yCord, size);
-                 
+                
                 
                 
                 try {
@@ -52,6 +52,7 @@ public class Explosion extends TimerTask{
                     world.remove(xCord, yCord);
                     pane.getChildren().remove(bomb);  
                     owner.removeBomb(bomb);
+                    
                     
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Explosion.class.getName()).log(Level.SEVERE, null, ex);
@@ -94,14 +95,20 @@ public class Explosion extends TimerTask{
                 //crate
                 if (world.getWorldMatrix()[xCord-i][yCord].getClass()==Crate.class){              
                     left = size-(size-i);
-                    leftCord = xCord -left;   //TODO wrong
+                    leftCord = xCord -left;   
                     //remove crate
-                    pane.getChildren().remove(world.getWorldMatrix()[xCord-i][yCord].getNode());
-                    world.destroyCrate(xCord-i,yCord);
+                    ((Crate)world.getWorldMatrix()[xCord-i][yCord]).damage(pane, world, xCord-i, yCord);
                     
                     break;
                 } 
-                //bomb TODO
+                else if(world.getWorldMatrix()[xCord-i][yCord].getClass()==Bomb.class){
+                    left = size-(size-i);
+                    leftCord = xCord -left;                      
+                    
+                    
+                    break;
+                }
+                
             } 
         }
         //Right
