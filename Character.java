@@ -19,7 +19,7 @@ public class Character extends MovingObjects{
     
     //defaults
     private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
-    private int maxBombs = 1;
+    private int maxBombs = 2;
     private int lives = 3;
     private int bombSize = 3;   
     private int detTime = 3000; //ms
@@ -97,12 +97,13 @@ public class Character extends MovingObjects{
             Node newBomb;
             newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
             currentBombs.add(newBomb);
-            Bomb bomb = new Bomb(newBomb,true, true, world,render, this);  
+
             int xCord  =  getXIndex(world,render);
             int yCord = getYIndex(world,render);
+            Bomb bomb = new Bomb(newBomb,true, true,this, pane, render, world,
+                xCord, yCord, bombSize, detTime);  
             world.setObject(xCord, yCord, bomb); 
             render.drawMapObject(xCord, yCord, world);   
-            bomb.setFuse(detTime, bombSize, world, render, getNode(), xCord, yCord, pane);    
             onTopOfBomb = bomb.getNode();
             
         }

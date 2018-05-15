@@ -63,7 +63,7 @@ public class Render {
     }
 
     void drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
-            int rightSize, World world) throws InterruptedException {
+            int rightSize, World world) {
 
         Polygon explosion  = new Polygon();
         double multX = graphicsWindowX/numGridX;
