@@ -62,7 +62,7 @@ public class Render {
         
     }
 
-    void drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
+    public Node drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
             int rightSize, World world) {
 
         Polygon explosion  = new Polygon();
@@ -86,10 +86,7 @@ public class Render {
         });
         explosion.setFill(new ImagePattern(new Image("BombermanInda/Images/explosion.png"),0,0,1,1,true));   //change
         pane.getChildren().add(explosion);
-        Timer detTimer = new Timer();
-        RemoveExplosion remExpl = new RemoveExplosion(pane,(Node)explosion);
-        detTimer.schedule(remExpl, 400);        
-      
+        return explosion;
     }
    
     public enum GraphicsObjects{

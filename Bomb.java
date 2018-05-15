@@ -7,6 +7,8 @@ package BombermanInda;
 
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
@@ -25,6 +27,12 @@ public class Bomb extends MapObject{
     private int bombSize;
     private boolean detonated = false;
     private Timer detTimer;
+    
+    //default
+    private int explosionAnimTime = 400;
+    private int damageInterval = 50;
+    private int numTicks = explosionAnimTime/damageInterval;
+            
     public Bomb(Node newBomb, boolean isVisible, boolean collisionEnable, Character owner, Pane pane, Render render,World world,
             int xCord, int yCord, int bombSize, int milliseconds) {
         super(newBomb, 0, 0 , isVisible , collisionEnable);
@@ -35,11 +43,11 @@ public class Bomb extends MapObject{
         this.pane = pane;
         this.owner = owner;
         this.bombSize = bombSize;
-        
+
+        //start ticking
         detTimer = new Timer();
         Explosion explosion = new Explosion(this); 
         detTimer.schedule(explosion, milliseconds); 
-        
     }
     
     public void detonate () {
@@ -52,14 +60,31 @@ public class Bomb extends MapObject{
 
             //calc size & do damage
             Border border = doDamageAndCalcSize(xCord, yCord, bombSize);
-
-            render.drawExplosion(xCord, yCord, border.up, border.down, border.left, border.right, world);
-            //remove logical
+            
+            //remove bomb logical
             world.remove(xCord, yCord);
-            //remove graphical
+            //remove bomb graphical
             pane.getChildren().remove(getNode());  
-            //remove from person
+            //remove bomb from person
             owner.removeBomb(getNode());
+            
+            //animate explosion
+            Node explosion = render.drawExplosion(xCord, yCord, border.up, border.down, border.left, border.right, world);
+            
+            //start timer that removes explosion
+            Timer remExpl = new Timer();
+            RemoveExplosion remTimer = new RemoveExplosion(pane,(Node)explosion);
+            
+            remExpl.schedule(remTimer, explosionAnimTime);        
+      
+            //do damage within border for the rest of the animation
+            Timer doDmg = new Timer();
+            ExplosionDamage explDmg = new ExplosionDamage(this, border, xCord, yCord,numTicks); 
+            doDmg.schedule(explDmg, explosionAnimTime, damageInterval); 
+            
+            //doDamageToMovObj(border, xCord, yCord);--
+            
+            
         }
     }
     /**
@@ -83,11 +108,7 @@ public class Bomb extends MapObject{
         int up = size;
         int down = size;
         
-        int leftCord = xCord -size;
-        int rightCord= xCord +size; 
-        int upCord = yCord -size;
-        int downCord= yCord +size;       
-        
+
         //left
         for (int i = 1; i <= size; i++) {
             if (xCord-i <0 ) {
@@ -97,7 +118,6 @@ public class Bomb extends MapObject{
                 //crate
                 if (world.getWorldMatrix()[xCord-i][yCord].getClass()==Crate.class){              
                     left = size-(size-i);
-                    leftCord = xCord -left;   
                     //remove crate
                     ((Crate)world.getWorldMatrix()[xCord-i][yCord]).damage(pane, world, xCord-i, yCord);
                     
@@ -105,7 +125,6 @@ public class Bomb extends MapObject{
                 } 
                 else if(world.getWorldMatrix()[xCord-i][yCord].getClass()==Bomb.class){
                     left = size-(size-i);
-                    leftCord = xCord -left;  
                     ((Bomb)world.getWorldMatrix()[xCord-i][yCord]).detonate();
                     break;
                 }
@@ -121,7 +140,6 @@ public class Bomb extends MapObject{
                 //crate
                 if (world.getWorldMatrix()[xCord+i][yCord].getClass()==Crate.class){              
                     right = size-(size-i);
-                    rightCord = xCord + right; 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord+i][yCord].getNode());
                     world.destroyCrate(xCord+i,yCord); 
@@ -130,7 +148,6 @@ public class Bomb extends MapObject{
                 } 
                 else if(world.getWorldMatrix()[xCord+i][yCord].getClass()==Bomb.class){
                     right = size-(size-i);
-                    rightCord = xCord + right; 
                     ((Bomb)world.getWorldMatrix()[xCord+i][yCord]).detonate();
                     break;
                 }
@@ -146,7 +163,6 @@ public class Bomb extends MapObject{
                 //crate
                 if (world.getWorldMatrix()[xCord][yCord-i].getClass()==Crate.class){              
                     up = size-(size-i);
-                    upCord = yCord -up; 
 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord-i].getNode());
@@ -157,7 +173,6 @@ public class Bomb extends MapObject{
                 //bomb
                 else if(world.getWorldMatrix()[xCord][yCord-i].getClass()==Bomb.class){
                     up = size-(size-i);
-                    upCord = yCord -up; 
                     ((Bomb)world.getWorldMatrix()[xCord][yCord-i]).detonate();
                     break;
                 }
@@ -172,7 +187,6 @@ public class Bomb extends MapObject{
                 //crate
                 if (world.getWorldMatrix()[xCord][yCord+i].getClass()==Crate.class){              
                     down = size-(size-i);
-                    downCord = downCord + down; 
 
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord+i].getNode());
@@ -181,7 +195,6 @@ public class Bomb extends MapObject{
                 } 
                 else if(world.getWorldMatrix()[xCord][yCord+i].getClass()==Bomb.class){
                     down = size-(size-i);
-                    downCord = downCord + down; 
                     ((Bomb)world.getWorldMatrix()[xCord][yCord+i]).detonate();
                     break;
                 }
@@ -190,15 +203,24 @@ public class Bomb extends MapObject{
             
             
         }
+        Border border = new Border (left,right,up,down);
+        doDamageToMovObj(border, xCord,yCord);
+        
+        return border;
+    }
+    
+    public void doDamageToMovObj(Border border, int xCord,int yCord){
+        int leftCord = xCord -border.left;  
+        int rightCord = xCord + border.right; 
+        int upCord = yCord -border.up; 
+        int downCord = yCord +border.down;
+
         //here we have left right up down calculated
         ArrayList<MovingObjects> copyOfMovObjList =  new ArrayList<MovingObjects>(world.getMovingObjects());
         for (MovingObjects movObj:copyOfMovObjList){
             //check for collision and deal damage TODO
             int xIndex = movObj.getXIndex(world, render);
             int yIndex = movObj.getYIndex(world, render);
-                
-
-            
             //boolean that will determine wheter or not we got hit
             boolean hit = false;
             //horisontal hitbox
@@ -214,10 +236,7 @@ public class Bomb extends MapObject{
             
         }
         
-        
-        
-        
-        
-        return new Border (left,right,up,down);
+        //TODO
     }
+    
 }
