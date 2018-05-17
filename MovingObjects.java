@@ -22,6 +22,10 @@ public abstract class MovingObjects extends MapObject{
     //defaults
     private double nudgeSpeedMod = 0.25;
     private double maxSpeed = 1.5;
+    
+    //speedlimit 
+    private double speedLimit = 2132;
+    
 
 
    
@@ -93,6 +97,13 @@ public abstract class MovingObjects extends MapObject{
     }
     public void setNudgeSpeedMod(double newSpeedMod){
         nudgeSpeedMod = newSpeedMod;
+    }
+    public double getSpeedX(){
+        return speedX;
+    }
+    
+    public double getSpeedY(){
+        return speedY;
     }
 
     abstract void damage();

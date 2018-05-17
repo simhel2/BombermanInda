@@ -7,13 +7,14 @@ package BombermanInda;
 
 import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 
 /**
  *
  * @author simon
  */
 
-//TODO: add different types of crates
+//TODO: add different types of crates ??
 
 
 public class Crate extends MapObject {
@@ -22,11 +23,13 @@ public class Crate extends MapObject {
                 
     }
     
-    
-// TODO: add destroy functionality / animation ? WARNING NOT CALLED ATM!
-public void playDestroyAnim(){
-   
+    public void damage (Pane pane, World world, int xCord, int yCord){
+        //remove graphic
+        pane.getChildren().remove(this.getNode());
+        //remove logic
+        world.destroyCrate(xCord,yCord);
+    }
+
 }
     
-    
-}
+

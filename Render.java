@@ -62,8 +62,8 @@ public class Render {
         
     }
 
-    void drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
-            int rightSize, World world) throws InterruptedException {
+    public Node drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
+            int rightSize, World world) {
 
         Polygon explosion  = new Polygon();
         double multX = graphicsWindowX/numGridX;
@@ -86,10 +86,7 @@ public class Render {
         });
         explosion.setFill(new ImagePattern(new Image("BombermanInda/Images/explosion.png"),0,0,1,1,true));   //change
         pane.getChildren().add(explosion);
-        Timer detTimer = new Timer();
-        RemoveExplosion remExpl = new RemoveExplosion(pane,(Node)explosion);
-        detTimer.schedule(remExpl, 400);        
-      
+        return explosion;
     }
    
     public enum GraphicsObjects{
@@ -166,7 +163,6 @@ public class Render {
         for(int i = 0; i < world.getWorldMatrix().length; ++i) {
             for(int j = 0; j < world.getWorldMatrix()[i].length; ++j) {
                 if (world.getWorldMatrix()[i][j]!=null) {   //if worldMatrix has something draw it
-                   System.out.println(i +", " +j);
                    if (!pane.getChildren().contains((world.getWorldMatrix()[i][j]).getNode())) {    //if it is not in world matrix add it
                        pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize?)    
                    } 
@@ -194,6 +190,9 @@ public class Render {
                    int posY = y*graphicsWindowY/world.getWorldMatrix()[0].length;
                    world.getWorldMatrix()[x][y].getNode().relocate(posX,posY);                   
         }           
+    }
+    public void removeMapObject(World world, int xCord,int yCord) {
+        pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord].getNode());
     }
 
     public int getGraphicsWindowX(){
