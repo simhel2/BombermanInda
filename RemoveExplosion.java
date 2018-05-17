@@ -5,6 +5,7 @@
  */
 package BombermanInda;
 
+import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -17,9 +18,11 @@ import javafx.scene.layout.Pane;
 public class RemoveExplosion extends TimerTask{
     private Pane pane;    
     private Node explosion;
-    public RemoveExplosion(Pane pane, Node explosion){
+    private Timer timer;
+    public RemoveExplosion(Pane pane, Node explosion, Timer timer){
         this.pane = pane;
         this.explosion = explosion;
+        this.timer = timer;
     }
             
     
@@ -28,6 +31,7 @@ public class RemoveExplosion extends TimerTask{
          Platform.runLater(new Runnable(){
             @Override public void run() {        
                 pane.getChildren().remove(explosion);
+                timer.cancel();
             }
          });    
              

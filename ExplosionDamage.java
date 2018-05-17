@@ -5,6 +5,7 @@
  */
 package BombermanInda;
 
+import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
 
@@ -19,12 +20,14 @@ public class ExplosionDamage extends TimerTask {
     private int yCord;
     private int tick = 0;
     private int numTicks;
-    public ExplosionDamage(Bomb bomb, Bomb.Border border, int xCord, int yCord, int numTicks){
+    private Timer timer;
+    public ExplosionDamage(Bomb bomb, Timer timer, Bomb.Border border, int xCord, int yCord, int numTicks){
         super();
         this.bomb = bomb;
         this.border = border;
         this.xCord = xCord;
         this.yCord = yCord;
+        this.timer = timer;
         this.numTicks =numTicks;
         
         
@@ -40,8 +43,9 @@ public class ExplosionDamage extends TimerTask {
                 }
             });        
         } else {
+            timer.cancel();
             this.cancel();
-        
+            
         }
             
     }

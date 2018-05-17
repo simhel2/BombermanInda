@@ -6,6 +6,7 @@
 package BombermanInda;
 
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,15 +19,18 @@ import javafx.scene.layout.Pane;
  */
 public class Explosion extends TimerTask{
     private Bomb bomb;
-    public Explosion(Bomb bomb) {
+    private Timer timer;
+    public Explosion(Bomb bomb, Timer timer) {
         super();
         this.bomb = bomb;
+        this.timer = timer;
     }
     @Override
     public void run() {
         Platform.runLater(new Runnable(){
             @Override public void run() {
                 bomb.detonate();
+                timer.cancel();
                 
             }
         });

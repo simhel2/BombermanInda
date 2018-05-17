@@ -19,7 +19,7 @@ public class Character extends MovingObjects{
     
     //defaults
     private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
-    private int maxBombs = 2;
+    private int maxBombs = 99999;
     private int lives = 3;
     private int bombSize = 3;   
     private int detTime = 3000; //ms
@@ -46,10 +46,11 @@ public class Character extends MovingObjects{
             for (MovingObjects movObj : world.getMovingObjects() ) {
                 if(movObj.getClass() == Character.class) {
                     charsLeft++;
+                    break;
                 }
                 
             }
-            if (charsLeft<=1)
+            if (!(charsLeft>0))
             {
                 game.endScreen(game.getPrimaryStage());
             }

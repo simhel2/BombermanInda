@@ -97,8 +97,7 @@ public class World {
     };
     
     //TODO: should ideally check the entire line becasue otherwise slow logic or
-           //high speed may give you noclip: scrapped for performance since it is unlikely
-    
+           //high speed may give you noclip: scrapped for performance instead limited maxspeed of character
     //notes: startX and startY for everything is top left
     
     //TODO: think? maybe could avoid code dupe by setting midpoint 

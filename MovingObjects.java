@@ -22,6 +22,10 @@ public abstract class MovingObjects extends MapObject{
     //defaults
     private double nudgeSpeedMod = 0.25;
     private double maxSpeed = 1.5;
+    
+    //speedlimit 
+    private double speedLimit = 2132;
+    
 
 
    

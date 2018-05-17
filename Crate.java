@@ -25,7 +25,7 @@ public class Crate extends MapObject {
     
     public void damage (Pane pane, World world, int xCord, int yCord){
         //remove graphic
-        pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord].getNode());
+        pane.getChildren().remove(this.getNode());
         //remove logic
         world.destroyCrate(xCord,yCord);
     }

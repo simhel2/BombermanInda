@@ -46,7 +46,7 @@ public class Bomb extends MapObject{
 
         //start ticking
         detTimer = new Timer();
-        Explosion explosion = new Explosion(this); 
+        Explosion explosion = new Explosion(this, detTimer); 
         detTimer.schedule(explosion, milliseconds); 
     }
     
@@ -73,13 +73,12 @@ public class Bomb extends MapObject{
             
             //start timer that removes explosion
             Timer remExpl = new Timer();
-            RemoveExplosion remTimer = new RemoveExplosion(pane,(Node)explosion);
-            
+            RemoveExplosion remTimer = new RemoveExplosion(pane,(Node)explosion, remExpl);
             remExpl.schedule(remTimer, explosionAnimTime);        
       
             //do damage within border for the rest of the animation
             Timer doDmg = new Timer();
-            ExplosionDamage explDmg = new ExplosionDamage(this, border, xCord, yCord,numTicks); 
+            ExplosionDamage explDmg = new ExplosionDamage(this, doDmg, border, xCord, yCord, numTicks); 
             doDmg.schedule(explDmg, explosionAnimTime, damageInterval); 
             
             //doDamageToMovObj(border, xCord, yCord);--
@@ -236,7 +235,6 @@ public class Bomb extends MapObject{
             
         }
         
-        //TODO
     }
     
 }
