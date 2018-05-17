@@ -94,7 +94,7 @@ public class Render {
    
     public enum GraphicsObjects{
 
-        MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED; //TODO add more
+        MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED, WALL; //TODO add more
 
     }
             
@@ -146,7 +146,13 @@ public class Render {
             speedUp.setFitHeight(graphicsWindowY/numGridY);
             return speedUp;
 
-        } else {
+        }   else if (grp == GraphicsObjects.WALL) {
+            ImageView wall = new ImageView("BombermanInda/Images/Crimson.png");
+            wall.setFitWidth(graphicsWindowX / numGridX);
+            wall.setFitHeight(graphicsWindowY / numGridY);
+            return wall;
+        }
+        else {
             //make error
             throw new Error("could not construct object"+grp.toString());
           
@@ -206,8 +212,9 @@ public class Render {
         return numGridY;
     }
     
-    public void drawBackground(World world){
-        gc.drawImage(world.getBackground(), 0, 0, graphicsWindowX, graphicsWindowY );
+    public void drawBackground(Image image){
+        ImageView background = new ImageView(image);
+        pane.getChildren().add(background);
     }
     public void removeObject(Node node) {
         pane.getChildren().remove(node);

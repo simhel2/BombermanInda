@@ -27,6 +27,8 @@ public class RemoveExplosion extends TimerTask{
     public void run() {
          Platform.runLater(new Runnable(){
             @Override public void run() {        
+
+                //DO
                 pane.getChildren().remove(explosion);
             }
          });    

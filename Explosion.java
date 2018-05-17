@@ -94,7 +94,7 @@ public class Explosion extends TimerTask{
                 //crate
                 if (world.getWorldMatrix()[xCord-i][yCord].getClass()==Crate.class){              
                     left = size-(size-i);
-                    leftCord = xCord -left;   //TODO wrong
+                    leftCord = xCord -left;
                     //remove crate
                     pane.getChildren().remove(world.getWorldMatrix()[xCord-i][yCord].getNode());
                     world.destroyCrate(xCord-i,yCord);
