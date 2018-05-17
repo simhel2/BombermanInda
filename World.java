@@ -11,20 +11,20 @@ public class World {
     private ArrayList<MovingObjects> movingObjects;
     
     //WorldType w;
-    private Image background;
+
     private final int numCrates;
-    private final Render render;
+    private Render render;
     
     //defaults
     private double nudgeRatio = 0.4; //ratio from top or bottom where nudge is allowed, max <1/2
     
             
 
-    public World (int x, int y, Render render, int numCrates, Image background) {   // can add WorldType w for multiple maps
+    public World (int x, int y, Render render, int numCrates) {   // can add WorldType w for multiple maps
         worldMatrix = new MapObject[x][y];
         movingObjects = new ArrayList<MovingObjects>();
         this.numCrates = numCrates;
-        this.background = background;
+
         this.render = render;
         generateWorld();
     } 
@@ -45,7 +45,13 @@ public class World {
     }
 
     public void generateWorld(){
-        
+
+        // TODO improve generation
+        //generate wall
+        worldMatrix[0][1] = new Wall(render.createGraphicsEntity(Render.GraphicsObjects.WALL)
+                ,0,0,true,true);
+
+
         // Generate Crates:
         for(int i = 0; i<numCrates; i++) {
             int x = ThreadLocalRandom.current().nextInt(0,worldMatrix.length);
@@ -452,7 +458,12 @@ public class World {
         return worldMatrix[0].length;
     }    
     
-    
+    public void clearWorld(){
+        worldMatrix = null;
+        movingObjects = null;
+
+        render = null;
+    }
     
     public double getPixelsPerSquareX(){
         return render.getGraphicsWindowX()/worldMatrix.length;
@@ -465,11 +476,6 @@ public class World {
     public void removeMovingObject(MovingObjects movObj){
         movingObjects.remove(movObj);
     }
-    
-    public Image getBackground(){
-        return background;
-    }
-    public void setBackground(Image background){
-        this.background= background;
-    }
+
+
 }

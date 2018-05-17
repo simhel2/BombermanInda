@@ -111,7 +111,8 @@ public class CharacterMovement {
                 }
 
                 else if(ke.getCode() == KeyCode.ESCAPE) {
-                    game.gameMenu(primaryStage);
+                    game.removeGame();
+                    game.gameMenu(primaryStage, game.getPane());
                 }
             }
 

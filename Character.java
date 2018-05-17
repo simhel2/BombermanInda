@@ -52,6 +52,8 @@ public class Character extends MovingObjects{
             }
             if (!(charsLeft>0))
             {
+
+                game.removeGame();
                 game.endScreen(game.getPrimaryStage());
             }
         } 
