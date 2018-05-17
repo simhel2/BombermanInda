@@ -126,7 +126,7 @@ public class CharacterMovement {
                     if((ke.getCode()==KeyCode.UP&&playerOne.getSpeedY()<0)||(ke.getCode()==KeyCode.DOWN&&playerOne.getSpeedY()>0)) {
                         playerOne.setSpeedYDirection(0);
                     }
-                    
+                        
                 }
                 if (ke.getCode() == KeyCode.LEFT || ke.getCode() == KeyCode.RIGHT) {
                     if((ke.getCode()==KeyCode.LEFT&&playerOne.getSpeedX()<0)||(ke.getCode()==KeyCode.RIGHT&&playerOne.getSpeedX()>0)) {

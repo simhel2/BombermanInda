@@ -19,9 +19,9 @@ public class Character extends MovingObjects{
     
     //defaults
     private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
-    private int maxBombs = 99999;
+    private int maxBombs = 1;
     private int lives = 3;
-    private int bombSize = 3;   
+    private int bombSize = 2;   
     private int detTime = 3000; //ms
     
     public Character(Node graphic, double posX, double posY, boolean isVisible, 
