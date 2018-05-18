@@ -33,7 +33,7 @@ public class PowerUp extends MapObject{
             player.addBombLimit(1);
         }
         else if (powerUp ==  PowerUps.SPEED) {
-            player.changeSpeed(10);
+            player.changeSpeed(1.333);
         }
         
         //TODO Add more
