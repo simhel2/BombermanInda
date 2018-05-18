@@ -24,9 +24,9 @@ public class Character extends MovingObjects{
     private int bombSize = 2;   
     private int detTime = 3000; //ms
     
-    public Character(Node graphic, double posX, double posY, boolean isVisible, 
+    public Character(Node graphic, double posX, double posY, double maxSpeed, double moveDistLimit, boolean isVisible, 
             boolean collisionEnable, Render render, World world, Pane pane, Game game){
-        super(graphic, posX, posY, isVisible, collisionEnable);
+        super(graphic, posX, posY, maxSpeed, moveDistLimit, isVisible, collisionEnable);
         this.render = render;
         this.world = world;
         this.pane = pane;
@@ -94,7 +94,7 @@ public class Character extends MovingObjects{
     
     public void layBomb() throws InterruptedException{
         
-        if (currentBombs.size()<maxBombs 
+        if (currentBombs.size()<maxBombs && lives > 0 
                 //disallow putting bombs on top of stuff
                 && world.getWorldMatrix()[getXIndex(world, render)][getYIndex(world, render)]==null) {
             Node newBomb;
