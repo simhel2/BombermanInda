@@ -49,6 +49,8 @@ private int graphicsWindowY = 720; // Window size
 private int numGridX = 32; //16:9
 private int numGridY = 18;
 private int numCrates = 180;
+//starting speed for characters
+private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY)/20; 
 
 
     @Override
@@ -175,7 +177,8 @@ private int numCrates = 180;
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
-        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane, this);   //create char on (0,0)
+        Character mainChar = new Character(mainCharNode,0,0, speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
+                true, true, render, world, pane, this);   //create char on (0,0)
         world.addMovingObject(mainChar);
         //activate movement
         //mainChar.testControls(primaryStage, render);
@@ -184,7 +187,8 @@ private int numCrates = 180;
         Node dummyNode1 = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER); //TODO change
 
         Character dummyChar1 = new Character(dummyNode1,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
-                                             true,true, render, world, pane, this);
+                speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
+                true,true, render, world, pane, this);
 
         world.addMovingObject(dummyChar1);
 

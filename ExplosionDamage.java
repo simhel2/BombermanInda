@@ -18,7 +18,7 @@ public class ExplosionDamage extends TimerTask {
     private Bomb.Border border;
     private int xCord;
     private int yCord;
-    private int tick = 0;
+    private int tick = 1;
     private int numTicks;
     private Timer timer;
     public ExplosionDamage(Bomb bomb, Timer timer, Bomb.Border border, int xCord, int yCord, int numTicks){
@@ -38,12 +38,15 @@ public class ExplosionDamage extends TimerTask {
         if(tick < numTicks) {
             Platform.runLater(new Runnable(){
                 @Override public void run() {
-                    bomb.doDamageToMovObj(border, xCord, yCord);
-                    tick++;
+                    if (bomb!= null ) {
+                        bomb.doDamageToMovObj(border, xCord, yCord);
+                        tick++;
+                    }
                 }
             });        
         } else {
             timer.cancel();
+            timer.purge();
             this.cancel();
             
         }

@@ -34,8 +34,9 @@ public class Bomb extends MapObject{
     private int numTicks = explosionAnimTime/damageInterval;
             
     public Bomb(Node newBomb, boolean isVisible, boolean collisionEnable, Character owner, Pane pane, Render render,World world,
-            int xCord, int yCord, int bombSize, int milliseconds) {
-        super(newBomb, 0, 0 , isVisible , collisionEnable);
+            int xCord, int yCord, double x, double y, int bombSize, int milliseconds) {
+        super(newBomb, x,  
+                y, isVisible , collisionEnable);
         this.world = world;
         this.render = render;
         this.xCord = xCord;
@@ -58,19 +59,19 @@ public class Bomb extends MapObject{
             detTimer.cancel();
             detTimer.purge();
 
-            //calc size & do damage
-            Border border = doDamageAndCalcSize(xCord, yCord, bombSize);
-            
             //remove bomb logical
             world.remove(xCord, yCord);
             //remove bomb graphical
             pane.getChildren().remove(getNode());  
             //remove bomb from person
-            owner.removeBomb(getNode());
+            owner.removeBomb(this);
             
+            //calc size & do damage
+            Border border = doDamageAndCalcSize(xCord, yCord, bombSize);
+
             //animate explosion
             Node explosion = render.drawExplosion(xCord, yCord, border.up, border.down, border.left, border.right, world);
-            
+
             //start timer that removes explosion
             Timer remExpl = new Timer();
             RemoveExplosion remTimer = new RemoveExplosion(pane,(Node)explosion, remExpl);
@@ -79,7 +80,7 @@ public class Bomb extends MapObject{
             //do damage within border for the rest of the animation
             Timer doDmg = new Timer();
             ExplosionDamage explDmg = new ExplosionDamage(this, doDmg, border, xCord, yCord, numTicks); 
-            doDmg.schedule(explDmg, explosionAnimTime, damageInterval); 
+            doDmg.schedule(explDmg, explosionAnimTime-100, damageInterval); 
             
             //doDamageToMovObj(border, xCord, yCord);--
             
@@ -213,8 +214,11 @@ public class Bomb extends MapObject{
         int rightCord = xCord + border.right; 
         int upCord = yCord -border.up; 
         int downCord = yCord +border.down;
-
-        //here we have left right up down calculated
+        
+        //if empty end
+        if (world.getMovingObjects()== null) {
+            return;
+        }
         ArrayList<MovingObjects> copyOfMovObjList =  new ArrayList<MovingObjects>(world.getMovingObjects());
         for (MovingObjects movObj:copyOfMovObjList){
             //check for collision and deal damage TODO

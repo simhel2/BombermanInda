@@ -29,8 +29,11 @@ public class Explosion extends TimerTask{
     public void run() {
         Platform.runLater(new Runnable(){
             @Override public void run() {
-                bomb.detonate();
-                timer.cancel();
+                if (bomb != null) {
+                    bomb.detonate();
+                    timer.cancel();
+                    timer.purge();
+                }
                 
             }
         });
