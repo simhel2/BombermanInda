@@ -214,8 +214,11 @@ public class Bomb extends MapObject{
         int rightCord = xCord + border.right; 
         int upCord = yCord -border.up; 
         int downCord = yCord +border.down;
-
-        //here we have left right up down calculated
+        
+        //if empty end
+        if (world.getMovingObjects()== null) {
+            return;
+        }
         ArrayList<MovingObjects> copyOfMovObjList =  new ArrayList<MovingObjects>(world.getMovingObjects());
         for (MovingObjects movObj:copyOfMovObjList){
             //check for collision and deal damage TODO

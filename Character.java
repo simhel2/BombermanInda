@@ -46,11 +46,10 @@ public class Character extends MovingObjects{
             for (MovingObjects movObj : world.getMovingObjects() ) {
                 if(movObj.getClass() == Character.class) {
                     charsLeft++;
-                    break;
                 }
                 
             }
-            if (!(charsLeft>0))
+            if (!(charsLeft>1))
             {
 
                 game.removeGame();
