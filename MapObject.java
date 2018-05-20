@@ -21,6 +21,7 @@ public abstract class MapObject {
     public void setCollision(boolean b)  {
         collisionEnable = b;
     }
+
     void setIsVisible(boolean b) {
         isVisible = b;
     }
@@ -32,6 +33,7 @@ public abstract class MapObject {
     public boolean isCollisionEnable() {
         return collisionEnable;
     }
+
     public void setCollision(Boolean bool) {
         collisionEnable  = bool;
     }
@@ -39,9 +41,12 @@ public abstract class MapObject {
     public double getX(){
         return posX;
     }
+
     public double getY(){
         return posY;
     }
+
+
     //get center of object index
     public int getYIndex(World world, Render render){
         return (int) ((((getY()+world.getPixelsPerSquareY()/2)*world.getWorldMatrix()[0].length))

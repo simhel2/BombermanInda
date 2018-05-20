@@ -36,7 +36,6 @@ import javafx.stage.Stage;
 public class Game extends Application {
 
 private static Pane pane;
-private static GameMenu menu;
 private static Stage primaryStage;
 private static World world;
 private static Render render;
@@ -169,6 +168,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         Character secondChar = new Character(secondCharNode,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
                 speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
                 true,true, render, world, pane, this);
+
 
 
         world.addMovingObject(secondChar);

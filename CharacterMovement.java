@@ -67,33 +67,66 @@ public class CharacterMovement {
             @Override
             public void handle(KeyEvent ke) {
 
-                if (ke.getCode() == KeyCode.UP) {
-                    playerOne.setSpeedYDirection(-1);
-                    render.drawMainCharacterBack(playerOne.getNode());
-                } else if (ke.getCode() == KeyCode.DOWN) {
-                    playerOne.setSpeedYDirection(1);
-                    render.drawMainCharacterFront(playerOne.getNode());
-                } else if (ke.getCode() == KeyCode.LEFT) {
-                    playerOne.setSpeedXDirection(-1);
-                    render.drawMainCharacterLeft(playerOne.getNode());
-                } else if (ke.getCode() == KeyCode.RIGHT) {
-                    playerOne.setSpeedXDirection(1);
-                    render.drawMainCharacterRight(playerOne.getNode());
-                } else if (ke.getCode() == KeyCode.W) {
-                    playerTwo.setSpeedYDirection(-1);
-                    render.drawSecondCharacterBack(playerTwo.getNode());
-                } else if (ke.getCode() == KeyCode.S) {
-                    playerTwo.setSpeedYDirection(1);
-                    render.drawSecondCharacterFront(playerTwo.getNode());
-                } else if (ke.getCode() == KeyCode.A) {
-                playerTwo.setSpeedXDirection(-1);
-                    render.drawSecondCharacterLeft(playerTwo.getNode());
-                } else if (ke.getCode() == KeyCode.D) {
-                    playerTwo.setSpeedXDirection(1);
-                    render.drawSecondCharacterRight(playerTwo.getNode());
+                if(playerOne.getIsInvulnerable()) {
+                    if (ke.getCode() == KeyCode.UP) {
+                        playerOne.setSpeedYDirection(-1);
+                        render.drawInvulnerableCharacterBack(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.DOWN) {
+                        playerOne.setSpeedYDirection(1);
+                        render.drawInvulnerableCharacterFront(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.LEFT) {
+                        playerOne.setSpeedXDirection(-1);
+                        render.drawInvulnerableCharacterLeft(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.RIGHT) {
+                        playerOne.setSpeedXDirection(1);
+                        render.drawInvulnerableCharacterRight(playerOne.getNode());
+                    }
+                }
+
+                else if(playerTwo.getIsInvulnerable()){
+                    if (ke.getCode() == KeyCode.W) {
+                        playerTwo.setSpeedYDirection(-1);
+                        render.drawInvulnerableCharacterBack(playerTwo.getNode());
+                    } else if (ke.getCode() == KeyCode.S) {
+                        playerTwo.setSpeedYDirection(1);
+                        render.drawInvulnerableCharacterFront(playerTwo.getNode());
+                    } else if (ke.getCode() == KeyCode.A) {
+                        playerTwo.setSpeedXDirection(-1);
+                        render.drawInvulnerableCharacterLeft(playerTwo.getNode());
+                    } else if (ke.getCode() == KeyCode.D) {
+                        playerTwo.setSpeedXDirection(1);
+                        render.drawInvulnerableCharacterRight(playerTwo.getNode());
+                    }
+                }
+                else {
+                    if (ke.getCode() == KeyCode.UP) {
+                        playerOne.setSpeedYDirection(-1);
+                        render.drawMainCharacterBack(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.DOWN) {
+                        playerOne.setSpeedYDirection(1);
+                        render.drawMainCharacterFront(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.LEFT) {
+                        playerOne.setSpeedXDirection(-1);
+                        render.drawMainCharacterLeft(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.RIGHT) {
+                        playerOne.setSpeedXDirection(1);
+                        render.drawMainCharacterRight(playerOne.getNode());
+                    } else if (ke.getCode() == KeyCode.W) {
+                        playerTwo.setSpeedYDirection(-1);
+                        render.drawSecondCharacterBack(playerTwo.getNode());
+                    } else if (ke.getCode() == KeyCode.S) {
+                        playerTwo.setSpeedYDirection(1);
+                        render.drawSecondCharacterFront(playerTwo.getNode());
+                    } else if (ke.getCode() == KeyCode.A) {
+                        playerTwo.setSpeedXDirection(-1);
+                        render.drawSecondCharacterLeft(playerTwo.getNode());
+                    } else if (ke.getCode() == KeyCode.D) {
+                        playerTwo.setSpeedXDirection(1);
+                        render.drawSecondCharacterRight(playerTwo.getNode());
+                    }
                 }
                 //layBomb
-                else if (ke.getCode() == KeyCode.T) {
+                if (ke.getCode() == KeyCode.T) {
                     try {
                         playerTwo.layBomb();
                     } catch (InterruptedException e) {

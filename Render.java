@@ -246,14 +246,32 @@ public class Render {
         ((ImageView) graphic).setImage(image);
 
     }
-    public static void drawSecondCharacterRight(Node graphic) {
+    public void drawSecondCharacterRight(Node graphic) {
         Image image = new Image("BombermanInda/Images/CharTwoRight.png");
         ((ImageView) graphic).setImage(image);
     }
-    public static void drawSecondCharacterLeft(Node graphic) {
+    public void drawSecondCharacterLeft(Node graphic) {
         Image image = new Image("BombermanInda/Images/CharTwoLeft.png");
         ((ImageView) graphic).setImage(image);
     }
+
+    public void drawInvulnerableCharacterFront(Node graphic) {
+        Image image = new Image("BombermanInda/Images/InvulnerableFront.png");
+        ((ImageView) graphic).setImage(image);
+    }
+    public void drawInvulnerableCharacterRight(Node graphic) {
+        Image image = new Image("BombermanInda/Images/InvulnerableRight.png");
+        ((ImageView) graphic).setImage(image);
+    }
+    public void drawInvulnerableCharacterLeft(Node graphic) {
+        Image image = new Image("BombermanInda/Images/InvulnerableLeft.png");
+        ((ImageView) graphic).setImage(image);
+    }
+    public void drawInvulnerableCharacterBack(Node graphic) {
+        Image image = new Image("BombermanInda/Images/InvulnerableBack.png");
+        ((ImageView) graphic).setImage(image);
+    }
+
 
 }
 

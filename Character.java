@@ -1,6 +1,7 @@
 package BombermanInda;
 
 import java.util.ArrayList;
+import java.util.Timer;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
@@ -16,13 +17,15 @@ public class Character extends MovingObjects{
     private Pane pane;
     private Game game;
     private Bomb onTopOfBomb;
-    
+    private boolean isInvulnerable = false;
+
     //defaults
     private ArrayList<Bomb> currentBombs= new ArrayList<Bomb>(); //hashmap would be more optimal
     private int maxBombs = 1;
     private int lives = 3;
     private int bombSize = 2;   
     private int detTime = 3000; //ms
+    private int invulnerabilityTime = 4200; //ms
     
     public Character(Node graphic, double posX, double posY, double maxSpeed, double moveDistLimit, boolean isVisible, 
             boolean collisionEnable, Render render, World world, Pane pane, Game game){
@@ -34,8 +37,11 @@ public class Character extends MovingObjects{
     }
 
     public void damage () {
-        
-        lives--;
+
+        if(!isInvulnerable){
+            lives--;
+        }
+
         if (lives==0){
             //remove from graphics and world
             pane.getChildren().remove(graphic);
@@ -55,7 +61,15 @@ public class Character extends MovingObjects{
                 game.endScreen(game.getPrimaryStage(), game.getPane());
             }
         } 
-        
+
+        isInvulnerable = true;
+
+        Timer makeInvulnerable = new Timer();
+        Invulnerability invulnerabilityTimer = new Invulnerability(pane, this, makeInvulnerable);
+        makeInvulnerable.schedule(invulnerabilityTimer, invulnerabilityTime);
+
+
+
         //TODO add animation/imortality on taking damage
         
     }
@@ -88,7 +102,15 @@ public class Character extends MovingObjects{
     public void resetOnTopOfBomb(){
         onTopOfBomb = null;
     }
-    
+
+    public boolean getIsInvulnerable(){
+        return isInvulnerable;
+    }
+
+    // Changes isInvulnerable to desired value
+    public void setInvulnerable(boolean value){
+        isInvulnerable = value;
+    }
     
     public void layBomb() throws InterruptedException{
         

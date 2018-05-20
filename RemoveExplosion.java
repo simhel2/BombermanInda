@@ -20,6 +20,7 @@ public class RemoveExplosion extends TimerTask{
     private Node explosion;
     private Timer timer;
     public RemoveExplosion(Pane pane, Node explosion, Timer timer){
+        super();
         this.pane = pane;
         this.explosion = explosion;
         this.timer = timer;
