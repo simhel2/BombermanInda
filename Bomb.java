@@ -121,7 +121,13 @@ public class Bomb extends MapObject{
                     ((Crate)world.getWorldMatrix()[xCord-i][yCord]).damage(pane, world, xCord-i, yCord);
                     
                     break;
-                } 
+                }
+                // Wall
+                else if (world.getWorldMatrix()[xCord-i][yCord].getClass()==Wall.class){
+                    left = size - (size-i);
+                    break;
+                }
+                // Bomb
                 else if(world.getWorldMatrix()[xCord-i][yCord].getClass()==Bomb.class){
                     left = size-(size-i);
                     ((Bomb)world.getWorldMatrix()[xCord-i][yCord]).detonate();
@@ -144,14 +150,20 @@ public class Bomb extends MapObject{
                     world.destroyCrate(xCord+i,yCord); 
                     
                     break;
-                } 
+                }
+                // Wall
+                else if(world.getWorldMatrix()[xCord+i][yCord].getClass()==Wall.class){
+                    right = size - (size-i);
+                    break;
+                }
+                // Bomb
                 else if(world.getWorldMatrix()[xCord+i][yCord].getClass()==Bomb.class){
                     right = size-(size-i);
                     ((Bomb)world.getWorldMatrix()[xCord+i][yCord]).detonate();
                     break;
                 }
                     
-            } 
+            }
         }
         //UP
         for (int i = 1; i <= size; i++) {
@@ -168,7 +180,12 @@ public class Bomb extends MapObject{
                     world.destroyCrate(xCord,yCord-i); 
                     
                     break;
-                } 
+                }
+                // Wall
+                else if(world.getWorldMatrix()[xCord][yCord-i].getClass()==Wall.class) {
+                    up = size - (size-i);
+                    break;
+                }
                 //bomb
                 else if(world.getWorldMatrix()[xCord][yCord-i].getClass()==Bomb.class){
                     up = size-(size-i);
@@ -191,7 +208,13 @@ public class Bomb extends MapObject{
                     pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord+i].getNode());
                     world.destroyCrate(xCord,yCord+i); 
                     break;
-                } 
+                }
+                //Wall
+                else if(world.getWorldMatrix()[xCord][yCord+i].getClass()==Wall.class){
+                    down = size - (size-i);
+                    break;
+                }
+                //Bomb
                 else if(world.getWorldMatrix()[xCord][yCord+i].getClass()==Bomb.class){
                     down = size-(size-i);
                     ((Bomb)world.getWorldMatrix()[xCord][yCord+i]).detonate();
