@@ -36,6 +36,10 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 //https://gamedevelopment.tutsplus.com/tutorials/introduction-to-javafx-for-game-development--cms-23835
 
+/**
+ *  Game is the application class where everything runs
+ */
+
 public class Game extends Application {
 
 private static Pane pane;
@@ -58,6 +62,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
 
 
+    // Is the first thing that happens when Bomber is run, creates the basics for handling the window
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -112,7 +117,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
             }
         });
 
-
+        // Opens the window with all the info
         primaryStage.show();
 
 
@@ -128,7 +133,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         world = new World(numGridX, numGridY, render, numCrates, numWalls); //create playfield
 
 
-        //create main char
+        //create main character
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
         Character mainChar = new Character(mainCharNode,0,0, speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
                 true, true, render, world, pane, this, Character.Player.PLAYERONE);   //create char on (0,0)
@@ -136,7 +141,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
 
 
-        //create second char
+        //create second character
         Node secondCharNode = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER);
         Character secondChar = new Character(secondCharNode,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
                 speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
@@ -240,7 +245,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
             playerOneDied.setTextAlignment(TextAlignment.CENTER);
         }
 
-        if(player == Character.Player.PLAYERTWO){
+        else if(player == Character.Player.PLAYERTWO){
             Label playerTwoDied = new Label("Player Two died. Please return to main menu");
             playerTwoDied.setFont(Font.font("Verdana", 20));
             playerTwoDied.setPrefWidth(graphicsWindowX/2);
@@ -284,7 +289,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         return button;
     }
 
-    //
+    // Multiple gets
     public Stage getPrimaryStage() {
         return primaryStage;
     }

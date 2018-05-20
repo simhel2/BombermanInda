@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- *
+ * Class that draws all graphics
  * @author simon
  */
 
@@ -43,6 +43,12 @@ public class Render {
     private int numGridY;
     private Game game;
 
+    /**
+     *
+     * @param pane the graphicspane where everything will be drawn
+     * @param stage which stage this is going to be in
+     * @param game what game this is
+     */
     public Render (Pane pane, Stage stage, Game game) {
         this.game = game;
         this.pane = pane;
@@ -89,7 +95,8 @@ public class Render {
         pane.getChildren().add(explosion);
         return explosion;
     }
-   
+
+    // Different kinds of objects
     public enum GraphicsObjects{
 
         MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED, WALL; //TODO add more

@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+/**
+ * Class that moves players depending on input
+ */
 public class CharacterMovement {
 
     private Stage primaryStage;
