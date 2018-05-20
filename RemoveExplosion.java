@@ -31,9 +31,11 @@ public class RemoveExplosion extends TimerTask{
          Platform.runLater(new Runnable(){
             @Override public void run() {        
 
-                //DO
-                pane.getChildren().remove(explosion);
-                timer.cancel();
+                if (explosion!= null) {
+                    pane.getChildren().remove(explosion);
+                    timer.cancel();
+                    timer.purge();
+                }
             }
          });    
              

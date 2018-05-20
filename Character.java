@@ -15,18 +15,18 @@ public class Character extends MovingObjects{
     private World world;
     private Pane pane;
     private Game game;
-    private Node onTopOfBomb;
+    private Bomb onTopOfBomb;
     
     //defaults
-    private ArrayList<Node> currentBombs= new ArrayList<Node>(); //hashmap would be more optimal
+    private ArrayList<Bomb> currentBombs= new ArrayList<Bomb>(); //hashmap would be more optimal
     private int maxBombs = 1;
     private int lives = 3;
     private int bombSize = 2;   
     private int detTime = 3000; //ms
     
-    public Character(Node graphic, double posX, double posY, boolean isVisible, 
+    public Character(Node graphic, double posX, double posY, double maxSpeed, double moveDistLimit, boolean isVisible, 
             boolean collisionEnable, Render render, World world, Pane pane, Game game){
-        super(graphic, posX, posY, isVisible, collisionEnable);
+        super(graphic, posX, posY, maxSpeed, moveDistLimit, isVisible, collisionEnable);
         this.render = render;
         this.world = world;
         this.pane = pane;
@@ -46,11 +46,10 @@ public class Character extends MovingObjects{
             for (MovingObjects movObj : world.getMovingObjects() ) {
                 if(movObj.getClass() == Character.class) {
                     charsLeft++;
-                    break;
                 }
                 
             }
-            if (!(charsLeft>0))
+            if (!(charsLeft>1))
             {
                 game.endGame();
                 game.endScreen(game.getPrimaryStage(), game.getPane());
@@ -61,7 +60,7 @@ public class Character extends MovingObjects{
         
     }
     
-    public void removeBomb(Node bomb) {
+    public void removeBomb(Bomb bomb) {
         currentBombs.remove(bomb);
         if (bomb == onTopOfBomb) {
             onTopOfBomb = null;
@@ -83,7 +82,7 @@ public class Character extends MovingObjects{
         setNudgeSpeedMod(getNudgeSpeedMod()*mult);
     }
     
-    public Node getOnTopOfBomb(){
+    public Bomb getOnTopOfBomb(){
         return onTopOfBomb;
     }
     public void resetOnTopOfBomb(){
@@ -93,20 +92,19 @@ public class Character extends MovingObjects{
     
     public void layBomb() throws InterruptedException{
         
-        if (currentBombs.size()<maxBombs 
+        if (currentBombs.size()<maxBombs && lives > 0 
                 //disallow putting bombs on top of stuff
                 && world.getWorldMatrix()[getXIndex(world, render)][getYIndex(world, render)]==null) {
             Node newBomb;
             newBomb = render.createGraphicsEntity(Render.GraphicsObjects.BOMB);
-            currentBombs.add(newBomb);
-
             int xCord  =  getXIndex(world,render);
             int yCord = getYIndex(world,render);
             Bomb bomb = new Bomb(newBomb,true, true,this, pane, render, world,
-                xCord, yCord, bombSize, detTime);  
+                xCord, yCord, getX(), getY(), bombSize, detTime);  
             world.setObject(xCord, yCord, bomb); 
             render.drawMapObject(xCord, yCord, world);   
-            onTopOfBomb = bomb.getNode();
+            currentBombs.add(bomb);
+            onTopOfBomb = bomb;
             
         }
     }

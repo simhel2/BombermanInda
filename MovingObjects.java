@@ -21,17 +21,17 @@ public abstract class MovingObjects extends MapObject{
     
     //defaults
     private double nudgeSpeedMod = 0.25;
-    private double maxSpeed = 1.5;
-    
-    //speedlimit 
-    private double speedLimit = 2132;
-    
+    private double maxSpeed;    
+    private double moveDistLimit;
+   
 
 
    
     
-    public MovingObjects(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
+    public MovingObjects(Node graphic, double posX, double posY, double maxSpeed, double moveDistLimit, boolean isVisible, boolean collisionEnable){
         super(graphic, posX, posY, isVisible, collisionEnable);
+        this.maxSpeed = maxSpeed;
+        this.moveDistLimit= moveDistLimit-1;
     }
     
     public void setSpeedXDirection(int direction){
@@ -63,19 +63,43 @@ public abstract class MovingObjects extends MapObject{
     }   
     public double getNewAfterMoveX(long elapsedTimeMs){
         double deltaMoveX =  (elapsedTimeMs* speedX)/1000;
+        //check so we do not move to far and can cause collision bug
+        if (deltaMoveX>0) {
+            deltaMoveX = Math.min(deltaMoveX, moveDistLimit);
+        } else {
+            deltaMoveX = Math.max(deltaMoveX, -moveDistLimit);
+        }        
         return getX()+deltaMoveX;
     }
     
     public double getNewAfterMoveY(long elapsedTimeMs){
         double deltaMoveY =  (elapsedTimeMs* speedY)/1000; 
+        //check so we do not move to far and can cause collision bug
+        if (deltaMoveY>0) {
+            deltaMoveY = Math.min(deltaMoveY, moveDistLimit);
+        } else {
+            deltaMoveY = Math.max(deltaMoveY, -moveDistLimit);
+        }
         return getY()+deltaMoveY;
     }
     public double getNewAfterNudgeX(long elapsedTimeMs){
         double deltaMoveX =  (elapsedTimeMs* maxSpeed* nudgeSpeedMod)/1000; 
+        //check so we do not move to far and can cause collision bug
+        if (deltaMoveX>0) {
+            deltaMoveX = Math.min(deltaMoveX, moveDistLimit);
+        } else {
+            deltaMoveX = Math.max(deltaMoveX, -moveDistLimit);
+        }        
         return getX()+deltaMoveX;
     }
     public double getNewAfterNudgeY(long elapsedTimeMs){
         double deltaMoveY =  (elapsedTimeMs* maxSpeed* nudgeSpeedMod)/1000; 
+        //check so we do not move to far and can cause collision bug
+        if (deltaMoveY>0) {
+            deltaMoveY = Math.min(deltaMoveY, moveDistLimit);
+        } else {
+            deltaMoveY = Math.max(deltaMoveY, -moveDistLimit);
+        } 
         return getY()+deltaMoveY;
     }
         

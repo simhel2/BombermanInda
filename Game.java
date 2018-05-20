@@ -51,6 +51,10 @@ private int numGridY = 17;
 private int numCrates = 250;
 private int numWalls = (numGridX*numGridY)/2-1;
 
+  //starting speed for characters
+private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY)/20; 
+
+
 
     @Override
     public void start(Stage primaryStage) {
@@ -154,14 +158,18 @@ private int numWalls = (numGridX*numGridY)/2-1;
 
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
-        Character mainChar = new Character(mainCharNode,0,0, true, true, render, world, pane, this);   //create char on (0,0)
+        Character mainChar = new Character(mainCharNode,0,0, speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
+                true, true, render, world, pane, this);   //create char on (0,0)
         world.addMovingObject(mainChar);
+
 
 
         //create second char
         Node secondCharNode = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER);
         Character secondChar = new Character(secondCharNode,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
-                                             true,true, render, world, pane, this);
+                speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
+                true,true, render, world, pane, this);
+
 
         world.addMovingObject(secondChar);
 
