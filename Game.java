@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -29,7 +30,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 //https://gamedevelopment.tutsplus.com/tutorials/introduction-to-javafx-for-game-development--cms-23835
 
@@ -50,7 +53,7 @@ private int numGridY = 17;
 private int numCrates = 250;
 private int numWalls = (numGridX*numGridY)/2-1;
 
-  //starting speed for characters
+//starting speed for characters
 private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY)/20; 
 
 
@@ -64,15 +67,12 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         render = new Render(pane, primaryStage, this);
         pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
+        // Goes directly into the game menu
         gameMenu(primaryStage, pane);
     }
 
+    // The game menu screen
     public void gameMenu(Stage primaryStage, Pane pane){
-
-        //init graphic window
-
-        //pane = new Pane();
-        //primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
 
 
         ImageView background = new ImageView("BombermanInda/Images/Blue.jpg");
@@ -81,36 +81,29 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         ImageView bombermanLogo = new ImageView("BombermanInda/Images/BomberManTitle.png");
         pane.getChildren().add(bombermanLogo);
         bombermanLogo.setPreserveRatio(true);
-        bombermanLogo.setFitWidth(graphicsWindowX/6);
+        bombermanLogo.setFitWidth(graphicsWindowX/4);
         bombermanLogo.relocate((graphicsWindowX/2)-bombermanLogo.getFitWidth()/2, graphicsWindowY/10);
-
-
-        // Makes a button that starts the game
-        ImageView startButtonImage = new ImageView("BombermanInda/Images/MainCharFront.png");
-        Button startButton = createButton(pane,"Start", startButtonImage, graphicsWindowX, graphicsWindowY, 5);
-
 
 
         // Makes a button that exits the program
         ImageView quitButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
-        Button quitButton = createButton(pane, "Quit", quitButtonImage, graphicsWindowX, graphicsWindowY, 3);
+        Button quitButton = createButton(pane, "Quit", quitButtonImage, graphicsWindowX, graphicsWindowY, 2);
         quitButton.setOnMousePressed(e -> System.exit(1));
 
-        // Makes a button that takes takes you to the options
-
+        // Makes a button that takes takes you to the help screen
         ImageView helpButtonImage = new ImageView("BombermanInda/Images/MainCharRight.png");
-        Button helpButton = createButton(pane, "Help", helpButtonImage, graphicsWindowX, graphicsWindowY, 2);
+        Button helpButton = createButton(pane, "Help", helpButtonImage, graphicsWindowX, graphicsWindowY, 3);
         helpButton.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                pane.getChildren().removeAll();
-                helpMenu(primaryStage, pane);
+                pane.getChildren().remove(0, pane.getChildren().size());
+                helpScreen(primaryStage, pane);
             }
         });
 
-
-
-
+        // Makes a button that starts the game
+        ImageView startButtonImage = new ImageView("BombermanInda/Images/MainCharFront.png");
+        Button startButton = createButton(pane,"Start", startButtonImage, graphicsWindowX, graphicsWindowY, 6);
         startButton.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -125,27 +118,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
     }
 
-    public void helpMenu(Stage primaryStage, Pane pane) {
-        //init graphic window
-        //primaryStage.setTitle("Bomberman");
-        //pane = new Pane();
-        //pane.setBorder(new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
-        //primaryStage.setScene(new Scene(pane, graphicsWindowX ,graphicsWindowY));
-        //Render render = new Render(pane, primaryStage, this);
-
-
-        // Makes a button that goes back to the menu
-        ImageView backButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
-        Button backButton = createButton(pane, "Back to menu", backButtonImage, graphicsWindowX, graphicsWindowY, 2);
-        backButton.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                pane.getChildren().removeAll();
-                gameMenu(primaryStage, pane);
-            }
-        });
-    }
-
+    // Starts the game
     public void startGame(Stage primaryStage, Pane pane) {
 
         //init background
@@ -158,7 +131,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         //create main char
         Node mainCharNode = render.createGraphicsEntity(Render.GraphicsObjects.MAINCHARACTER); //create node for char
         Character mainChar = new Character(mainCharNode,0,0, speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
-                true, true, render, world, pane, this);   //create char on (0,0)
+                true, true, render, world, pane, this, Character.Player.PLAYERONE);   //create char on (0,0)
         world.addMovingObject(mainChar);
 
 
@@ -167,7 +140,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         Node secondCharNode = render.createGraphicsEntity(Render.GraphicsObjects.SECONDCHARACTER);
         Character secondChar = new Character(secondCharNode,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
                 speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
-                true,true, render, world, pane, this);
+                true,true, render, world, pane, this, Character.Player.PLAYERTWO);
 
 
 
@@ -216,15 +189,101 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
     }
 
-    public void endScreen (Stage primaryStage, Pane pane) {
+    // Help screen
+    public void helpScreen(Stage primaryStage, Pane pane) {
+
+        ImageView background = new ImageView("BombermanInda/Images/Black.png");
+        pane.getChildren().add(background);
+
+        Label helpText = new Label();
+        helpText.setTextAlignment(TextAlignment.CENTER);
+        helpText.setFont(Font.font("Verdana", 15));
+        helpText.setTextFill(Color.WHITE);
+        helpText.setPrefWidth(graphicsWindowX/2);
+        helpText.setText("This is a two-player Bomberman game. \n" +
+                "One player uses the arrow keys to move and the dot-key to drop a bomb. \n" +
+                "And the other player uses the WASD-keys to move and the T-key to drop a bomb. \n"
+                + "If you want to quit the game, press the ESC-key.");
+        helpText.relocate((graphicsWindowX/2)-helpText.getPrefWidth()/2, graphicsWindowY/4);
+        pane.getChildren().add(helpText);
 
 
         // Makes a button that goes back to the menu
         ImageView backButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
-        Button backButton = createButton(pane,"Back to menu", backButtonImage, graphicsWindowX, graphicsWindowY, 2);
+        Button backButton = createButton(pane, "Menu", backButtonImage, graphicsWindowX, graphicsWindowY, 2);
+        backButton.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                pane.getChildren().removeAll();
+                gameMenu(primaryStage, pane);
+            }
+        });
+    }
+
+    // End screen menu
+    public void endScreen (Stage primaryStage, Pane pane, Character.Player player) {
+
+
+        ImageView background = new ImageView("BombermanInda/Images/Black.png");
+        pane.getChildren().add(background);
+
+        StackPane stack = new StackPane();
+
+        // Checks which player died in order to display the right text
+        if(player == Character.Player.PLAYERONE){
+            Label playerOneDied = new Label("Player One died. Please return to main menu");
+            playerOneDied.setFont(Font.font("Verdana", 20));
+            playerOneDied.setPrefWidth(graphicsWindowX/2);
+            playerOneDied.setTextFill(Color.WHITE);
+            pane.getChildren().add(playerOneDied);
+            playerOneDied.relocate((graphicsWindowX/3)-playerOneDied.getWidth()/2,graphicsWindowY/3);
+            playerOneDied.setTextAlignment(TextAlignment.CENTER);
+        }
+
+        if(player == Character.Player.PLAYERTWO){
+            Label playerTwoDied = new Label("Player Two died. Please return to main menu");
+            playerTwoDied.setFont(Font.font("Verdana", 20));
+            playerTwoDied.setPrefWidth(graphicsWindowX/2);
+            playerTwoDied.setTextFill(Color.WHITE);
+            pane.getChildren().add(playerTwoDied);
+            playerTwoDied.relocate((graphicsWindowX/3)-playerTwoDied.getWidth()/2,graphicsWindowY/3);
+            playerTwoDied.setTextAlignment(TextAlignment.CENTER);
+        }
+
+
+        // Makes a button that goes back to the menu
+        ImageView backButtonImage = new ImageView("BombermanInda/Images/MainCharBack.png");
+        Button backButton = createButton(pane,"Menu", backButtonImage, graphicsWindowX, graphicsWindowY, 2);
         backButton.setOnMousePressed(e -> gameMenu(primaryStage, pane));
 
     }
+
+    // Stops the animationtimer in startGame()
+    public void stopGameLoop() {
+        gameLoop.stop();
+    }
+
+    //ends game when one player dies
+    public void endGame(){
+        pane.getChildren().remove(0, pane.getChildren().size());
+        getWorld().clearWorld();
+        stopGameLoop();
+    }
+
+    // Creates a button with an image and a text in the middle of the X-axis and somewhere on the Y-axis according to yPos
+    public Button createButton(Pane pane, String text, ImageView image, int graphicsWindowX, int graphicsWindowY, int yPos){
+
+        Button button = new Button(text);
+        pane.getChildren().add(button);
+        image.setPreserveRatio(true);
+        image.setFitWidth(graphicsWindowX/10);
+        image.setFitHeight(graphicsWindowY/10);
+        button.setGraphic(image);
+        button.setPrefSize(graphicsWindowX/7, graphicsWindowY/7);
+        button.relocate((graphicsWindowX/2)-button.getPrefWidth()/2, (graphicsWindowY/yPos)+ button.getPrefHeight()/2);
+        return button;
+    }
+
 
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -234,10 +293,6 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
     public World getWorld() {
         return world;
-    }
-
-    public void stopGameLoop() {
-        gameLoop.stop();
     }
 
     public  int getGraphicsWindowX() {
@@ -259,30 +314,9 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
     public int getNumGridX(){
         return numGridX;
     }
-    
+
     public int getNumGridY(){
         return numGridY;
-    }
-
-
-    //ends game when one player dies
-    public void endGame(){
-        pane.getChildren().remove(0, pane.getChildren().size());
-        getWorld().clearWorld();
-        stopGameLoop();
-    }
-
-    public Button createButton(Pane pane, String text, ImageView image, int graphicsWindowX, int graphicsWindowY, int yPos){
-
-        Button button = new Button(text);
-        pane.getChildren().add(button);
-        image.setPreserveRatio(true);
-        image.setFitWidth(graphicsWindowX/10);
-        image.setFitHeight(graphicsWindowY/10);
-        button.setGraphic(image);
-        button.setPrefSize(graphicsWindowX/9, graphicsWindowY/9);
-        button.relocate((graphicsWindowX/2)-button.getPrefWidth()/2, graphicsWindowY/yPos);
-        return button;
     }
 
 }
