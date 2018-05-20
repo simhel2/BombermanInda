@@ -80,7 +80,7 @@ public class Bomb extends MapObject{
             //do damage within border for the rest of the animation
             Timer doDmg = new Timer();
             ExplosionDamage explDmg = new ExplosionDamage(this, doDmg, border, xCord, yCord, numTicks); 
-            doDmg.schedule(explDmg, explosionAnimTime-100, damageInterval); 
+            doDmg.schedule(explDmg, 0, damageInterval); 
             
             //doDamageToMovObj(border, xCord, yCord);--
             
