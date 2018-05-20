@@ -23,6 +23,7 @@ public class Character extends MovingObjects{
     private Bomb onTopOfBomb;
     private boolean isInvulnerable = false;
     private Player player;
+    private lastMoved lastMoved;
 
     //defaults
     private ArrayList<Bomb> currentBombs= new ArrayList<Bomb>(); //hashmap would be more optimal
@@ -74,6 +75,15 @@ public class Character extends MovingObjects{
         if(!isInvulnerable){
             // Takes one damage
             lives--;
+            if(lastMoved == lastMoved.UP){
+                render.drawInvulnerableCharacterBack(getNode());
+            }else if(lastMoved == lastMoved.DOWN){
+                render.drawInvulnerableCharacterFront(getNode());
+            }else if(lastMoved == lastMoved.RIGHT){
+                render.drawInvulnerableCharacterRight(getNode());
+            }else if(lastMoved == lastMoved.LEFT){
+                render.drawInvulnerableCharacterLeft(getNode());
+            }
         }
 
         if (lives==0){
@@ -169,5 +179,9 @@ public class Character extends MovingObjects{
             onTopOfBomb = bomb;
             
         }
+    }
+
+    public void setLastMoved(lastMoved lastMove){
+        lastMoved = lastMove;
     }
 }
