@@ -13,6 +13,7 @@ public class World {
     //WorldType w;
 
     private final int numCrates;
+    private final int numWalls;
     private Render render;
     
     //defaults
@@ -20,11 +21,11 @@ public class World {
     
             
 
-    public World (int x, int y, Render render, int numCrates) {   // can add WorldType w for multiple maps
+    public World (int x, int y, Render render, int numCrates, int numWalls) {   // can add WorldType w for multiple maps
         worldMatrix = new MapObject[x][y];
         movingObjects = new ArrayList<MovingObjects>();
         this.numCrates = numCrates;
-
+        this.numWalls = numWalls;
         this.render = render;
         generateWorld();
     } 
@@ -48,8 +49,46 @@ public class World {
 
         // TODO improve generation
         //generate wall
-        worldMatrix[0][1] = new Wall(render.createGraphicsEntity(Render.GraphicsObjects.WALL)
-                ,0,0,true,true);
+
+        int a = 1;
+        int b = 1;
+         for(int i = 0; i<numWalls; i++) {
+
+             //int x = ThreadLocalRandom.current().nextInt(0,worldMatrix.length);
+             //int y = ThreadLocalRandom.current().nextInt(0,worldMatrix[0].length);
+
+             int x = a;
+             int y = b;
+
+
+
+            if(worldMatrix[x][y]==null && x+y >= 2 && x+y <= worldMatrix.length+worldMatrix[0].length-4 && y%2!=0) {
+
+                try {
+                    worldMatrix[x][y] = new Wall(render.createGraphicsEntity(Render.GraphicsObjects.WALL)
+                        ,0,0,true,true);
+
+                } catch (Error e) {
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                 i--;    //WARNING this is may become infinite loop with bad params
+            }
+
+
+            a = a + 2;
+
+             if(x == worldMatrix.length-2){
+                 a = 1;
+                 b++;
+             }
+
+             if(y == worldMatrix[0].length-1){
+                 break;
+             }
+         }
+
+
 
        
                 

@@ -144,7 +144,7 @@ public class Render {
             return speedUp;
 
         }   else if (grp == GraphicsObjects.WALL) {
-            ImageView wall = new ImageView("BombermanInda/Images/Crimson.png");
+            ImageView wall = new ImageView("BombermanInda/Images/Wall.png");
             wall.setFitWidth(graphicsWindowX / numGridX);
             wall.setFitHeight(graphicsWindowY / numGridY);
             return wall;
