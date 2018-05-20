@@ -107,27 +107,35 @@ public class CharacterMovement {
                     if (ke.getCode() == KeyCode.UP) {
                         playerOne.setSpeedYDirection(-1);
                         render.drawMainCharacterBack(playerOne.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.UP);
                     } else if (ke.getCode() == KeyCode.DOWN) {
                         playerOne.setSpeedYDirection(1);
                         render.drawMainCharacterFront(playerOne.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.DOWN);
                     } else if (ke.getCode() == KeyCode.LEFT) {
                         playerOne.setSpeedXDirection(-1);
                         render.drawMainCharacterLeft(playerOne.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.LEFT);
                     } else if (ke.getCode() == KeyCode.RIGHT) {
                         playerOne.setSpeedXDirection(1);
                         render.drawMainCharacterRight(playerOne.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.RIGHT);
                     } else if (ke.getCode() == KeyCode.W) {
                         playerTwo.setSpeedYDirection(-1);
                         render.drawSecondCharacterBack(playerTwo.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.UP);
                     } else if (ke.getCode() == KeyCode.S) {
                         playerTwo.setSpeedYDirection(1);
                         render.drawSecondCharacterFront(playerTwo.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.DOWN);
                     } else if (ke.getCode() == KeyCode.A) {
                         playerTwo.setSpeedXDirection(-1);
                         render.drawSecondCharacterLeft(playerTwo.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.LEFT);
                     } else if (ke.getCode() == KeyCode.D) {
                         playerTwo.setSpeedXDirection(1);
                         render.drawSecondCharacterRight(playerTwo.getNode());
+                        playerOne.setLastMoved(Character.lastMoved.RIGHT);
                     }
                 }
                 // Lays a bomb at player two's location
