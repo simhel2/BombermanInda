@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 /**
- *
+ * Class that draws all graphics
  * @author simon
  */
 
@@ -43,6 +43,12 @@ public class Render {
     private int numGridY;
     private Game game;
 
+    /**
+     *
+     * @param pane the graphicspane where everything will be drawn
+     * @param stage which stage this is going to be in
+     * @param game what game this is
+     */
     public Render (Pane pane, Stage stage, Game game) {
         this.game = game;
         this.pane = pane;
@@ -58,10 +64,9 @@ public class Render {
         pane.getChildren().add( canvas );
         gc = canvas.getGraphicsContext2D();
 
-        
-        
     }
 
+    // Draws an explosion with a middle, and goes in four directions: up, down, right, left. Each direction has a "size".
     public Node drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
             int rightSize, World world) {
 
@@ -84,17 +89,21 @@ public class Render {
 
                 
         });
+
+        // Fills the polygon-shaped explosion with an image of an explosion
         explosion.setFill(new ImagePattern(new Image("BombermanInda/Images/explosion.png"),0,0,1,1,true));   //change
         pane.getChildren().add(explosion);
         return explosion;
     }
-   
+
+    // Different kinds of objects
     public enum GraphicsObjects{
 
         MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED, WALL; //TODO add more
 
     }
-            
+
+    // Creates graphics for every single object in the game, depending on its enum.
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
 
@@ -157,7 +166,8 @@ public class Render {
         
     
     }
-    
+
+    // Draws every object inside worldMatrix
     public void drawAllMapObjects(World world) {
         //draw all in matrix
         for(int i = 0; i < world.getWorldMatrix().length; ++i) {
@@ -180,6 +190,8 @@ public class Render {
             }             
         }
     }
+
+    // Draws one object on a position in the worldMatrix
     public void drawMapObject(int x, int y,  World world) {
         if (world.getWorldMatrix()[x][y]!=null) {   //if worldMatrix has something draw it
                    if (!pane.getChildren().contains((world.getWorldMatrix()[x][y]).getNode())) {    //if it is not in world matrix add it
@@ -191,6 +203,8 @@ public class Render {
                    world.getWorldMatrix()[x][y].getNode().relocate(posX,posY);                   
         }           
     }
+
+    // Removes an object that was in the matrix
     public void removeMapObject(World world, int xCord,int yCord) {
         pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord].getNode());
     }
@@ -210,15 +224,20 @@ public class Render {
     public int getNumGridY(){
         return numGridY;
     }
-    
+
+    // Draws the background of the gameworld.
     public void drawBackground(Image image){
         ImageView background = new ImageView(image);
         pane.getChildren().add(background);
     }
+
+    // Removes an object from the pane
     public void removeObject(Node node) {
         pane.getChildren().remove(node);
     }
 
+
+    //Draws every orientation of both characters, and the invulnerability state.
     public void drawMainCharacterFront(Node graphic) {
         Image image = new Image("BombermanInda/Images/MainCharFront.png");
         ((ImageView) graphic).setImage(image);

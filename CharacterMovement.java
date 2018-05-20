@@ -9,6 +9,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+/**
+ * Class that moves players depending on input
+ */
 public class CharacterMovement {
 
     private Stage primaryStage;
@@ -19,6 +22,7 @@ public class CharacterMovement {
     private Character playerThree;
     private Character playerFour;
 
+    // Different constructors based on amount of players
     public CharacterMovement (Game game, Stage primaryStage, Render render, Character playerOne){
         this.primaryStage = primaryStage;
         this.render = render;
@@ -55,10 +59,8 @@ public class CharacterMovement {
         this.playerFour = playerFour;
     }
 
-    public enum CharacterObject {
-        MAINCHARACTER, SECONDCHARACTER;
-    }
 
+    // Method for two players
     public void TwoPlayerControl(){
 
 
@@ -67,6 +69,7 @@ public class CharacterMovement {
             @Override
             public void handle(KeyEvent ke) {
 
+                // Checks if player one is invulnerable in order to change appearence.
                 if(playerOne.getIsInvulnerable()) {
                     if (ke.getCode() == KeyCode.UP) {
                         playerOne.setSpeedYDirection(-1);
@@ -83,6 +86,7 @@ public class CharacterMovement {
                     }
                 }
 
+                // Checks if player two is invulnerable in order to change appearence.
                 else if(playerTwo.getIsInvulnerable()){
                     if (ke.getCode() == KeyCode.W) {
                         playerTwo.setSpeedYDirection(-1);
@@ -98,6 +102,7 @@ public class CharacterMovement {
                         render.drawInvulnerableCharacterRight(playerTwo.getNode());
                     }
                 }
+                // If neither player is invulnerable, shows normal appearences
                 else {
                     if (ke.getCode() == KeyCode.UP) {
                         playerOne.setSpeedYDirection(-1);
@@ -125,7 +130,7 @@ public class CharacterMovement {
                         render.drawSecondCharacterRight(playerTwo.getNode());
                     }
                 }
-                //layBomb
+                // Lays a bomb at player two's location
                 if (ke.getCode() == KeyCode.T) {
                     try {
                         playerTwo.layBomb();
@@ -134,7 +139,7 @@ public class CharacterMovement {
                     }
                 }
 
-                //layBomb
+                // Lays a bomb at player one's location
                 else if (ke.getCode() == KeyCode.PERIOD) {
                     try {
                         playerOne.layBomb();
@@ -143,6 +148,7 @@ public class CharacterMovement {
                     }
                 }
 
+                // Ends the game and returns to the game menu
                 else if(ke.getCode() == KeyCode.ESCAPE) {
                     game.endGame();
                     game.gameMenu(primaryStage, game.getPane());
@@ -152,9 +158,12 @@ public class CharacterMovement {
 
         });
 
+
         primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
+                // Stops a players movement when they release one of the following buttons.
+
                 if (ke.getCode() == KeyCode.UP || ke.getCode() == KeyCode.DOWN) {
                     //check to make releasing keys not stutter player if he is already moving the other way
                     if((ke.getCode()==KeyCode.UP&&playerOne.getSpeedY()<0)||(ke.getCode()==KeyCode.DOWN&&playerOne.getSpeedY()>0)) {

@@ -11,6 +11,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+/**
+ * A class that makes different characters, player-controlled for now, but could be AI
+ */
+
 public class Character extends MovingObjects{
     private Render render;
     private World world;
@@ -18,6 +22,7 @@ public class Character extends MovingObjects{
     private Game game;
     private Bomb onTopOfBomb;
     private boolean isInvulnerable = false;
+    private Player player;
 
     //defaults
     private ArrayList<Bomb> currentBombs= new ArrayList<Bomb>(); //hashmap would be more optimal
@@ -26,19 +31,49 @@ public class Character extends MovingObjects{
     private int bombSize = 2;   
     private int detTime = 3000; //ms
     private int invulnerabilityTime = 1000; //ms
-    
+
+    /**
+     *
+     * @param graphic the characters corresponding Node
+     * @param posX which X-position this character starts at
+     * @param posY which X-position this character starts at
+     * @param maxSpeed the characters max speed
+     * @param moveDistLimit the limit of the distance of which the character can move
+     * @param isVisible if the character is visible
+     * @param collisionEnable if the character can collide with other things
+     * @param render the render used for graphics
+     * @param world the world the character is in
+     * @param pane the graphicspane
+     * @param game which game the character is in
+     * @param player which player this character is
+     */
+
     public Character(Node graphic, double posX, double posY, double maxSpeed, double moveDistLimit, boolean isVisible, 
-            boolean collisionEnable, Render render, World world, Pane pane, Game game){
+            boolean collisionEnable, Render render, World world, Pane pane, Game game, Player player){
         super(graphic, posX, posY, maxSpeed, moveDistLimit, isVisible, collisionEnable);
         this.render = render;
         this.world = world;
         this.pane = pane;
         this.game = game;
+        this.player = player;
     }
 
+    // Where this player last moved
+    public enum lastMoved {
+        UP, DOWN, LEFT, RIGHT
+    }
+
+    // Which player this can be
+    public enum Player {
+        PLAYERONE, PLAYERTWO
+    }
+
+
+    // This character takes damage
     public void damage () {
 
         if(!isInvulnerable){
+            // Takes one damage
             lives--;
         }
 
@@ -58,14 +93,16 @@ public class Character extends MovingObjects{
             if (!(charsLeft>1))
             {
                 game.endGame();
-                game.endScreen(game.getPrimaryStage(), game.getPane());
+                game.endScreen(game.getPrimaryStage(), game.getPane(), player);
             }
         } 
 
+        // Makes this character invulnerable
         isInvulnerable = true;
 
+        // Starts a timer that makes the character vulnerable again after some time
         Timer makeInvulnerable = new Timer();
-        Invulnerability invulnerabilityTimer = new Invulnerability(pane, this, makeInvulnerable);
+        Invulnerability invulnerabilityTimer = new Invulnerability(this, makeInvulnerable);
         makeInvulnerable.schedule(invulnerabilityTimer, invulnerabilityTime);
 
 
@@ -73,7 +110,8 @@ public class Character extends MovingObjects{
         //TODO add animation/imortality on taking damage
         
     }
-    
+
+    // Removes a bomb from "inventory"
     public void removeBomb(Bomb bomb) {
         currentBombs.remove(bomb);
         if (bomb == onTopOfBomb) {
@@ -103,6 +141,7 @@ public class Character extends MovingObjects{
         onTopOfBomb = null;
     }
 
+    // Shows if this character is invulnerable or not
     public boolean getIsInvulnerable(){
         return isInvulnerable;
     }
@@ -111,7 +150,9 @@ public class Character extends MovingObjects{
     public void setInvulnerable(boolean value){
         isInvulnerable = value;
     }
-    
+
+
+    // Lays bomb at this characters position
     public void layBomb() throws InterruptedException{
         
         if (currentBombs.size()<maxBombs && lives > 0 
