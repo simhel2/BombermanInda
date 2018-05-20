@@ -284,7 +284,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         return button;
     }
 
-
+    //
     public Stage getPrimaryStage() {
         return primaryStage;
     }
