@@ -30,7 +30,7 @@ public class Character extends MovingObjects{
     private int lives = 3;
     private int bombSize = 2;   
     private int detTime = 3000; //ms
-    private int invulnerabilityTime = 4200; //ms
+    private int invulnerabilityTime = 1000; //ms
 
     /**
      *
@@ -47,6 +47,7 @@ public class Character extends MovingObjects{
      * @param game which game the character is in
      * @param player which player this character is
      */
+
     public Character(Node graphic, double posX, double posY, double maxSpeed, double moveDistLimit, boolean isVisible, 
             boolean collisionEnable, Render render, World world, Pane pane, Game game, Player player){
         super(graphic, posX, posY, maxSpeed, moveDistLimit, isVisible, collisionEnable);

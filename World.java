@@ -5,106 +5,93 @@ import java.util.concurrent.ThreadLocalRandom;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 
-
+/**
+ * Class for handling the main logic and collision behind the world based on a grid matrix system.
+ * 
+ * @author simon
+ */
 public class World { 
     private MapObject[][] worldMatrix; //contains all non moving (blocking?) objects over the background (crate)
     private ArrayList<MovingObjects> movingObjects;
     
-    //WorldType w;
-
+    
     private final int numCrates;
-    private final int numWalls;
     private Render render;
     
     //defaults
     private double nudgeRatio = 0.4; //ratio from top or bottom where nudge is allowed, max <1/2
     
             
-
-    public World (int x, int y, Render render, int numCrates, int numWalls) {   // can add WorldType w for multiple maps
+    /**Create a world with a selected size 
+     * 
+     * @param x How wide the grid is 
+     * @param y How high the grid is
+     * @param render The render used for the graphical elements
+     * @param numCrates The number of crates in the world
+     */
+    public World (int x, int y, Render render, int numCrates) {   // can add WorldType w for multiple maps
         worldMatrix = new MapObject[x][y];
         movingObjects = new ArrayList<MovingObjects>();
         this.numCrates = numCrates;
-        this.numWalls = numWalls;
         this.render = render;
         generateWorld();
     } 
 
+    /**
+     * Returns the world matrix.
+     * @return The worldmatrix.
+     */
     public MapObject[][] getWorldMatrix() {
         return worldMatrix;
     }
+    /**
+     * Returns a list of moving objects in the world.
+     * @return A list of all the moving objects in the world
+     */
     public ArrayList<MovingObjects> getMovingObjects(){
         return movingObjects;
     }
     
-
+    /**
+     * Inserts a mapobject into the world.
+     * @param x x coordinate for the insertion
+     * @param y y cordinate for the insertion
+     * @param insert what mapobject to insert
+     */
     public void setObject(int x, int y, MapObject insert) {
         worldMatrix[x][y] = insert;
     }
+    /**Inserts a moving object into the world
+     * 
+     * @param insert what moving object to insert
+     */
     public void addMovingObject(MovingObjects insert){
         movingObjects.add(insert);
     }
 
+    /**
+     * Generate the worlds play area.
+     */
+    
     public void generateWorld(){
-
-        // TODO improve generation
         //generate wall
-
-        int a = 1;
-        int b = 1;
-         for(int i = 0; i<numWalls; i++) {
-
-             //int x = ThreadLocalRandom.current().nextInt(0,worldMatrix.length);
-             //int y = ThreadLocalRandom.current().nextInt(0,worldMatrix[0].length);
-
-             int x = a;
-             int y = b;
-
-
-
-            if(worldMatrix[x][y]==null && x+y >= 2 && x+y <= worldMatrix.length+worldMatrix[0].length-4 && y%2!=0) {
-
-                try {
-                    worldMatrix[x][y] = new Wall(render.createGraphicsEntity(Render.GraphicsObjects.WALL)
-                        ,0,0,true,true);
-
-                } catch (Error e) {
-                    System.out.println(e.getMessage());
-                }
-            } else {
-                 i--;    //WARNING this is may become infinite loop with bad params
+        //note that an even x or y causes one row to be without walls
+        for (int x=1; x< worldMatrix.length-1; x+=2){
+            for (int y=1; y< worldMatrix[0].length-1; y+=2){
+                worldMatrix[x][y] = new Wall(render.createGraphicsEntity(Render.GraphicsObjects.WALL)
+                                ,0,0,true,true);    
             }
-
-
-            a = a + 2;
-
-             if(x == worldMatrix.length-2){
-                 a = 1;
-                 b++;
-             }
-
-             if(y == worldMatrix[0].length-1){
-                 break;
-             }
-         }
-
-
-
-       
-                
-        
+            
+        }
         // Generate Crates:
         for(int i = 0; i<numCrates; i++) {
             int x = ThreadLocalRandom.current().nextInt(0,worldMatrix.length);
             int y = ThreadLocalRandom.current().nextInt(0,worldMatrix[0].length);
             
             if(worldMatrix[x][y]==null && x+y >= 2 && x+y <= worldMatrix.length+worldMatrix[0].length-4) {
-                try {
-                    worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
+                worldMatrix[x][y] = new Crate(render.createGraphicsEntity(Render.GraphicsObjects.CRATE)
                          ,0,0,true,true);                       
-                } catch (Error e) {
-                    System.out.println(e.getMessage());
-                }
+
             } else {       
                i--;    //WARNING this is may become infinite loop with bad params
             }
@@ -112,7 +99,12 @@ public class World {
         }
         // fill world with mapObj.
     }
-
+/**
+ * Function that is responsible for movement of all characters in the world
+ * 
+ * @param elapsedTimeMs 
+ */
+  
     public void moveAllMoveable(long elapsedTimeMs){
         for (MovingObjects movObj: movingObjects) {
             double newX = movObj.getNewAfterMoveX(elapsedTimeMs);
@@ -123,7 +115,7 @@ public class World {
                         {
                 movObj.Move(newX, newY);
             } else {
-                Position pos = lineIsClear(oldX,oldY,newX,newY,render.getGraphicsWindowX()/worldMatrix.length,
+                Position pos = moveWithCollision(oldX,oldY,newX,newY,render.getGraphicsWindowX()/worldMatrix.length,
 
                         render.getGraphicsWindowY()/worldMatrix[0].length, movObj, elapsedTimeMs); 
 
@@ -132,9 +124,9 @@ public class World {
         }
     }
     /**
-     * helper class position
+     * helper class position, used for returning a x,y coordinate
      */
-    class Position{
+    private class Position{
         public double xPos;
         public double yPos;    
         public Position(double xPos, double yPos) {
@@ -143,12 +135,25 @@ public class World {
         }
     };
     
-    //TODO: should ideally check the entire line becasue otherwise slow logic or
-           //high speed may give you noclip: scrapped for performance instead limited maxspeed of character
+    //Notes: should ideally check the entire line becasue otherwise slow logic or
+           //high speed may give you noclip, this was scrapped for performance instead we limited maxspeed of character
     //notes: startX and startY for everything is top left
     
-    //TODO: think? maybe could avoid code dupe by setting midpoint 
-    public Position lineIsClear(double startX, double startY, double endX, double endY,double radiusX, 
+    /** Function for moving with collision that also handles nudging people into the lanes. 
+     *  Designed specifically to take constant time in respect to amount of things in the world matrix.
+     * (except for powerups and other moving objects)
+     * 
+     * @param startX start X position (not coordinate)
+     * @param startY start Y position (not coordinate)
+     * @param endX end X position (not coordinate)
+     * @param endY end Y position (not coordinate)
+     * @param radiusX the diameter of the object in x direction
+     * @param radiusY the diameter of the object in y direction
+     * @param thisObj the object that is moving
+     * @param elapsedTimeMs The time since the last frame
+     * @return The new position we reached
+     */
+    public Position moveWithCollision(double startX, double startY, double endX, double endY,double radiusX, 
                 double radiusY, MovingObjects thisObj, long elapsedTimeMs){
         try {
             int startXIndex = (int) (((startX*worldMatrix.length)/render.getGraphicsWindowX()));        
@@ -202,7 +207,7 @@ public class World {
                         newY = Math.min(newY, 
                                 radiusY+(double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
                         //recursively do new movement
-                        return lineIsClear(startX, startY, startX, newY, radiusX, 
+                        return moveWithCollision(startX, startY, startX, newY, radiusX, 
                                    radiusY, thisObj, elapsedTimeMs);
                     }            
 
@@ -231,7 +236,7 @@ public class World {
                         newY = Math.max(newY, 
                                 endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
                         //recursively do new movement
-                        return lineIsClear(startX, startY, startX, newY, radiusX, 
+                        return moveWithCollision(startX, startY, startX, newY, radiusX, 
                                    radiusY, thisObj, elapsedTimeMs);                    
 
                     }
@@ -259,7 +264,7 @@ public class World {
                             newY = Math.min(newY, 
                                     radiusY+(double)endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
                             //recursively do new movement
-                            return lineIsClear(startX, startY, startX, newY, radiusX, 
+                            return moveWithCollision(startX, startY, startX, newY, radiusX, 
                                        radiusY, thisObj, elapsedTimeMs);
 
                         } else { 
@@ -284,7 +289,7 @@ public class World {
                             newY = Math.max(newY, 
                                     endYIndex*render.getGraphicsWindowY()/worldMatrix[0].length);
                             //recursively do new movement
-                            return lineIsClear(startX, startY, startX, newY, radiusX, 
+                            return moveWithCollision(startX, startY, startX, newY, radiusX, 
                                        radiusY, thisObj, elapsedTimeMs);                    
 
                         }
@@ -311,7 +316,7 @@ public class World {
                             newX = Math.min(newX, 
                                     radiusX+(double)endXIndex*render.getGraphicsWindowX()/worldMatrix.length);
                             //recursively do new movement
-                            return lineIsClear(startX, startY, newX, startY, radiusX, 
+                            return moveWithCollision(startX, startY, newX, startY, radiusX, 
                                        radiusY, thisObj, elapsedTimeMs); 
                         }
                         else {
@@ -335,7 +340,7 @@ public class World {
                             newX = Math.min(newX, 
                                     radiusX+(double)endXIndex*render.getGraphicsWindowX()/worldMatrix.length);
                             //recursively do new movement
-                            return lineIsClear(startX, startY, newX, startY, radiusX, 
+                            return moveWithCollision(startX, startY, newX, startY, radiusX, 
                                        radiusY, thisObj, elapsedTimeMs); 
 
                         }
@@ -359,7 +364,7 @@ public class World {
                             newX = Math.min(newX, 
                                     radiusX+(double)endXIndex*render.getGraphicsWindowX()/worldMatrix.length);
                             //recursively do new movement
-                            return lineIsClear(startX, startY, newX, startY, radiusX, 
+                            return moveWithCollision(startX, startY, newX, startY, radiusX, 
                                        radiusY, thisObj, elapsedTimeMs);
                         } 
                         else {
@@ -382,7 +387,7 @@ public class World {
                             newX = Math.min(newX, 
                                     radiusX+(double)endXIndex*render.getGraphicsWindowX()/worldMatrix.length);
                             //recursively do new movement
-                            return lineIsClear(startX, startY, newX, startY, radiusX, 
+                            return moveWithCollision(startX, startY, newX, startY, radiusX, 
                                        radiusY, thisObj, elapsedTimeMs);                    
                         } 
                         else {
@@ -392,6 +397,7 @@ public class World {
                 }
 
 
+                
           //check for collision with another moving obj. but not itself
                 for (MovingObjects movObj: movingObjects) {
                     //check vs itself 
@@ -427,21 +433,8 @@ public class World {
 
                 return new Position(endX, endY);       
             }
+            //finally check if you are not standing on top of bomb anymore
             finally {
-
-                int endXIndexCenter = (int)((endX+getPixelsPerSquareX()/2)*worldMatrix.length)/render.getGraphicsWindowX();        
-                int endYIndexCenter = (int) ((endY+getPixelsPerSquareY()/2)*worldMatrix[0].length)/render.getGraphicsWindowY();        
-                
-                
-                int endXIndex = (int)((endX)*worldMatrix.length)/render.getGraphicsWindowX();        
-                int endYIndex = (int) ((endY)*worldMatrix[0].length)/render.getGraphicsWindowY();        
-                
-                if (thisObj.getClass()==Character.class
-                        &&((Character)thisObj).getOnTopOfBomb()!=null) {
-                
-                } 
-
-                
                 //If standing on bomb       
                 //if moved from current tile stop standing on top of bomb
                 if(thisObj.getClass()==Character.class
@@ -454,49 +447,20 @@ public class World {
                         ((Character)thisObj).resetOnTopOfBomb();
                     }    
                     
-                    //thisObj.getX()
-                    //((Character)thisObj).getOnTopOfBomb().getX()
-                    
-                    //thisObj.getX()+getPixelsPerSquareX()
-                    //((Character)thisObj).getOnTopOfBomb().getX()+getPixelsPerSquareX()
-                    
-                    //thisObj.getY()
-                    //((Character)thisObj).getOnTopOfBomb().getY()
-                    
-                    //thisObj.getY()+getPixelsPerSquareY()
-                    //((Character)thisObj).getOnTopOfBomb().getY()+getPixelsPerSquareY()
-                    
-                    
-                                        
-                    
-                    
-                    
-                            
-                       
-                        
-                        
                 }
               
-                /**
-                if(thisObj.getClass()==Character.class
-                        &&((Character)thisObj).getOnTopOfBomb()!=null 
-                        &&(((Character)thisObj).getOnTopOfBomb().getXIndex(this, render)!=endXIndexCenter
-                        ||((Character)thisObj).getOnTopOfBomb().getYIndex(this, render)!=endYIndexCenter)){
-                        ((Character)thisObj).getOnTopOfBomb().setCollision(true);
-                        ((Character)thisObj).resetOnTopOfBomb();
-                        
-                        
-                }
-                **/
-
             }
             
 
         
     }  
 
+    /**
+     * Function for removing the logical (but not graphical) crate and randomly creating powerups
+     * @param xCord x coordinate of the crate to destroy
+     * @param yCord y coordinate of the crate to destroy 
+     */
     
-    //remove the logical (but not the graphical) crate
     public void destroyCrate(int xCord, int yCord){
         remove(xCord, yCord);
 
@@ -531,31 +495,42 @@ public class World {
             render.drawMapObject(xCord, yCord, this);
         }
     }    
-    
+    /**
+     * Function for removing mapobject on a certain place in the world matrix.
+     * @param x the x coordinate of the object to be removed
+     * @param y the y coordinate of the object to be removed
+     */
     public void remove(int x, int y){
         worldMatrix[x][y]= null;
     }
-    public int getWidth(){
-        return worldMatrix.length;
-    }
-    public int getHeight(){
-        return worldMatrix[0].length;
-    }    
-    
+ 
+    /**
+     * Function for clearing the world. 
+     */
     public void clearWorld(){
         worldMatrix = null;
         movingObjects = null;
 
         render = null;
     }
-    
+    /**
+     * Function that returns how many pixels there are per square in X direction
+     * @return how many pixels per square in X direction
+     */
     public double getPixelsPerSquareX(){
         return render.getGraphicsWindowX()/worldMatrix.length;
     }
-     
+    /**
+     * Function that returns how many pixels there are per square in Y direction
+     * @return how many pixels per square in Y direction
+     */
     public double getPixelsPerSquareY(){
         return render.getGraphicsWindowY()/worldMatrix[0].length;
     }
+    /**
+     * Function for removing a specific moving object
+     * @param movObj the moving object to be removed
+     */
     
     public void removeMovingObject(MovingObjects movObj){
         movingObjects.remove(movObj);
