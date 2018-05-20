@@ -10,14 +10,20 @@ import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 
 /**
- *
+ * Class for destructible crates
  * @author simon
  */
 
-//TODO: add different types of crates ??
-
 
 public class Crate extends MapObject {
+/**Default constructor
+ * 
+ * @param graphic The graphical representation of the crate
+ * @param posX the actual y position of the crate
+ * @param posY The actual x position of the crate 
+ * @param isVisible Determines if the crate is visible
+ * @param collisionEnable Determines if the crate has collision
+ */
     public Crate(Node graphic, double posX, double posY, boolean isVisible, boolean collisionEnable){
                 super(graphic, posX, posY, isVisible, collisionEnable);
                 

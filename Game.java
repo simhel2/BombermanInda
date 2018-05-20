@@ -42,13 +42,12 @@ private static Render render;
 private static AnimationTimer gameLoop;
 
 
-//NOTE graphicswindow must be evenly divisible by their respective numGrid
+//NOTE graphicswindow must be evenly divisible by their respective numGrid, and numgrid should be odd to allow correct wall placement
 private int graphicsWindowX = 1271; // Window size 16:9
 private int graphicsWindowY = 714; // Window size
-private int numGridX = 31; //16:9
+private int numGridX = 31; 
 private int numGridY = 17;
 private int numCrates = 250;
-private int numWalls = (numGridX*numGridY)/2-1;
 
   //starting speed for characters
 private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY)/20; 
@@ -152,7 +151,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         Image background = new Image( "BombermanInda/Images/Grey.png" );
         //init world
         // TODO fix so it will be scaleable.
-        world = new World(numGridX, numGridY, render, numCrates, numWalls); //create playfield
+        world = new World(numGridX, numGridY, render, numCrates); //create playfield
 
 
         //create main char
