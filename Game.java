@@ -7,6 +7,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -47,6 +48,7 @@ private static Stage primaryStage;
 private static World world;
 private static Render render;
 private static AnimationTimer gameLoop;
+private static CharacterMovement characterMovement;
 
 
 //NOTE graphicswindow must be evenly divisible by their respective numGrid, and numgrid should be odd to allow correct wall placement
@@ -149,7 +151,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
 
         //activate movement
-        new CharacterMovement(this, primaryStage, render,mainChar, secondChar);
+        characterMovement = new CharacterMovement(this, primaryStage, render,mainChar, secondChar);
 
 
         //draw background
@@ -267,7 +269,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
     public void endGame(){
         pane.getChildren().remove(0, pane.getChildren().size());
         getWorld().clearWorld();
-        
+        characterMovement.removeControls();
         stopGameLoop();
     }
 
