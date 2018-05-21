@@ -123,19 +123,19 @@ public class CharacterMovement {
                     } else if (ke.getCode() == KeyCode.W) {
                         playerTwo.setSpeedYDirection(-1);
                         render.drawSecondCharacterBack(playerTwo.getNode());
-                        playerOne.setLastMoved(Character.lastMoved.UP);
+                        playerTwo.setLastMoved(Character.lastMoved.UP);
                     } else if (ke.getCode() == KeyCode.S) {
                         playerTwo.setSpeedYDirection(1);
                         render.drawSecondCharacterFront(playerTwo.getNode());
-                        playerOne.setLastMoved(Character.lastMoved.DOWN);
+                        playerTwo.setLastMoved(Character.lastMoved.DOWN);
                     } else if (ke.getCode() == KeyCode.A) {
                         playerTwo.setSpeedXDirection(-1);
                         render.drawSecondCharacterLeft(playerTwo.getNode());
-                        playerOne.setLastMoved(Character.lastMoved.LEFT);
+                        playerTwo.setLastMoved(Character.lastMoved.LEFT);
                     } else if (ke.getCode() == KeyCode.D) {
                         playerTwo.setSpeedXDirection(1);
                         render.drawSecondCharacterRight(playerTwo.getNode());
-                        playerOne.setLastMoved(Character.lastMoved.RIGHT);
+                        playerTwo.setLastMoved(Character.lastMoved.RIGHT);
                     }
                 }
                 // Lays a bomb at player two's location
