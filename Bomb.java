@@ -290,6 +290,9 @@ public class Bomb extends MapObject{
         }
         
     }
+    /**
+     * Defuse this bomb ensuring it will not detonate
+     */
     public void defuse () {
         if (!detonated) {
             detonated = true;

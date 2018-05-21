@@ -27,7 +27,7 @@ public class Character extends MovingObjects{
 
     //defaults
     private ArrayList<Bomb> currentBombs= new ArrayList<Bomb>(); //hashmap would be more optimal
-    private int maxBombs = 5;
+    private int maxBombs = 1;
     private int lives = 3;
     private int bombSize = 2;   
     private int detTime = 3000; //ms
