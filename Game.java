@@ -145,9 +145,6 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         Character secondChar = new Character(secondCharNode,graphicsWindowX-(graphicsWindowX/numGridX),graphicsWindowY-(graphicsWindowY/numGridY),
                 speed, Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGridY),
                 true,true, render, world, pane, this, Character.Player.PLAYERTWO);
-
-
-
         world.addMovingObject(secondChar);
 
 
@@ -230,7 +227,6 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
         ImageView background = new ImageView("BombermanInda/Images/Black.png");
         pane.getChildren().add(background);
-
         StackPane stack = new StackPane();
 
         // Checks which player died in order to display the right text
@@ -271,6 +267,7 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
     public void endGame(){
         pane.getChildren().remove(0, pane.getChildren().size());
         getWorld().clearWorld();
+        
         stopGameLoop();
     }
 
