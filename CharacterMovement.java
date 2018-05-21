@@ -70,7 +70,6 @@ public class CharacterMovement {
      */
     public void TwoPlayerControl(){
 
-        //primaryStage.getScene().setOnKeyPressed(onPressed = new EventHandler<KeyEvent>() {
         onPressed = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
@@ -174,7 +173,6 @@ public class CharacterMovement {
         primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, onPressed);
 
 
-        //primaryStage.getScene().setOnKeyReleased(onReleased = new EventHandler<KeyEvent>() {
         onReleased = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
