@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
 public class World { 
     private MapObject[][] worldMatrix; //contains all non moving (blocking?) objects over the background (crate)
     private ArrayList<MovingObjects> movingObjects;
-    
+    private ArrayList<Bomb> bombsToDefuse  = new ArrayList<Bomb>();
     
     private final int numCrates;
     private Render render;
@@ -508,11 +508,27 @@ public class World {
      * Function for clearing the world. 
      */
     public void clearWorld(){
+        //defuse all bombs from living players
+        for(MovingObjects movObj: movingObjects) {
+            if (movObj.getClass()==Character.class){
+                for(Bomb bomb: ((Character)movObj).getBombs()) {
+                    bomb.defuse();
+                }
+            }
+        }
+        //defuse all bombs for dead players
+        for (Bomb bomb: bombsToDefuse) {
+            bomb.defuse();
+        }
         worldMatrix = null;
         movingObjects = null;
-
         render = null;
+        
     }
+    public void addBombsToDefuse(ArrayList<Bomb> bombs){
+        bombsToDefuse.addAll(bombs);
+    }
+    
     /**
      * Function that returns how many pixels there are per square in X direction
      * @return how many pixels per square in X direction

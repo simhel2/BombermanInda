@@ -27,7 +27,7 @@ public class Character extends MovingObjects{
 
     //defaults
     private ArrayList<Bomb> currentBombs= new ArrayList<Bomb>(); //hashmap would be more optimal
-    private int maxBombs = 1;
+    private int maxBombs = 5;
     private int lives = 3;
     private int bombSize = 2;   
     private int detTime = 3000; //ms
@@ -91,6 +91,7 @@ public class Character extends MovingObjects{
             //remove from graphics and world
             pane.getChildren().remove(graphic);
             world.removeMovingObject(this);
+            world.addBombsToDefuse(currentBombs);
             
             //check if game over
             int charsLeft = 0;
@@ -121,12 +122,15 @@ public class Character extends MovingObjects{
         
     }
 
-    // Removes a bomb from "inventory"
+    // Removes a bomb from list of placed bombs 
     public void removeBomb(Bomb bomb) {
         currentBombs.remove(bomb);
         if (bomb == onTopOfBomb) {
             onTopOfBomb = null;
         }
+    }
+    public ArrayList<Bomb> getBombs(){
+        return currentBombs;
     }
     
     //powerups
