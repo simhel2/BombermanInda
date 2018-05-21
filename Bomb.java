@@ -81,6 +81,7 @@ public class Bomb extends MapObject{
 
             //remove bomb logical
             world.remove(xCord, yCord);
+         
             //remove bomb graphical
             pane.getChildren().remove(getNode());  
             //remove bomb from person
@@ -288,6 +289,17 @@ public class Bomb extends MapObject{
             
         }
         
+    }
+    /**
+     * Defuse this bomb ensuring it will not detonate
+     */
+    public void defuse () {
+        if (!detonated) {
+            detonated = true;
+            detTimer.cancel();
+            detTimer.purge();
+        }
+    
     }
     
 }

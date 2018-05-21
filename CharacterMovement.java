@@ -1,6 +1,7 @@
 package BombermanInda;
 
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,6 +22,9 @@ public class CharacterMovement {
     private Character playerTwo;
     private Character playerThree;
     private Character playerFour;
+    
+    private EventHandler<KeyEvent> onPressed;
+    private EventHandler<KeyEvent> onReleased;
 
     // Different constructors based on amount of players
     public CharacterMovement (Game game, Stage primaryStage, Render render, Character playerOne){
@@ -63,9 +67,8 @@ public class CharacterMovement {
     // Method for two players
     public void TwoPlayerControl(){
 
-
-        //random keylistener for no reason
-        primaryStage.getScene().setOnKeyPressed(new EventHandler<KeyEvent>() {
+        //primaryStage.getScene().setOnKeyPressed(onPressed = new EventHandler<KeyEvent>() {
+        onPressed = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
 
@@ -164,10 +167,12 @@ public class CharacterMovement {
             }
 
 
-        });
+        };
+        primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, onPressed);
 
 
-        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+        //primaryStage.getScene().setOnKeyReleased(onReleased = new EventHandler<KeyEvent>() {
+        onReleased = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent ke) {
                 // Stops a players movement when they release one of the following buttons.
@@ -198,7 +203,14 @@ public class CharacterMovement {
 
 
             }
-        });
+        };
+        primaryStage.getScene().addEventHandler(KeyEvent.KEY_RELEASED, onReleased);
 
+
+    }
+    public void removeControls(){
+        primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, onPressed);
+        primaryStage.getScene().removeEventHandler(KeyEvent.KEY_RELEASED, onReleased);
+        
     }
 }
