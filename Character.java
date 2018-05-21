@@ -59,23 +59,31 @@ public class Character extends MovingObjects{
         this.player = player;
     }
 
-    // Where this player last moved
+    /**
+     * Which direction this player last moved
+     */
     public enum lastMoved {
         UP, DOWN, LEFT, RIGHT
     }
 
-    // Which player this can be
+
+    /**
+     * Which different player this can be
+     */
     public enum Player {
         PLAYERONE, PLAYERTWO
     }
 
 
-    // This character takes damage
+    /**
+     * This character takes damage
+     */
     public void damage () {
 
         if(!isInvulnerable){
             // Takes one damage
             lives--;
+            // Checks which direction this character last moved in so it can update the picture instantly
             if(lastMoved == lastMoved.UP){
                 render.drawInvulnerableCharacterBack(getNode());
             }else if(lastMoved == lastMoved.DOWN){
@@ -115,14 +123,13 @@ public class Character extends MovingObjects{
         Timer makeInvulnerable = new Timer();
         Invulnerability invulnerabilityTimer = new Invulnerability(this, makeInvulnerable);
         makeInvulnerable.schedule(invulnerabilityTimer, invulnerabilityTime);
-
-
-
-        //TODO add animation/imortality on taking damage
         
     }
 
-    // Removes a bomb from list of placed bombs 
+    /**
+     * Removes a bomb from list of placed bombs
+     * @param bomb what bomb to remove
+     */
     public void removeBomb(Bomb bomb) {
         currentBombs.remove(bomb);
         if (bomb == onTopOfBomb) {
@@ -134,12 +141,27 @@ public class Character extends MovingObjects{
     }
     
     //powerups
+
+    /**
+     * makes the explosion bigger
+     * @param i how much bigger to make the explosion
+     */
     public void improveBombs(int i){
         bombSize = bombSize+i; 
     }
+
+    /**
+     * adds more bombs to the capacity
+     * @param i how many more bombs to add
+     */
     public void addBombLimit(int i){
         maxBombs=maxBombs+i;
     }
+
+    /**
+     * changes the speed of a character by some multiplier
+     * @param mult multiplier to change the speed
+     */
     public void changeSpeed(double mult){
         setMaxSpeed(getMaxSpeed()*mult);
     }
@@ -155,18 +177,30 @@ public class Character extends MovingObjects{
         onTopOfBomb = null;
     }
 
-    // Shows if this character is invulnerable or not
+
+    /**
+     * Shows if this character is invulnerable or not
+     * @return returns if this character is invulnerable or not
+     */
     public boolean getIsInvulnerable(){
         return isInvulnerable;
     }
 
-    // Changes isInvulnerable to desired value
+
+    /**
+     * Changes isInvulnerable to desired value
+     * @param value what value to change isInvulnerable into
+     */
     public void setInvulnerable(boolean value){
         isInvulnerable = value;
     }
 
 
-    // Lays bomb at this characters position
+
+    /**
+     * Lays bomb at this characters position
+     * @throws InterruptedException
+     */
     public void layBomb() throws InterruptedException{
         
         if (currentBombs.size()<maxBombs && lives > 0 
@@ -186,6 +220,10 @@ public class Character extends MovingObjects{
         }
     }
 
+    /**
+     * changes the direction in which a player last moved
+     * @param lastMove in which direction a player last moved
+     */
     public void setLastMoved(lastMoved lastMove){
         lastMoved = lastMove;
     }

@@ -64,7 +64,10 @@ public class CharacterMovement {
     }
 
 
-    // Method for two players
+
+    /**
+     * Method for two players
+     */
     public void TwoPlayerControl(){
 
         //primaryStage.getScene().setOnKeyPressed(onPressed = new EventHandler<KeyEvent>() {
@@ -208,6 +211,10 @@ public class CharacterMovement {
 
 
     }
+
+    /**
+     * removes the key-handlers
+     */
     public void removeControls(){
         primaryStage.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, onPressed);
         primaryStage.getScene().removeEventHandler(KeyEvent.KEY_RELEASED, onReleased);

@@ -63,7 +63,11 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
 
 
-    // Is the first thing that happens when Bomber is run, creates the basics for handling the window
+
+    /**
+     *  Is the first thing that happens when Bomber is run, creates the basics for handling the window
+     * @param primaryStage which stage to use
+     */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -77,7 +81,12 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         gameMenu(primaryStage, pane);
     }
 
-    // The game menu screen
+
+    /**
+     * The game menu screen
+     * @param primaryStage which stage to use
+     * @param pane which graphicspane to display in
+     */
     public void gameMenu(Stage primaryStage, Pane pane){
 
 
@@ -124,13 +133,18 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
     }
 
-    // Starts the game
+
+
+    /**
+     *     // Starts the game
+     * @param primaryStage which stage to use
+     * @param pane which graphicspane to display this in
+     */
     public void startGame(Stage primaryStage, Pane pane) {
 
         //init background
         Image background = new Image( "BombermanInda/Images/Grey.png" );
-        //init world
-        // TODO fix so it will be scaleable.
+        //init world.
         world = new World(numGridX, numGridY, render, numCrates); //create playfield
 
 
@@ -192,7 +206,13 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
     }
 
-    // Help screen
+
+
+    /**
+     * Help screen with information on how to play
+     * @param primaryStage which stage to use
+     * @param pane which graphicspane to show this in
+     */
     public void helpScreen(Stage primaryStage, Pane pane) {
 
         ImageView background = new ImageView("BombermanInda/Images/Black.png");
@@ -223,7 +243,14 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         });
     }
 
-    // End screen menu
+
+
+    /**
+     * End screen menu that shows which player lost
+     * @param primaryStage what stage to use
+     * @param pane which graphicspane to show this in
+     * @param player which player lost
+     */
     public void endScreen (Stage primaryStage, Pane pane, Character.Player player) {
 
 
@@ -260,12 +287,20 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
 
     }
 
-    // Stops the animationtimer in startGame()
+
+
+    /**
+     * Stops the animationtimer in startGame()
+     */
     public void stopGameLoop() {
         gameLoop.stop();
     }
 
-    //ends game when one player dies
+
+
+    /**
+     * ends game when one player dies
+     */
     public void endGame(){
         pane.getChildren().remove(0, pane.getChildren().size());
         getWorld().clearWorld();
@@ -273,7 +308,17 @@ private double speed = Math.min(graphicsWindowX/numGridX, graphicsWindowY/numGri
         stopGameLoop();
     }
 
-    // Creates a button with an image and a text in the middle of the X-axis and somewhere on the Y-axis according to yPos
+
+    /**
+     * Creates a button with an image and a text in the middle of the X-axis and somewhere on the Y-axis according to yPos
+     * @param pane which graphicspane to show this in
+     * @param text what text to display
+     * @param image what image to display
+     * @param graphicsWindowX how big the window is
+     * @param graphicsWindowY how big the window is
+     * @param yPos what y position the button will be located in
+     * @return
+     */
     public Button createButton(Pane pane, String text, ImageView image, int graphicsWindowX, int graphicsWindowY, int yPos){
 
         Button button = new Button(text);

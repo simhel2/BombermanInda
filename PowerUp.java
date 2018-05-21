@@ -29,10 +29,19 @@ public class PowerUp extends MapObject{
         this.powerUp = powerUp;
     }
 
-    // Different kind of powerups
+
+
+    /**
+     * Different kind of powerups
+     */
     public enum PowerUps{
         BIGGER,MORE,IMMORTAL, SPEED;
     }
+
+    /**
+     * Makes a player use a powerup
+     * @param player which player took the powerup
+     */
     public void consume(Character player){
         //depends on enum
 
@@ -48,11 +57,7 @@ public class PowerUp extends MapObject{
         else if (powerUp ==  PowerUps.SPEED) {
             player.changeSpeed(1.333);
         }
-        
-        //TODO Add more
 
-        
-            
     }
     
 }

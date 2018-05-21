@@ -66,7 +66,18 @@ public class Render {
 
     }
 
-    // Draws an explosion with a middle, and goes in four directions: up, down, right, left. Each direction has a "size".
+
+    /**
+     * Draws an explosion with a middle, and goes in four directions: up, down, right, left. Each direction has a "size".
+     * @param xCord which x position this explosion starts in
+     * @param yCord which y position this explosion starts in
+     * @param upSize how far up the explosion will go
+     * @param downSize how far down the explosion will go
+     * @param leftSize how far left the explosion will go
+     * @param rightSize how far right the explosion will go
+     * @param world what world this is in
+     * @return returns the image (Node) of the polygon for the explosion
+     */
     public Node drawExplosion(int xCord, int yCord, int upSize, int downSize, int leftSize, 
             int rightSize, World world) {
 
@@ -96,7 +107,10 @@ public class Render {
         return explosion;
     }
 
-    // Different kinds of objects
+
+    /**
+     * Different kinds of objects
+     */
     public enum GraphicsObjects{
 
         MAINCHARACTER, CRATE, BOMB, SECONDCHARACTER, POWER_BIGGER, POWER_MORE, POWER_SPEED, WALL; //TODO add more
@@ -104,6 +118,12 @@ public class Render {
     }
 
     // Creates graphics for every single object in the game, depending on its enum.
+
+    /**
+     * Creates graphics for every single object in the game, depending on its enum.
+     * @param grp which kind of object this is
+     * @return returns the image (Node) of the object
+     */
     public Node createGraphicsEntity(GraphicsObjects grp){
         if(grp==GraphicsObjects.MAINCHARACTER) {
 
@@ -159,7 +179,7 @@ public class Render {
             return wall;
         }
         else {
-            //make error
+
             throw new Error("could not construct object"+grp.toString());
           
         }
@@ -167,31 +187,42 @@ public class Render {
     
     }
 
-    // Draws every object inside worldMatrix
+
+
+    /**
+     * Draws every object inside worldMatrix
+     * @param world which world to draw the objects
+     */
     public void drawAllMapObjects(World world) {
         //draw all in matrix
-        for(int i = 0; i < world.getWorldMatrix().length; ++i) {
-            for(int j = 0; j < world.getWorldMatrix()[i].length; ++j) {
-                if (world.getWorldMatrix()[i][j]!=null) {   //if worldMatrix has something draw it
-                   if (!pane.getChildren().contains((world.getWorldMatrix()[i][j]).getNode())) {    //if it is not in world matrix add it
-                       pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize?)    
-                   } 
-                   //calculate position:
-                   int posX = i*graphicsWindowX/world.getWorldMatrix().length;  
-                   int posY = j*graphicsWindowY/world.getWorldMatrix()[0].length;
-                   world.getWorldMatrix()[i][j].getNode().relocate(posX,posY);                   
-               }                     
+        for (int i = 0; i < world.getWorldMatrix().length; ++i) {
+            for (int j = 0; j < world.getWorldMatrix()[i].length; ++j) {
+                if (world.getWorldMatrix()[i][j] != null) {   //if worldMatrix has something draw it
+                    if (!pane.getChildren().contains((world.getWorldMatrix()[i][j]).getNode())) {    //if it is not in world matrix add it
+                        pane.getChildren().add(world.getWorldMatrix()[i][j].getNode());                   //(optimize?)
+                    }
+                    //calculate position:
+                    int posX = i * graphicsWindowX / world.getWorldMatrix().length;
+                    int posY = j * graphicsWindowY / world.getWorldMatrix()[0].length;
+                    world.getWorldMatrix()[i][j].getNode().relocate(posX, posY);
+                }
             }
         }
         //draw all moveable objects 
-        for (MovingObjects movObj: world.getMovingObjects()) {
+        for (MovingObjects movObj : world.getMovingObjects()) {
             if (!pane.getChildren().contains(movObj.getNode())) {    //if it is not in world matrix add it
                 pane.getChildren().add(movObj.getNode());                   //(optimize?)    
-            }             
+            }
         }
     }
 
-    // Draws one object on a position in the worldMatrix
+    /**
+     * Draws one object on a position in the worldMatrix
+
+     * @param x which x position to draw the object
+     * @param y which y position to draw the object
+     * @param world what world to draw the object in
+     */
     public void drawMapObject(int x, int y,  World world) {
         if (world.getWorldMatrix()[x][y]!=null) {   //if worldMatrix has something draw it
                    if (!pane.getChildren().contains((world.getWorldMatrix()[x][y]).getNode())) {    //if it is not in world matrix add it
@@ -204,7 +235,13 @@ public class Render {
         }           
     }
 
-    // Removes an object that was in the matrix
+
+    /**
+     * Removes an object that was in the matrix
+     * @param world in what world to remove the object
+     * @param xCord what x coordinate this object is in
+     * @param yCord what y coordinate this object is in
+     */
     public void removeMapObject(World world, int xCord,int yCord) {
         pane.getChildren().remove(world.getWorldMatrix()[xCord][yCord].getNode());
     }
@@ -225,7 +262,12 @@ public class Render {
         return numGridY;
     }
 
-    // Draws the background of the gameworld.
+
+
+    /**
+     * Draws the background of the gameworld.
+     * @param image what image to have as a background
+     */
     public void drawBackground(Image image){
         ImageView background = new ImageView(image);
         pane.getChildren().add(background);
@@ -237,7 +279,12 @@ public class Render {
     }
 
 
-    //Draws every orientation of both characters, and the invulnerability state.
+
+
+    /**
+     * Draws every orientation of both characters, and the invulnerability state. (All methods)
+     * @param graphic what node to set an Image to.
+     */
     public void drawMainCharacterFront(Node graphic) {
         Image image = new Image("BombermanInda/Images/MainCharFront.png");
         ((ImageView) graphic).setImage(image);
